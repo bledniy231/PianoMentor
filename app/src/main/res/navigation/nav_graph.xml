@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/statisticsFragment">
+
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.ui.statistics.StatisticsFragment"
+        android:label="StatisticsFragment"
+        tools:layout="@layout/fragment_statistics">
+        <action
+            android:id="@+id/action_choose_register_or_login"
+            app:destination="@id/chooseLoginOrRegisterFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseLoginOrRegisterFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.ui.choose_login_or_register.ChooseLoginOrRegisterFragment"
+        android:label="fragment_choose_login_or_register"
+        tools:layout="@layout/fragment_choose_login_or_register">
+        <action
+            android:id="@+id/action_start_register"
+            app:destination="@id/statisticsFragment"/>
+        <action
+            android:id="@+id/action_start_login"
+            app:destination="@id/loginFragment"/>
+        <action
+            android:id="@+id/action_back_arrow"
+            app:destination="@id/statisticsFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+    </fragment>
+
+</navigation>

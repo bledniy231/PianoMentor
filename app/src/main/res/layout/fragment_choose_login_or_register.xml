@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/first_purple"
+    android:orientation="vertical"
+    tools:context="teachingsolutions.presentation_layer.fragments.ui.choose_login_or_register.ChooseLoginOrRegisterFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/reg_or_login_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_scrollFlags="enterAlways"
+        app:layout_collapseMode="pin"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+        android:background="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/text_login_or_register"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:textSize="40sp"
+        android:gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/ultra_light_purple"
+        android:text="@string/pianomentor"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/start_register_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/second_brown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/start_login_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/dark_gray"
+            android:text = "@string/register"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/start_login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/second_green"
+            app:layout_constraintStart_toEndOf="@+id/start_register_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/dark_gray"
+            android:text = "@string/login"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

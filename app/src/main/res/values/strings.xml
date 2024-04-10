@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">PianoMentor</string>
+    <string name="user_icon">user_icon</string>
+    <string name="previous_button_viewpager">Предыдущее</string>
+    <string name="next_button_viewpager">Следующее</string>
+    <string name="pianomentor">PianoMentor</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="login">Войти</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">Вы вошли в учётную запись</string>
+    <string name="invalid_username">Не правильна указан Email</string>
+    <string name="invalid_password">Пароль должен быть больше пяти символов</string>
+    <string name="login_failed">Вход не был выполнен</string>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:shape="line"
+            android:thicknessRatio="18"
+            android:useLevel="false">
+            <stroke
+                android:width="8dp"
+                android:color="@color/second_purple" />
+        </shape>
+    </item>
+
+    <item>
+        <clip
+            android:clipOrientation="horizontal"
+            android:gravity="start">
+            <shape
+                android:shape="line"
+                android:thicknessRatio="18"
+                android:useLevel="true">
+                <stroke
+                    android:width="8dp"
+                    android:color="@color/first_purple">
+                </stroke>
+            </shape>
+        </clip>
+    </item>
+</layer-list>
