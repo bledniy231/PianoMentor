@@ -12,8 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentLoginBinding
+import teachingsolutions.presentation_layer.fragments.ui.common.LoggedInUserModelUI
+import teachingsolutions.presentation_layer.fragments.ui.common.ViewModelsFactory
 
 class LoginFragment : Fragment() {
 
@@ -33,13 +36,13 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this, ViewModelsFactory())[LoginViewModel::class.java]
 
-        val usernameEditText = binding.emailEditText
-        val passwordEditText = binding.passwordEditText
+        val emailEditText = binding.loginEmailEditText
+        val passwordEditText = binding.loginPasswordEditText
         val loginButton = binding.loginButton
         val loadingProgressBar = binding.loginLoading
+        val loginToolbar = binding.loginToolbar
 
         loginViewModel.loginFormState.observe(viewLifecycleOwner,
             Observer { loginFormState ->
@@ -48,7 +51,7 @@ class LoginFragment : Fragment() {
                 }
                 loginButton.isEnabled = loginFormState.isDataValid
                 loginFormState.usernameError?.let {
-                    usernameEditText.error = getString(it)
+                    emailEditText.error = getString(it)
                 }
                 loginFormState.passwordError?.let {
                     passwordEditText.error = getString(it)
@@ -61,9 +64,11 @@ class LoginFragment : Fragment() {
                 loadingProgressBar.visibility = View.GONE
                 loginResult.error?.let {
                     showLoginFailed(it)
+                    passwordEditText.text.clear()
                 }
                 loginResult.success?.let {
                     updateUiWithUser(it)
+                    findNavController().navigate(R.id.action_successful_loggedIn)
                 }
             })
 
@@ -78,17 +83,17 @@ class LoginFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable) {
                 loginViewModel.loginDataChanged(
-                    usernameEditText.text.toString(),
+                    emailEditText.text.toString(),
                     passwordEditText.text.toString()
                 )
             }
         }
-        usernameEditText.addTextChangedListener(afterTextChangedListener)
+        emailEditText.addTextChangedListener(afterTextChangedListener)
         passwordEditText.addTextChangedListener(afterTextChangedListener)
         passwordEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 loginViewModel.login(
-                    usernameEditText.text.toString(),
+                    emailEditText.text.toString(),
                     passwordEditText.text.toString()
                 )
             }
@@ -98,13 +103,17 @@ class LoginFragment : Fragment() {
         loginButton.setOnClickListener {
             loadingProgressBar.visibility = View.VISIBLE
             loginViewModel.login(
-                usernameEditText.text.toString(),
+                emailEditText.text.toString(),
                 passwordEditText.text.toString()
             )
         }
+
+        loginToolbar.setNavigationOnClickListener {
+            findNavController().navigate(R.id.action_back_arrow_login_to_choose)
+        }
     }
 
-    private fun updateUiWithUser(model: LoggedInUserView) {
+    private fun updateUiWithUser(model: LoggedInUserModelUI) {
         val welcome = getString(R.string.welcome) + model.displayName
         Toast.makeText(requireContext(), welcome, Toast.LENGTH_LONG).show()
     }

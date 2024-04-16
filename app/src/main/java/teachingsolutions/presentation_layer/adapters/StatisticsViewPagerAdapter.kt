@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
-import teachingsolutions.presentation_layer.fragments.data.model.StatisticsViewPagerItemModel
+import teachingsolutions.presentation_layer.fragments.data.statistics.model.StatisticsViewPagerItemModel
 
 class StatisticsViewPagerAdapter(
     fragmentContext: Context) :
@@ -37,8 +37,8 @@ class StatisticsViewPagerAdapter(
             } else {
                 progressBarView.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_brown, resources.newTheme())
             }
-            progressBarView.progress = statModel.progressValue
-            progressCounter.text = statModel.progressValue.toString()
+            progressBarView.progress = statModel.progressValueInPercent
+            progressCounter.text = statModel.progressValueAbsolute.toString()
             title.text = statModel.titleText
             description.text = statModel.descriptionText
         }

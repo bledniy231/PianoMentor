@@ -1,9 +1,9 @@
-package teachingsolutions.presentation_layer.fragments.ui.login
+package teachingsolutions.presentation_layer.fragments.ui.common
 
 /**
  * User details post authentication that is exposed to the UI
  */
-data class LoggedInUserView(
+data class LoggedInUserModelUI(
     val displayName: String
     //... other data fields that may be accessible to the UI
 )

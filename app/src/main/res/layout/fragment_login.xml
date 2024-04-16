@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
-        android:id="@+id/email_edit_text"
+        android:id="@+id/login_email_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -35,11 +35,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/password_edit_text"
+        app:layout_constraintBottom_toBottomOf="@+id/login_password_edit_text"
         app:layout_constraintVertical_bias="0.8"/>
 
     <EditText
-        android:id="@+id/password_edit_text"
+        android:id="@+id/login_password_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -53,7 +53,7 @@
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/login_email_edit_text"
         app:layout_constraintBottom_toBottomOf="@+id/login_button"
         app:layout_constraintVertical_bias="0.15" />
 
@@ -68,13 +68,13 @@
         android:layout_marginBottom="64dp"
         android:enabled="false"
         android:text="@string/action_sign_in"
-        android:backgroundTint="@color/second_green"
+        android:backgroundTint="@color/light_green"
         android:textColorHint="@color/dark_gray"
         android:textColor="@color/dark_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/login_password_edit_text"
         app:layout_constraintVertical_bias="0.3" />
 
     <ProgressBar
@@ -89,8 +89,8 @@
         android:visibility="gone"
         android:backgroundTint="@color/first_green"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/password_edit_text"
-        app:layout_constraintStart_toStartOf="@+id/password_edit_text"
+        app:layout_constraintEnd_toEndOf="@+id/login_password_edit_text"
+        app:layout_constraintStart_toStartOf="@+id/login_password_edit_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
 

@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_choose_register_or_login"
             app:destination="@id/chooseLoginOrRegisterFragment"/>
+        <action
+            android:id="@+id/action_choose_profile"
+            app:destination="@id/profileFragment"/>
+        <action
+            android:id="@+id/action_choose_courses"
+            app:destination="@id/coursesFragment"/>
     </fragment>
 
     <fragment
@@ -22,12 +28,12 @@
         tools:layout="@layout/fragment_choose_login_or_register">
         <action
             android:id="@+id/action_start_register"
-            app:destination="@id/statisticsFragment"/>
+            app:destination="@id/registrationFragment"/>
         <action
             android:id="@+id/action_start_login"
             app:destination="@id/loginFragment"/>
         <action
-            android:id="@+id/action_back_arrow"
+            android:id="@+id/action_back_arrow_choose_to_statisticsFragment"
             app:destination="@id/statisticsFragment"/>
     </fragment>
     <fragment
@@ -35,6 +41,42 @@
         android:name="teachingsolutions.presentation_layer.fragments.ui.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_back_arrow_login_to_choose"
+            app:destination="@id/chooseLoginOrRegisterFragment"/>
+        <action
+            android:id="@+id/action_successful_loggedIn"
+            app:destination="@id/statisticsFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.ui.registration.RegistrationFragment"
+        android:label="RegistrationFragment">
+        <action
+            android:id="@+id/action_back_arrow_login_to_choose"
+            app:destination="@id/chooseLoginOrRegisterFragment"/>
+        <action
+            android:id="@+id/action_successful_registered"
+            app:destination="@id/statisticsFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.ui.profile.ProfileFragment"
+        android:label="PersonalFragment">
+        <action
+            android:id="@+id/action_back_arrow_profile_to_statistics"
+            app:destination="@id/statisticsFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/coursesFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.ui.courses.CoursesFragment"
+        android:label="CoursesFragment">
+        <action
+            android:id="@+id/action_back_arrow_courses_to_statistics"
+            app:destination="@id/statisticsFragment"/>
+        <action
+            android:id="@+id/action_open_course"
+            app:destination="@id/coursesFragment"/>
     </fragment>
 
 </navigation>

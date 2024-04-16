@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
+    <item android:id="@android:id/background">
         <shape
             android:shape="ring"
             android:thicknessRatio="18"
             android:useLevel="false">
-            <solid android:color="@color/second_brown" />
+            <gradient
+                android:centerColor="@color/second_brown"
+                android:centerX="50%"
+                android:centerY="50%"
+                android:endColor="@color/second_brown"
+                android:gradientRadius="75%p"
+                android:startColor="@color/first_brown"
+                android:type="radial" />
+
         </shape>
     </item>
 
-    <item>
+    <item android:id="@android:id/progress">
         <rotate
-            android:fromDegrees="-90"
-            android:toDegrees="-90">
+            android:fromDegrees="270"
+            android:toDegrees="270">
             <shape
                 android:shape="ring"
                 android:thicknessRatio="18"
                 android:useLevel="true">
-                <solid android:color="@color/first_brown"/>
+                <solid android:color="@color/first_brown" />
+                <corners android:radius="10dp" />
             </shape>
         </rotate>
     </item>

@@ -1,13 +1,13 @@
-package teachingsolutions.presentation_layer.fragments.data
+package teachingsolutions.presentation_layer.fragments.data.common
 
 /**
  * A generic class that holds a value with its loading status.
  * @param <T>
  */
-sealed class Result<out T : Any> {
+sealed class ActionResult<out T : Any> {
 
-    data class Success<out T : Any>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
+    data class Success<out T : Any>(val data: T) : ActionResult<T>()
+    data class Error(val exception: Exception) : ActionResult<Nothing>()
 
     override fun toString(): String {
         return when (this) {

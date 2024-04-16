@@ -1,13 +1,14 @@
-package teachingsolutions.presentation_layer.fragments.data
+package teachingsolutions.presentation_layer.fragments.data.login_registration
 
-import teachingsolutions.presentation_layer.fragments.data.model.LoggedInUserModel
+import teachingsolutions.presentation_layer.fragments.data.common.ActionResult
+import teachingsolutions.presentation_layer.fragments.data.login_registration.model.LoggedInUserModel
 
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val dataSource: LoginDataSource) {
+class LoginRegistrationRepository(val dataSource: LoginRegistrationDataSource) {
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUserModel? = null
@@ -27,11 +28,22 @@ class LoginRepository(val dataSource: LoginDataSource) {
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): Result<LoggedInUserModel> {
+    fun login(username: String, password: String): ActionResult<LoggedInUserModel> {
         // handle login
         val result = dataSource.login(username, password)
 
-        if (result is Result.Success) {
+        if (result is ActionResult.Success) {
+            setLoggedInUser(result.data)
+        }
+
+        return result
+    }
+
+    fun register(username: String, email: String, password: String, confirmPassword: String): ActionResult<LoggedInUserModel> {
+        // handle register
+        val result = dataSource.register(username, email, password, confirmPassword)
+
+        if (result is ActionResult.Success) {
             setLoggedInUser(result.data)
         }
 

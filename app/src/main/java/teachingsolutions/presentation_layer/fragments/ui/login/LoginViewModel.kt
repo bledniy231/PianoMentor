@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
 import com.example.pianomentor.R
-import teachingsolutions.presentation_layer.fragments.data.LoginRepository
-import teachingsolutions.presentation_layer.fragments.data.Result
+import teachingsolutions.presentation_layer.fragments.data.login_registration.LoginRegistrationRepository
+import teachingsolutions.presentation_layer.fragments.data.common.ActionResult
+import teachingsolutions.presentation_layer.fragments.ui.common.LoggedInUserModelUI
+import teachingsolutions.presentation_layer.fragments.ui.common.LoginResult
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel(private val loginRegistrationRepository: LoginRegistrationRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -18,18 +20,18 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
+        val result = loginRegistrationRepository.login(username, password)
 
-        if (result is Result.Success) {
+        if (result is ActionResult.Success) {
             _loginResult.value =
-                LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+                LoginResult(success = LoggedInUserModelUI(displayName = result.data.displayName))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }
     }
 
-    fun loginDataChanged(username: String, password: String) {
-        if (!isUserNameValid(username)) {
+    fun loginDataChanged(email: String, password: String) {
+        if (!isEmailValid(email)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
         } else if (!isPasswordValid(password)) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
@@ -38,16 +40,10 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
-    // A placeholder username validation check
-    private fun isUserNameValid(username: String): Boolean {
-        return if (username.contains("@")) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
-        }
+    private fun isEmailValid(username: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(username).matches()
     }
 
-    // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
     }
