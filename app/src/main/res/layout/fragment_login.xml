@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/first_purple"
-    tools:context="teachingsolutions.presentation_layer.fragments.ui.login.LoginFragment">
+    tools:context="teachingsolutions.presentation_layer.fragments.login.LoginFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/login_toolbar"

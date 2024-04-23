@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/reg_or_login_toolbar"
+        android:id="@+id/profile_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_scrollFlags="enterAlways"
@@ -39,11 +39,13 @@
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/upload_profile_photo_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
+            android:layout_margin="10dp"
             app:cardElevation="15dp"
-            app:cardCornerRadius="12dp">
+            app:cardCornerRadius="12dp"
+            android:clickable="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -56,11 +58,13 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/about_app_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             app:cardElevation="15dp"
-            app:cardCornerRadius="12dp">
+            app:cardCornerRadius="12dp"
+            android:clickable="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -73,11 +77,13 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/logout_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             app:cardElevation="15dp"
-            app:cardCornerRadius="12dp">
+            app:cardCornerRadius="12dp"
+            android:clickable="true">
 
             <TextView
                 android:layout_width="match_parent"

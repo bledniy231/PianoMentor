@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
-import teachingsolutions.presentation_layer.fragments.data.main_menu.model.MainMenuRecyclerViewItemModel
+import teachingsolutions.domain_layer.mapping_models.MainMenuRecyclerViewItemModel
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 class MainMenuRecyclerViewAdapter(private var listener: ISelectRecyclerViewItemListener<MainMenuRecyclerViewItemModel>)

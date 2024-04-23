@@ -27,4 +27,13 @@
     <string name="upload_profile_photo">Загрузить фотографию</string>
     <string name="about_app">О приложении</string>
     <string name="logout">Выйти из учетной записи</string>
+    <string name="logout_title_dialog">Выход из учётной записи</string>
+    <string name="are_you_sure_logout_dialog">Хотите ли вы выйти из аккаунта?</string>
+    <string name="yes_word">Да</string>
+    <string name="no_word">Нет</string>
+    <string name="you_havent_been_already_logged_in">Вы ещё не вошли в аккаунт</string>
+    <string name="you_have_been_logged_out">Вы вышли из учётной записи</string>
+    <string name="app_version_text"><u>Версия приложения:</u> 1.0.0</string>
+    <string name="app_creator_text"><u>Создатель приложения:</u>\nСеряков Егор Сергеевич\nСтудент ЮУрГУ\nкафедры Системного программирования\nГруппы КЭ-402</string>
+    <string name="diploma_text">Это приложение является дипломной работой бакалавра.</string>
 </resources>

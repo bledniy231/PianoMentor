@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context="teachingsolutions.presentation_layer.fragments.ui.statistics.StatisticsFragment">
+        tools:context="teachingsolutions.presentation_layer.fragments.statistics.StatisticsFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tool_bar_statistics"

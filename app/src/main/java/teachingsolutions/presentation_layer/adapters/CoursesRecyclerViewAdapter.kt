@@ -4,17 +4,13 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
-import teachingsolutions.presentation_layer.fragments.data.courses.model.CourseRecyclerViewItemModel
-import teachingsolutions.presentation_layer.fragments.data.main_menu.model.MainMenuRecyclerViewItemModel
-import teachingsolutions.presentation_layer.fragments.ui.courses.CoursesFragment
+import teachingsolutions.domain_layer.mapping_models.CourseRecyclerViewItemModel
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
-import java.lang.Math.ceil
 
 class CoursesRecyclerViewAdapter(private var listener: ISelectRecyclerViewItemListener<CourseRecyclerViewItemModel>)
     : RecyclerView.Adapter<CoursesRecyclerViewAdapter.CoursesRecyclerViewViewHolder>() {

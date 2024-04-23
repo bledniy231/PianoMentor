@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/first_purple"
     android:orientation="vertical"
-    tools:context="teachingsolutions.presentation_layer.fragments.ui.choose_login_or_register.ChooseLoginOrRegisterFragment">
+    tools:context="teachingsolutions.presentation_layer.fragments.choose_login_or_register.ChooseLoginOrRegisterFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/reg_or_login_toolbar"
