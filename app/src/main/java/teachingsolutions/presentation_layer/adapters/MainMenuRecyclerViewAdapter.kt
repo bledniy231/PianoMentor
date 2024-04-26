@@ -9,17 +9,17 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
-import teachingsolutions.domain_layer.mapping_models.MainMenuRecyclerViewItemModel
+import teachingsolutions.domain_layer.mapping_models.MainMenuItemModel
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
-class MainMenuRecyclerViewAdapter(private var listener: ISelectRecyclerViewItemListener<MainMenuRecyclerViewItemModel>)
+class MainMenuRecyclerViewAdapter(private var listener: ISelectRecyclerViewItemListener<MainMenuItemModel>)
      : RecyclerView.Adapter<MainMenuRecyclerViewAdapter.MainMenuRecyclerViewViewHolder>() {
      inner class MainMenuRecyclerViewViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
           private val icon: ImageView = itemView.findViewById(R.id.main_menu_recycler_view_icon)
           private val title: TextView = itemView.findViewById(R.id.main_menu_recycler_view_title_text)
           internal val card: CardView = itemView.findViewById(R.id.main_menu_recycler_view_item)
 
-          internal fun bind(mainMenuModel: MainMenuRecyclerViewItemModel?) {
+          internal fun bind(mainMenuModel: MainMenuItemModel?) {
                if (mainMenuModel == null) {
                     return
                }
@@ -29,7 +29,7 @@ class MainMenuRecyclerViewAdapter(private var listener: ISelectRecyclerViewItemL
           }
      }
 
-     private var models: List<MainMenuRecyclerViewItemModel>? = null
+     private var models: List<MainMenuItemModel>? = null
 
      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainMenuRecyclerViewViewHolder {
           val view = LayoutInflater.from(parent.context).inflate(R.layout.main_menu_recycler_view_item, parent, false)
@@ -48,7 +48,7 @@ class MainMenuRecyclerViewAdapter(private var listener: ISelectRecyclerViewItemL
      }
 
      @SuppressLint("NotifyDataSetChanged")
-     public fun setModelsList(list: List<MainMenuRecyclerViewItemModel>) {
+     public fun setModelsList(list: List<MainMenuItemModel>) {
           models = list
           notifyDataSetChanged()
      }

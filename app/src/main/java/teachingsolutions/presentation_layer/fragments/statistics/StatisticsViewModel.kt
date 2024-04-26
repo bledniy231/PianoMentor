@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.pianomentor.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import teachingsolutions.data_access_layer.login_registration.UserRepository
-import teachingsolutions.domain_layer.mapping_models.MainMenuRecyclerViewItemModel
+import teachingsolutions.domain_layer.mapping_models.MainMenuItemModel
 import teachingsolutions.domain_layer.mapping_models.statistics.CoursesProgressModel
 import teachingsolutions.domain_layer.mapping_models.statistics.ExercisesProgressModel
 import teachingsolutions.domain_layer.mapping_models.statistics.LecturesProgressModel
@@ -15,14 +15,14 @@ import javax.inject.Inject
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(private var userRepository: UserRepository) : ViewModel() {
 
-    fun getMainMenuItems(): List<MainMenuRecyclerViewItemModel> {
+    fun getMainMenuItems(): List<MainMenuItemModel> {
         return listOf(
-            MainMenuRecyclerViewItemModel(R.drawable.icon_cources, "Курсы"),
-            MainMenuRecyclerViewItemModel(R.drawable.icon_practice, "Практические занятия"),
-            MainMenuRecyclerViewItemModel(R.drawable.icon_lectures, "Лекции по теории"),
-            MainMenuRecyclerViewItemModel(R.drawable.icon_lectures_tests, "Тесты по теории"),
-            MainMenuRecyclerViewItemModel(R.drawable.icon_hearing, "Тренировка слуха"),
-            MainMenuRecyclerViewItemModel(R.drawable.icon_sound_analyze, "Анализатор звука")
+            MainMenuItemModel(R.drawable.icon_cources, "Курсы"),
+            MainMenuItemModel(R.drawable.icon_practice, "Практические занятия"),
+            MainMenuItemModel(R.drawable.icon_lectures, "Лекции по теории"),
+            MainMenuItemModel(R.drawable.icon_lectures_tests, "Тесты по теории"),
+            MainMenuItemModel(R.drawable.icon_hearing, "Тренировка слуха"),
+            MainMenuItemModel(R.drawable.icon_sound_analyze, "Анализатор звука")
         )
     }
 
@@ -40,6 +40,6 @@ class StatisticsViewModel @Inject constructor(private var userRepository: UserRe
     }
 
     fun isUserLoggedIn(): Boolean {
-        return  userRepository.isLoggedIn
+        return userRepository.isLoggedIn
     }
 }

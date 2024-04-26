@@ -1,30 +1,29 @@
 package teachingsolutions.data_access_layer.login_registration
 
 import android.content.SharedPreferences
-import teachingsolutions.data_access_layer.DAL_models.LoginUserRequest
+import com.google.gson.Gson
+import teachingsolutions.data_access_layer.DAL_models.user.JwtTokens
+import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequest
 import teachingsolutions.data_access_layer.common.ActionResult
-import teachingsolutions.data_access_layer.DAL_models.LoginUserResponse
-import teachingsolutions.data_access_layer.DAL_models.RegisterUserRequest
+import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponse
+import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequest
+import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResponse
+import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequest
+import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
-    private val dataSource: UserDataSource
-) {
-    companion object {
-        private const val PREF_NAME = "teaching_solutions"
-        private const val KEY_AUTH_TOKEN = "auth_token"
-        private const val KEY_REFRESH_TOKEN = "refresh_token"
-        private const val KEY_USERID = "user_id"
-        private const val KEY_USERNAME = "username"
-        private const val KEY_EMAIL = "email"
-        private const val KEY_ROLES = "roles"
-    }
+    private val prefKeys: SharedPreferencesKeys,
+    private val dataSource: UserDataSource) {
 
     private var user: LoginUserResponse? = null
-        private set
+    private val gson = Gson()
 
     val userId: Long?
         get() = user?.userId
@@ -36,19 +35,24 @@ class UserRepository @Inject constructor(
         get() = user != null
 
     init {
-        user = getUserFromPreferences()
+        user = null
     }
 
     suspend fun logout() {
         dataSource.logout()
         user = null
         with(sharedPreferences.edit()) {
-            putString(KEY_AUTH_TOKEN, null)
-            putString(KEY_REFRESH_TOKEN, null)
-            putString(KEY_USERID, null)
-            putString(KEY_USERNAME, null)
-            putString(KEY_EMAIL, null)
-            putStringSet(KEY_ROLES, null)
+            prefKeys::class.java.declaredFields.forEach { field ->
+                field.isAccessible = true
+                val key = field.get(prefKeys) as? String
+                if (key != null) {
+                    if (key == prefKeys.KEY_ROLES) {
+                        putStringSet(key, null)
+                    } else {
+                        putString(key, null)
+                    }
+                }
+            }
             apply()
         }
     }
@@ -73,32 +77,63 @@ class UserRepository @Inject constructor(
         return result
     }
 
+    suspend fun refreshUserTokens(jwtTokens: JwtTokens): ActionResult<RefreshUserTokensResponse> {
+        return dataSource.refreshUserTokens(RefreshUserTokensRequest(jwtTokens))
+    }
+
     private fun setLoggedInUser(loginUserResponse: LoginUserResponse) {
         this.user = loginUserResponse
 
         with(sharedPreferences.edit()) {
-            putString(KEY_AUTH_TOKEN, loginUserResponse.accessToken)
-            putString(KEY_REFRESH_TOKEN, loginUserResponse.refreshToken)
-            putString(KEY_USERID, loginUserResponse.userId.toString())
-            putString(KEY_USERNAME, loginUserResponse.userName)
-            putString(KEY_EMAIL, loginUserResponse.email)
-            putStringSet(KEY_ROLES, loginUserResponse.roles.toSet())
+            putString(prefKeys.KEY_USER_TOKENS, gson.toJson(loginUserResponse.jwtTokensModel))
+            putString(prefKeys.KEY_USERID, loginUserResponse.userId.toString())
+            putString(prefKeys.KEY_USERNAME, loginUserResponse.userName)
+            putString(prefKeys.KEY_EMAIL, loginUserResponse.email)
+            putStringSet(prefKeys.KEY_ROLES, loginUserResponse.roles.toSet())
             apply()
         }
     }
 
-    private fun getUserFromPreferences(): LoginUserResponse? {
-        val accessToken = sharedPreferences.getString(KEY_AUTH_TOKEN, null)
-        val refreshToken = sharedPreferences.getString(KEY_REFRESH_TOKEN, null)
-        val userId = sharedPreferences.getString(KEY_USERID, null)?.toInt()
-        val userName = sharedPreferences.getString(KEY_USERNAME, null)
-        val email = sharedPreferences.getString(KEY_EMAIL, null)
-        val roles = sharedPreferences.getStringSet(KEY_ROLES, null)?.toList()
+    public suspend fun checkIfCurrentUserValid(): LoginUserResponse? {
+        val jwtTokensJsonString = sharedPreferences.getString(prefKeys.KEY_USER_TOKENS, null)
+        val jwtTokens = if (jwtTokensJsonString != null) gson.fromJson(jwtTokensJsonString, JwtTokens::class.java) else null
+        val userId = sharedPreferences.getString(prefKeys.KEY_USERID, null)?.toLong()
+        val userName = sharedPreferences.getString(prefKeys.KEY_USERNAME, null)
+        val email = sharedPreferences.getString(prefKeys.KEY_EMAIL, null)
+        val roles = sharedPreferences.getStringSet(prefKeys.KEY_ROLES, null)?.toList()
 
-        return if (accessToken != null && refreshToken != null && userId != null && userName != null && email != null && roles != null) {
-            LoginUserResponse(userId.toLong(), userName, email, accessToken, refreshToken, roles)
-        } else {
-            null
+        val user: LoginUserResponse? = null
+        if (jwtTokens != null && userId != null && userName != null && email != null && !roles.isNullOrEmpty()) {
+            if (isTokensValid(jwtTokens))
+            {
+                return LoginUserResponse(userId, userName, email, jwtTokens, roles)
+            }
+            else if (isTokenExpired(jwtTokens.accessTokenExpireTime))
+            {
+                val refreshResult = refreshUserTokens(jwtTokens)
+                if (refreshResult is ActionResult.Success)
+                {
+                    return refreshResult.data.jwtTokens?.let { LoginUserResponse(userId, userName, email, it, roles) }
+                }
+                else
+                {
+                    logout()
+                    return null
+                }
+            }
         }
+        else
+        {
+            return null
+        }
+    }
+
+    private fun isTokensValid(jwtTokens: JwtTokens): Boolean {
+        return jwtTokens.accessTokenExpireTime?.isAfter(LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)) == true
+            && jwtTokens.refreshTokenExpireTime?.isAfter(LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)) == true
+    }
+
+    private fun isTokenExpired(tokenExpireTime: LocalDateTime?): Boolean {
+        return tokenExpireTime?.isBefore(LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)) == true
     }
 }

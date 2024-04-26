@@ -5,21 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentCoursesBinding
 import dagger.hilt.android.AndroidEntryPoint
 import teachingsolutions.presentation_layer.adapters.CoursesRecyclerViewAdapter
-import teachingsolutions.domain_layer.mapping_models.CourseRecyclerViewItemModel
+import teachingsolutions.domain_layer.mapping_models.courses.CourseModel
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CoursesFragment : Fragment(),
-    ISelectRecyclerViewItemListener<CourseRecyclerViewItemModel> {
+    ISelectRecyclerViewItemListener<CourseModel> {
 
     companion object {
         fun newInstance() = CoursesFragment()
@@ -45,7 +44,6 @@ class CoursesFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //viewModel = ViewModelProvider(this, ViewModelsFactory())[CoursesViewModel::class.java]
         initialCoursesRecyclerView()
         binding.coursesToolbar.title = arguments?.getString("Курс") ?: "Курсы"
         binding.coursesToolbar.setNavigationOnClickListener {
@@ -54,14 +52,29 @@ class CoursesFragment : Fragment(),
     }
 
     private fun initialCoursesRecyclerView() {
-        val list = viewModel.getCoursesList()
+        val courseName = arguments?.getString("Курс")
+        val list: List<CourseModel>? = when (courseName) {
+            null -> viewModel.getCoursesList()
+            "Введение" -> viewModel.getIntroductionCourseItemsList()
+            "Продолжение" -> viewModel.getContinuationCourseItemsList()
+            "Профи" -> viewModel.getProfiCourseItemsList()
+            else -> {
+                Toast.makeText(requireContext(), "Неизвестный курс", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_back_arrow_courses_to_statistics)
+                null
+            }
+        }
 
-        val adapter = CoursesRecyclerViewAdapter(this)
-        adapter.setModelsList(list)
+        val adapter = CoursesRecyclerViewAdapter(this, when (courseName) {
+            null -> CourseImplementation.BASE_COURSES
+            else -> CourseImplementation.EXACT_COURSE_ITEMS
+        })
+
+        adapter.setModelsList(list ?: emptyList())
         binding.coursesRecyclerView.adapter = adapter
     }
 
-    override fun onItemSelected(itemModel: CourseRecyclerViewItemModel) {
+    override fun onItemSelected(itemModel: CourseModel) {
         when (itemModel.title) {
             "Курс \"Введение\"" -> {
                 val args = bundleOf("Курс" to "Введение")

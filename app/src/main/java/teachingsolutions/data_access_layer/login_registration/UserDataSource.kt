@@ -1,10 +1,12 @@
 package teachingsolutions.data_access_layer.login_registration
 
 import retrofit2.Response
-import teachingsolutions.data_access_layer.DAL_models.LoginUserRequest
+import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequest
 import teachingsolutions.data_access_layer.common.ActionResult
-import teachingsolutions.data_access_layer.DAL_models.LoginUserResponse
-import teachingsolutions.data_access_layer.DAL_models.RegisterUserRequest
+import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponse
+import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequest
+import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResponse
+import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequest
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
 import java.io.IOException
 import javax.inject.Inject
@@ -12,12 +14,18 @@ import javax.inject.Inject
 
 class UserDataSource @Inject constructor(private val apiService: IPianoMentorApiService) {
     suspend fun login(request: LoginUserRequest): ActionResult<LoginUserResponse> {
-        var result: ActionResult<LoginUserResponse>? = null
-        try {
+        return try {
             val callResult = apiService.loginUser(request)
-            result = ActionResult.Success(callResult)
+            when (callResult.failedMessage) {
+                null -> {
+                    ActionResult.Success(callResult)
+                }
+                else -> {
+                    ActionResult.NormalError(callResult)
+                }
+            }
         } catch (e: Exception) {
-            result = ActionResult.Error(IOException("Error login in, response not successful, ${e.message}"))
+            ActionResult.ExceptionError(IOException("Error login in, response not successful, ${e.message}"))
         }
 
 //        callLogin.enqueue(object: Callback<LoginUserResponse> {
@@ -29,17 +37,22 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
 //                result = ActionResult.Error(IOException("Error login in, exception caught", t))
 //            }
 //        })
-
-        return result!!
     }
 
     suspend fun register(request: RegisterUserRequest): ActionResult<LoginUserResponse> {
-        var result: ActionResult<LoginUserResponse>? = null
-        try {
+        return try {
             val callResult = apiService.registerUser(request)
-            result = ActionResult.Success(callResult)
+            when (callResult.failedMessage) {
+                null -> {
+                    ActionResult.Success(callResult)
+                }
+
+                else -> {
+                    ActionResult.NormalError(callResult)
+                }
+            }
         } catch (e: Exception) {
-            result = ActionResult.Error(IOException("Error register in, response not successful"))
+            ActionResult.ExceptionError(IOException("Error register in, response not successful"))
         }
 //        callRegister.enqueue(object: Callback<LoginUserResponse> {
 //            override fun onResponse(call: Call<LoginUserResponse>, response: Response<LoginUserResponse>) {
@@ -50,20 +63,31 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
 //                result = ActionResult.Error(IOException("Error login in, exception caught", t))
 //            }
 //        })
-
-        return result!!
     }
 
     suspend fun logout(): ActionResult<Unit> {
-        var result: ActionResult<Unit>? = null
-        try {
+        return try {
             apiService.logoutUser()
-            result = ActionResult.Success(Unit)
+            ActionResult.Success(Unit)
         } catch (e: Exception) {
-            result = ActionResult.Error(IOException("Error logout in, response not successful"))
+            ActionResult.ExceptionError(IOException("Error logout in, response not successful"))
         }
+    }
 
-        return result!!
+    suspend fun refreshUserTokens(request: RefreshUserTokensRequest): ActionResult<RefreshUserTokensResponse> {
+        return try {
+            val result = apiService.refreshUserTokens(request)
+            when (result.errors) {
+                null -> {
+                    ActionResult.Success(result)
+                }
+                else -> {
+                    ActionResult.NormalError(result)
+                }
+            }
+        } catch (e: Exception) {
+            ActionResult.ExceptionError(IOException("Error refresh user tokens, response not successful"))
+        }
     }
 
     private fun loginUserOnResponse(response: Response<LoginUserResponse>): ActionResult<LoginUserResponse> {
@@ -72,10 +96,10 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
             if (user != null && user.failedMessage.isNullOrEmpty()) {
                 ActionResult.Success(user)
             } else {
-                ActionResult.Error(IOException("Error login in, response failed message: ${user?.failedMessage ?: "cannot map response to user model"}"))
+                ActionResult.ExceptionError(IOException("Error login in, response failed message: ${user?.failedMessage ?: "cannot map response to user model"}"))
             }
         } else {
-            ActionResult.Error(IOException("Error login in, response not successful"))
+            ActionResult.ExceptionError(IOException("Error login in, response not successful"))
         }
     }
 }

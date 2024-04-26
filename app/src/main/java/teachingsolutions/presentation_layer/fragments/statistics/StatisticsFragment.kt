@@ -13,14 +13,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
-import teachingsolutions.domain_layer.mapping_models.MainMenuRecyclerViewItemModel
+import teachingsolutions.domain_layer.mapping_models.MainMenuItemModel
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 
 @AndroidEntryPoint
 class StatisticsFragment : Fragment(),
-    ISelectRecyclerViewItemListener<MainMenuRecyclerViewItemModel> {
+    ISelectRecyclerViewItemListener<MainMenuItemModel> {
     companion object {
         fun newInstance() = StatisticsFragment()
     }
@@ -48,6 +48,7 @@ class StatisticsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         //viewModel = ViewModelProvider(this, ViewModelsFactory())[StatisticsViewModel::class.java]
         initialStatisticsViewPager()
         initialMainMenuRecyclerView()
@@ -117,7 +118,7 @@ class StatisticsFragment : Fragment(),
         binding.mainMenuRecyclerView.adapter = mainMenuRecyclerViewAdapter
     }
 
-    override fun onItemSelected(itemModel: MainMenuRecyclerViewItemModel) {
+    override fun onItemSelected(itemModel: MainMenuItemModel) {
         when (itemModel.titleText) {
             "Курсы" -> {
                 findNavController().navigate(R.id.action_choose_courses)

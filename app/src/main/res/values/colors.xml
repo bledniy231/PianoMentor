@@ -10,6 +10,7 @@
     <color name="first_brown">#A37850</color>
     <color name="light_brown">#DAC2AB</color>
     <color name="second_brown">#F1DECC</color>
+    <color name="light_gray">#7C7C7C</color>
     <color name="neutral_grey">#393939</color>
     <color name="dark_gray">#262626</color>
     <color name="ultra_light_purple">#FEF7FF</color>
