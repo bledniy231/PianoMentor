@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,14 +14,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
-import teachingsolutions.domain_layer.mapping_models.MainMenuItemModel
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 
 @AndroidEntryPoint
 class StatisticsFragment : Fragment(),
-    ISelectRecyclerViewItemListener<MainMenuItemModel> {
+    ISelectRecyclerViewItemListener<MainMenuItemModelUI> {
     companion object {
         fun newInstance() = StatisticsFragment()
     }
@@ -49,7 +49,10 @@ class StatisticsFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //viewModel = ViewModelProvider(this, ViewModelsFactory())[StatisticsViewModel::class.java]
+        if (!viewModel.isUserStillAvailable()) {
+            Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_SHORT).show()
+        }
+
         initialStatisticsViewPager()
         initialMainMenuRecyclerView()
         binding.toolBarUserIconGoLogin.setOnClickListener {
@@ -118,7 +121,7 @@ class StatisticsFragment : Fragment(),
         binding.mainMenuRecyclerView.adapter = mainMenuRecyclerViewAdapter
     }
 
-    override fun onItemSelected(itemModel: MainMenuItemModel) {
+    override fun onItemSelected(itemModel: MainMenuItemModelUI) {
         when (itemModel.titleText) {
             "Курсы" -> {
                 findNavController().navigate(R.id.action_choose_courses)

@@ -8,28 +8,35 @@ import java.io.IOException
 import javax.inject.Inject
 
 class CoursesDataSource @Inject constructor(private val apiService: IPianoMentorApiService) {
-
     suspend fun getCourses(userId: Long): ActionResult<CoursesResponse> {
-        var result: ActionResult<CoursesResponse>? = null
-        result = try {
-            val callResult = apiService.getCourses(userId)
-            ActionResult.Success(callResult)
+        return try {
+            val result = apiService.getCourses(userId)
+            when (result.errors) {
+                null -> {
+                    ActionResult.Success(result)
+                }
+                else -> {
+                    ActionResult.NormalError(result)
+                }
+            }
         } catch (e: Exception) {
             ActionResult.ExceptionError(IOException("Error while getting courses, response not successful, ${e.message}"))
         }
-
-        return result!!
     }
 
     suspend fun getCourseItems(userId: Long, courseId: Int): ActionResult<CourseItemsResponse> {
-        var result: ActionResult<CourseItemsResponse>? = null
-        result = try {
-            val callResult = apiService.getCourseItems(userId, courseId)
-            ActionResult.Success(callResult)
+        return try {
+            val result = apiService.getCourseItems(userId, courseId)
+            when (result.errors) {
+                null -> {
+                    ActionResult.Success(result)
+                }
+                else -> {
+                    ActionResult.NormalError(result)
+                }
+            }
         } catch (e: Exception) {
             ActionResult.ExceptionError(IOException("Error while getting course items of course: ${courseId}, response not successful, ${e.message}"))
         }
-
-        return result!!
     }
 }

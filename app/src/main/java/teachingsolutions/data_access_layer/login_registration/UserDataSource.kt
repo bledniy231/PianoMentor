@@ -27,16 +27,6 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
         } catch (e: Exception) {
             ActionResult.ExceptionError(IOException("Error login in, response not successful, ${e.message}"))
         }
-
-//        callLogin.enqueue(object: Callback<LoginUserResponse> {
-//            override fun onResponse(call: Call<LoginUserResponse>, response: Response<LoginUserResponse>) {
-//                result = loginUserOnResponse(response)
-//            }
-//
-//            override fun onFailure(call: Call<LoginUserResponse>, t: Throwable) {
-//                result = ActionResult.Error(IOException("Error login in, exception caught", t))
-//            }
-//        })
     }
 
     suspend fun register(request: RegisterUserRequest): ActionResult<LoginUserResponse> {
@@ -46,7 +36,6 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
                 null -> {
                     ActionResult.Success(callResult)
                 }
-
                 else -> {
                     ActionResult.NormalError(callResult)
                 }
@@ -54,15 +43,6 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
         } catch (e: Exception) {
             ActionResult.ExceptionError(IOException("Error register in, response not successful"))
         }
-//        callRegister.enqueue(object: Callback<LoginUserResponse> {
-//            override fun onResponse(call: Call<LoginUserResponse>, response: Response<LoginUserResponse>) {
-//                result = loginUserOnResponse(response)
-//            }
-//
-//            override fun onFailure(call: Call<LoginUserResponse>, t: Throwable) {
-//                result = ActionResult.Error(IOException("Error login in, exception caught", t))
-//            }
-//        })
     }
 
     suspend fun logout(): ActionResult<Unit> {

@@ -1,13 +1,5 @@
 package teachingsolutions.presentation_layer.fragments.common
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import teachingsolutions.data_access_layer.login_registration.UserRepository
-import teachingsolutions.presentation_layer.fragments.courses.CoursesViewModel
-import teachingsolutions.presentation_layer.fragments.login.LoginViewModel
-import teachingsolutions.presentation_layer.fragments.registration.RegistrationViewModel
-import teachingsolutions.presentation_layer.fragments.statistics.StatisticsViewModel
-
 //class ViewModelsFactory : ViewModelProvider.Factory {
 //
 //    private val userRepository = UserRepository()

@@ -10,10 +10,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import teachingsolutions.data_access_layer.login_registration.UserRepository
+import teachingsolutions.domain_layer.login_registration.UserRepository
 import teachingsolutions.data_access_layer.common.ActionResult
-import teachingsolutions.presentation_layer.fragments.common.LoggedInUserModelUI
-import teachingsolutions.presentation_layer.fragments.common.LoginResult
+import teachingsolutions.presentation_layer.fragments.login.model.LoggedInUserModelUI
+import teachingsolutions.presentation_layer.fragments.login.model.LoginFormState
+import teachingsolutions.presentation_layer.fragments.login.model.LoginResult
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,11 +29,16 @@ class LoginViewModel @Inject constructor(private val loginRegisterRepository: Us
     fun login(username: String, password: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val result = loginRegisterRepository.login(username, password)
-                if (result is ActionResult.Success) {
-                    _loginResult.postValue(LoginResult(success = LoggedInUserModelUI(displayName = result.data.userName)))
-                } else {
-                    _loginResult.postValue(LoginResult(error = R.string.login_failed))
+                when (val result = loginRegisterRepository.login(username, password)) {
+                    is ActionResult.Success -> {
+                        _loginResult.postValue(LoginResult(success = LoggedInUserModelUI(displayName = result.data.userName)))
+                    }
+                    is ActionResult.ExceptionError -> {
+                        _loginResult.postValue(LoginResult(error = result.exception.message))
+                    }
+                    is ActionResult.NormalError -> {
+                        _loginResult.postValue(LoginResult(error = result.data.failedMessage))
+                    }
                 }
             }
         }

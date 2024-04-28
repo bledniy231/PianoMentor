@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
-import teachingsolutions.domain_layer.mapping_models.statistics.StatisticsViewPagerItemModel
+import teachingsolutions.presentation_layer.fragments.statistics.StatisticsViewPagerItemModelUI
 
 class StatisticsViewPagerAdapter(
     fragmentContext: Context) :
@@ -25,7 +25,7 @@ class StatisticsViewPagerAdapter(
         private val description: TextView = itemView.findViewById(R.id.cardview_description_text)
 
         internal fun bind(
-            statModel: StatisticsViewPagerItemModel?,
+            statModel: StatisticsViewPagerItemModelUI?,
             position: Int,
             resources: Resources) {
             if (statModel == null) {
@@ -44,7 +44,7 @@ class StatisticsViewPagerAdapter(
         }
     }
 
-    private var models: List<StatisticsViewPagerItemModel>? = null
+    private var models: List<StatisticsViewPagerItemModelUI>? = null
     private val fragmentContextInstance: Context = fragmentContext
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatisticsViewPagerViewHolder {
@@ -61,7 +61,7 @@ class StatisticsViewPagerAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public fun setModelsList(list: List<StatisticsViewPagerItemModel>) {
+    public fun setModelsList(list: List<StatisticsViewPagerItemModelUI>) {
         models = list
         notifyDataSetChanged()
     }

@@ -1,35 +1,65 @@
 package teachingsolutions.presentation_layer.fragments.courses
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import teachingsolutions.data_access_layer.common.ActionResult
+import teachingsolutions.domain_layer.courses.CoursesRepository
 import teachingsolutions.domain_layer.mapping_models.courses.CourseModel
-import teachingsolutions.domain_layer.mapping_models.courses.InnerCourseItemModel
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsResult
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
+import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResult
 import javax.inject.Inject
 
 @HiltViewModel
-class CoursesViewModel @Inject constructor(): ViewModel() {
-    fun getCoursesList(): List<CourseModel> {
-        return listOf(
-            CourseModel(1,"Курс \"Введение\"", "Уровень сложности: лёгкий", "Начальный курс, обязательный к прохождению каждому. \n" +
-                    "Здесь собраны все самые нужные для старта теоретические материалы, а так же начинаются практические задания", 28),
-            CourseModel(2,"Курс \"Продолжение\"", "Уровень сложности: средний", "Продолжение начального курса. \nЗдесь вы познакомитесь с новыми темами и углубитесь в уже известные. \nТак же вас ждут новые практические задания", 4),
-            CourseModel(3,"Курс \"Профи\"", "Уровень сложности: сложный", "Самый сложный курс, который подойдёт только тем, кто уже прошёл предыдущие курсы. \nЗдесь вы найдёте самые сложные темы и задания", 0)
-        )
+class CoursesViewModel @Inject constructor(
+    private val coursesRepository: CoursesRepository
+): ViewModel() {
+    private val _coursesResult = MutableLiveData<CoursesResult>()
+    val coursesResult: LiveData<CoursesResult> = _coursesResult
+
+    private val _courseItemsResult = MutableLiveData<CourseItemsResult>()
+    val courseItemsResult: LiveData<CourseItemsResult> = _courseItemsResult
+
+    fun getCoursesList(userId: Long) {
+        viewModelScope.launch {
+            with(Dispatchers.IO) {
+                when (val result = coursesRepository.getCourses((userId))) {
+                    is ActionResult.Success -> {
+                        _coursesResult.postValue(result.data)
+                    }
+                    is ActionResult.NormalError -> {
+                        _coursesResult.postValue(result.data)
+                    }
+                    is ActionResult.ExceptionError -> {
+                        _coursesResult.postValue(CoursesResult(null, result.exception.message))
+                    }
+                }
+            }
+        }
+
     }
 
-    fun getIntroductionCourseItemsList(): List<InnerCourseItemModel> {
-        return listOf(
-            InnerCourseItemModel(1, "Начальная теория музыки", CourseItemType.LECTURE, Cou),
-            InnerCourseItemModel(2, "Ещё немного теории", CourseItemType.QUIZ, "Пройдено 28%")
-        )
-    }
-
-    fun getContinuationCourseItemsList(): List<CourseModel>? {
-
-    }
-
-    fun getProfiCourseItemsList(): List<CourseModel>? {
-
+    fun getIntroductionCourseItemsList(userId: Long, courseId: Int) {
+        viewModelScope.launch {
+            with(Dispatchers.IO) {
+                when (val result = coursesRepository.getCourseItems(userId, courseId)) {
+                    is ActionResult.Success -> {
+                        _courseItemsResult.postValue(result.data)
+                    }
+                    is ActionResult.NormalError -> {
+                        _courseItemsResult.postValue(result.data)
+                    }
+                    is ActionResult.ExceptionError -> {
+                        _courseItemsResult.postValue(CourseItemsResult(null, result.exception.message))
+                    }
+                }
+            }
+        }
     }
 }

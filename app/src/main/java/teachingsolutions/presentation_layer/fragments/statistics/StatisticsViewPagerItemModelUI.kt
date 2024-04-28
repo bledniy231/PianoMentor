@@ -1,8 +1,8 @@
-package teachingsolutions.domain_layer.mapping_models.statistics
+package teachingsolutions.presentation_layer.fragments.statistics
 
 import teachingsolutions.presentation_layer.interfaces.IItemUIModel
 
-data class StatisticsViewPagerItemModel(
+data class StatisticsViewPagerItemModelUI(
     var progressValueAbsolute: Int,
     var progressValueInPercent: Int,
     var titleText: String,

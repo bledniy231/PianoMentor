@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentRegistrationBinding
 import dagger.hilt.android.AndroidEntryPoint
-import teachingsolutions.presentation_layer.fragments.common.LoggedInUserModelUI
+import teachingsolutions.presentation_layer.fragments.login.model.LoggedInUserModelUI
 
 @AndroidEntryPoint
 class RegistrationFragment : Fragment() {
@@ -135,7 +135,7 @@ class RegistrationFragment : Fragment() {
         Toast.makeText(requireContext(), welcome, Toast.LENGTH_LONG).show()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun showLoginFailed(errorString: String) {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_LONG).show()
     }
 

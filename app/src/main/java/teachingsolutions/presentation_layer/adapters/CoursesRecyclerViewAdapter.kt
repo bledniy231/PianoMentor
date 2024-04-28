@@ -16,13 +16,14 @@ import com.example.pianomentor.R
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
 import teachingsolutions.domain_layer.mapping_models.courses.CourseModel
-import teachingsolutions.domain_layer.mapping_models.courses.InnerCourseItemModel
-import teachingsolutions.presentation_layer.fragments.courses.CourseImplementation
+import teachingsolutions.domain_layer.mapping_models.courses.CourseItemModel
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseImplementation
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 class CoursesRecyclerViewAdapter(
     private val listener: ISelectRecyclerViewItemListener<CourseModel>,
-    private val courseImplementation: CourseImplementation)
+    private val courseImplementation: CourseImplementation
+)
     : RecyclerView.Adapter<CoursesRecyclerViewAdapter.CoursesRecyclerViewViewHolder>() {
     inner class CoursesRecyclerViewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val title: TextView = itemView.findViewById(R.id.title1)
@@ -55,7 +56,7 @@ class CoursesRecyclerViewAdapter(
                 subtitle.visibility = View.GONE
                 description.visibility = View.GONE
                 progressBar.visibility = View.GONE
-                val innerCourseItemModel = courseModel as InnerCourseItemModel
+                val innerCourseItemModel = courseModel as CourseItemModel
                 title.text = innerCourseItemModel.title
                 when (innerCourseItemModel.courseItemType) {
                     CourseItemType.LECTURE -> {

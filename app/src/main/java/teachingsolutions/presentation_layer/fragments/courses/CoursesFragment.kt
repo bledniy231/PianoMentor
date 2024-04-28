@@ -14,6 +14,7 @@ import com.example.pianomentor.databinding.FragmentCoursesBinding
 import dagger.hilt.android.AndroidEntryPoint
 import teachingsolutions.presentation_layer.adapters.CoursesRecyclerViewAdapter
 import teachingsolutions.domain_layer.mapping_models.courses.CourseModel
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseImplementation
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 @AndroidEntryPoint
@@ -44,15 +45,22 @@ class CoursesFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initialCoursesRecyclerView()
+
         binding.coursesToolbar.title = arguments?.getString("Курс") ?: "Курсы"
         binding.coursesToolbar.setNavigationOnClickListener {
             findNavController().navigate(R.id.action_back_arrow_courses_to_statistics)
         }
+
+        initialCoursesRecyclerView()
     }
 
     private fun initialCoursesRecyclerView() {
         val courseName = arguments?.getString("Курс")
+
+        when (courseName) {
+
+        }
+
         val list: List<CourseModel>? = when (courseName) {
             null -> viewModel.getCoursesList()
             "Введение" -> viewModel.getIntroductionCourseItemsList()
@@ -77,17 +85,17 @@ class CoursesFragment : Fragment(),
     override fun onItemSelected(itemModel: CourseModel) {
         when (itemModel.title) {
             "Курс \"Введение\"" -> {
-                val args = bundleOf("Курс" to "Введение")
+                val args = bundleOf("CourseId" to "Введение")
                 findNavController().navigate(R.id.action_open_course, args)
             }
 
             "Курс \"Продолжение\"" -> {
-                val args = bundleOf("Курс" to "Продолжение")
+                val args = bundleOf("CourseId" to "Продолжение")
                 findNavController().navigate(R.id.action_open_course, args)
             }
 
             "Курс \"Профи\"" -> {
-                val args = bundleOf("Курс" to "Профи")
+                val args = bundleOf("CourseId" to "Профи")
                 findNavController().navigate(R.id.action_open_course, args)
             }
         }

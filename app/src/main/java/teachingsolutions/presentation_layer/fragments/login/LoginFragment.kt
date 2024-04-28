@@ -1,7 +1,6 @@
 package teachingsolutions.presentation_layer.fragments.login
 
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import android.os.Bundle
@@ -17,8 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
-import teachingsolutions.presentation_layer.fragments.common.LoggedInUserModelUI
-import javax.inject.Inject
+import teachingsolutions.presentation_layer.fragments.login.model.LoggedInUserModelUI
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -49,9 +47,8 @@ class LoginFragment : Fragment() {
 
         loginViewModel.loginFormState.observe(viewLifecycleOwner,
             Observer { loginFormState ->
-                if (loginFormState == null) {
-                    return@Observer
-                }
+                loginFormState ?: return@Observer
+
                 loginButton.isEnabled = loginFormState.isDataValid
                 loginFormState.usernameError?.let {
                     emailEditText.error = getString(it)
@@ -64,6 +61,7 @@ class LoginFragment : Fragment() {
         loginViewModel.loginResult.observe(viewLifecycleOwner,
             Observer { loginResult ->
                 loginResult ?: return@Observer
+
                 loadingProgressBar.visibility = View.GONE
                 loginResult.error?.let {
                     showLoginFailed(it)
@@ -121,7 +119,7 @@ class LoginFragment : Fragment() {
         Toast.makeText(requireContext(), welcome, Toast.LENGTH_LONG).show()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun showLoginFailed(errorString: String) {
         Toast.makeText(requireContext(), errorString, Toast.LENGTH_LONG).show()
     }
 

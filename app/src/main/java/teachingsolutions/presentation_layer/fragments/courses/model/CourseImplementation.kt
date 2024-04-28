@@ -1,4 +1,4 @@
-package teachingsolutions.presentation_layer.fragments.courses
+package teachingsolutions.presentation_layer.fragments.courses.model
 
 enum class CourseImplementation {
     BASE_COURSES,

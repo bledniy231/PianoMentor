@@ -11,9 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import teachingsolutions.data_access_layer.common.ActionResult
-import teachingsolutions.data_access_layer.login_registration.UserRepository
-import teachingsolutions.presentation_layer.fragments.common.LoggedInUserModelUI
-import teachingsolutions.presentation_layer.fragments.common.LoginResult
+import teachingsolutions.domain_layer.login_registration.UserRepository
+import teachingsolutions.presentation_layer.fragments.login.model.LoggedInUserModelUI
+import teachingsolutions.presentation_layer.fragments.login.model.LoginResult
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,11 +28,16 @@ class RegistrationViewModel @Inject constructor(private val userRepository: User
     fun register(username: String, email: String, password: String, confirmPassword: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val result = userRepository.register(username, email, password, confirmPassword)
-                if (result is ActionResult.Success) {
-                    _registerResult.postValue(LoginResult(success = LoggedInUserModelUI(displayName = result.data.userName)))
-                } else {
-                    _registerResult.postValue(LoginResult(error = R.string.login_failed))
+                when (val result = userRepository.register(username, email, password, confirmPassword)) {
+                    is ActionResult.Success -> {
+                        _registerResult.postValue(LoginResult(success = LoggedInUserModelUI(displayName = result.data.userName)))
+                    }
+                    is ActionResult.ExceptionError -> {
+                        _registerResult.postValue(LoginResult(error = result.exception.message))
+                    }
+                    is ActionResult.NormalError -> {
+                        _registerResult.postValue(LoginResult(error = result.data.failedMessage))
+                    }
                 }
             }
         }

@@ -1,4 +1,4 @@
-package teachingsolutions.presentation_layer.fragments.login
+package teachingsolutions.presentation_layer.fragments.login.model
 
 /**
  * Data validation state of the login form.

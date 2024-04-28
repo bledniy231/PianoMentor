@@ -1,4 +1,4 @@
-package teachingsolutions.data_access_layer.login_registration
+package teachingsolutions.domain_layer.login_registration
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
@@ -9,6 +9,7 @@ import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponse
 import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequest
 import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResponse
 import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequest
+import teachingsolutions.data_access_layer.login_registration.UserDataSource
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
 import java.time.Instant
 import java.time.LocalDateTime
@@ -20,7 +21,8 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val prefKeys: SharedPreferencesKeys,
-    private val dataSource: UserDataSource) {
+    private val dataSource: UserDataSource
+) {
 
     private var user: LoginUserResponse? = null
     private val gson = Gson()
@@ -94,43 +96,43 @@ class UserRepository @Inject constructor(
         }
     }
 
-    public suspend fun checkIfCurrentUserValid(): LoginUserResponse? {
-        val jwtTokensJsonString = sharedPreferences.getString(prefKeys.KEY_USER_TOKENS, null)
-        val jwtTokens = if (jwtTokensJsonString != null) gson.fromJson(jwtTokensJsonString, JwtTokens::class.java) else null
+    public suspend fun checkIfCurrentUserValid(): Boolean {
+        val jwtTokens = sharedPreferences.getString(prefKeys.KEY_USER_TOKENS, null)?.let { gson.fromJson(it, JwtTokens::class.java) }
         val userId = sharedPreferences.getString(prefKeys.KEY_USERID, null)?.toLong()
         val userName = sharedPreferences.getString(prefKeys.KEY_USERNAME, null)
         val email = sharedPreferences.getString(prefKeys.KEY_EMAIL, null)
         val roles = sharedPreferences.getStringSet(prefKeys.KEY_ROLES, null)?.toList()
 
-        val user: LoginUserResponse? = null
-        if (jwtTokens != null && userId != null && userName != null && email != null && !roles.isNullOrEmpty()) {
-            if (isTokensValid(jwtTokens))
+        if (jwtTokens != null && userId != null && userName != null && email != null && roles != null)
+        {
+            if (!isTokenExpired(jwtTokens.accessTokenExpireTime) && !isTokenExpired(jwtTokens.refreshTokenExpireTime))
             {
-                return LoginUserResponse(userId, userName, email, jwtTokens, roles)
+                setLoggedInUser(LoginUserResponse(userId, userName, email, jwtTokens, roles))
+                return true
             }
-            else if (isTokenExpired(jwtTokens.accessTokenExpireTime))
+            else if (!isTokenExpired(jwtTokens.refreshTokenExpireTime))
             {
-                val refreshResult = refreshUserTokens(jwtTokens)
-                if (refreshResult is ActionResult.Success)
+                val result = refreshUserTokens(jwtTokens)
+                if (result is ActionResult.Success)
                 {
-                    return refreshResult.data.jwtTokens?.let { LoginUserResponse(userId, userName, email, it, roles) }
+                    result.data.jwtTokens?.let { newTokens ->
+                        setLoggedInUser(LoginUserResponse(userId, userName, email, newTokens, roles))
+                        return true
+                    }
                 }
-                else
-                {
-                    logout()
-                    return null
-                }
+                logout()
+                return false
+            }
+            else
+            {
+                logout()
+                return false
             }
         }
         else
         {
-            return null
+            return false
         }
-    }
-
-    private fun isTokensValid(jwtTokens: JwtTokens): Boolean {
-        return jwtTokens.accessTokenExpireTime?.isAfter(LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)) == true
-            && jwtTokens.refreshTokenExpireTime?.isAfter(LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)) == true
     }
 
     private fun isTokenExpired(tokenExpireTime: LocalDateTime?): Boolean {

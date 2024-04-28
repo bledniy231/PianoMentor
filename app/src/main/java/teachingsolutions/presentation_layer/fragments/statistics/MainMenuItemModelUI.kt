@@ -1,8 +1,8 @@
-package teachingsolutions.domain_layer.mapping_models
+package teachingsolutions.presentation_layer.fragments.statistics
 
 import teachingsolutions.presentation_layer.interfaces.IItemUIModel
 
-data class MainMenuItemModel (
+data class MainMenuItemModelUI (
     public var iconId: Int,
     public var titleText: String
 ) : IItemUIModel
