@@ -4,7 +4,13 @@ import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressT
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
 
 data class CourseItemModelUI(
-    val title: String,
+    override val courseId: Int,
+    override val title: String,
     val courseItemType: CourseItemType,
-    val courseItemProgressType: CourseItemProgressType
-)
+    val courseItemProgressType: CourseItemProgressType,
+    val courseItemId: Int,
+    override val isExactItem: Boolean = true,
+    override val subtitle: String = "",
+    override val description: String = "",
+    override val progressInPercent: Int = 0
+): CourseModelUI(courseId, title, subtitle, description, progressInPercent, isExactItem)

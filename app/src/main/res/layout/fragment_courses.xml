@@ -23,9 +23,22 @@
         android:layout_height="match_parent"
         android:paddingHorizontal="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/course_item"
+        tools:listitem="@layout/course_card"
         tools:itemCount="3">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <ProgressBar
+        android:id="@+id/courses_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
+        android:visibility="gone"
+        android:backgroundTint="@color/first_green"
+        android:progressTint="@color/first_green" />
 
 </LinearLayout>

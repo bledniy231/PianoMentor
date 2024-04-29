@@ -8,18 +8,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentCoursesBinding
 import dagger.hilt.android.AndroidEntryPoint
 import teachingsolutions.presentation_layer.adapters.CoursesRecyclerViewAdapter
-import teachingsolutions.domain_layer.mapping_models.courses.CourseModel
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseImplementation
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 @AndroidEntryPoint
 class CoursesFragment : Fragment(),
-    ISelectRecyclerViewItemListener<CourseModel> {
+    ISelectRecyclerViewItemListener<CourseModelUI> {
 
     companion object {
         fun newInstance() = CoursesFragment()
@@ -29,10 +30,8 @@ class CoursesFragment : Fragment(),
     private val binding get() = _binding!!
 
     private val viewModel: CoursesViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var userId: Long? = null
+    private var courseImpl: CourseImplementation? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,59 +45,85 @@ class CoursesFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.coursesToolbar.title = arguments?.getString("Курс") ?: "Курсы"
         binding.coursesToolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.action_back_arrow_courses_to_statistics)
-        }
-
-        initialCoursesRecyclerView()
-    }
-
-    private fun initialCoursesRecyclerView() {
-        val courseName = arguments?.getString("Курс")
-
-        when (courseName) {
-
-        }
-
-        val list: List<CourseModel>? = when (courseName) {
-            null -> viewModel.getCoursesList()
-            "Введение" -> viewModel.getIntroductionCourseItemsList()
-            "Продолжение" -> viewModel.getContinuationCourseItemsList()
-            "Профи" -> viewModel.getProfiCourseItemsList()
-            else -> {
-                Toast.makeText(requireContext(), "Неизвестный курс", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_back_arrow_courses_to_statistics)
-                null
+            when (val courseId = arguments?.getString("CourseId")?.toInt() ?: 0) {
+                0 -> findNavController().navigate(R.id.action_back_arrow_courses_to_statistics)
+                else -> {
+                    //val args = bundleOf("CourseId" to courseId)
+                    findNavController().navigate(R.id.action_back_arrow_courses_to_courses/*, args*/)
+                }
             }
         }
+        binding.coursesLoading.visibility = View.VISIBLE
+        binding.coursesRecyclerView.visibility = View.GONE
+        userId = viewModel.getUserId() ?: 0
 
-        val adapter = CoursesRecyclerViewAdapter(this, when (courseName) {
-            null -> CourseImplementation.BASE_COURSES
-            else -> CourseImplementation.EXACT_COURSE_ITEMS
+        initialReceivingElements()
+
+        viewModel.coursesResult.observe(viewLifecycleOwner,
+            Observer { coursesResultUI ->
+                coursesResultUI ?: return@Observer
+
+                binding.coursesLoading.visibility = View.GONE
+                binding.coursesRecyclerView.visibility = View.VISIBLE
+                coursesResultUI.error?.let {
+                    updateUiWithCoursesFailed(it)
+                }
+
+                coursesResultUI.success?.let {
+                    val adapter = CoursesRecyclerViewAdapter(this, courseImpl ?: CourseImplementation.BASE_COURSES)
+                    adapter.setModelsList(coursesResultUI.success)
+
+                    binding.coursesRecyclerView.adapter = adapter
+                }
         })
 
-        adapter.setModelsList(list ?: emptyList())
-        binding.coursesRecyclerView.adapter = adapter
+        viewModel.courseItemsResult.observe(viewLifecycleOwner,
+            Observer { courseItemsResultUI ->
+                courseItemsResultUI ?: return@Observer
+
+                binding.coursesLoading.visibility = View.GONE
+                binding.coursesRecyclerView.visibility = View.VISIBLE
+                courseItemsResultUI.error?.let {
+                    updateUiWithCoursesFailed(it)
+                }
+
+                courseItemsResultUI.success?.let {
+                    val adapter = CoursesRecyclerViewAdapter(this, courseImpl ?: CourseImplementation.EXACT_COURSE_ITEMS)
+                    adapter.setModelsList(courseItemsResultUI.success)
+
+                    binding.coursesRecyclerView.adapter = adapter
+                }
+        })
+
+        binding.coursesToolbar.title = arguments?.getString("Title") ?: "Курсы"
     }
 
-    override fun onItemSelected(itemModel: CourseModel) {
-        when (itemModel.title) {
-            "Курс \"Введение\"" -> {
-                val args = bundleOf("CourseId" to "Введение")
-                findNavController().navigate(R.id.action_open_course, args)
+    private fun initialReceivingElements() {
+        when (val courseId = arguments?.getString("CourseId")?.toInt() ?: 0) {
+            0 -> {
+                courseImpl = CourseImplementation.BASE_COURSES
+                viewModel.getCoursesList(userId ?: 0)
             }
-
-            "Курс \"Продолжение\"" -> {
-                val args = bundleOf("CourseId" to "Продолжение")
-                findNavController().navigate(R.id.action_open_course, args)
-            }
-
-            "Курс \"Профи\"" -> {
-                val args = bundleOf("CourseId" to "Профи")
-                findNavController().navigate(R.id.action_open_course, args)
+            else -> {
+                courseImpl = CourseImplementation.EXACT_COURSE_ITEMS
+                viewModel.getExactCourseItemsList(userId ?: 0, courseId)
             }
         }
+    }
+
+    override fun onItemSelected(itemModel: CourseModelUI) {
+        if (itemModel.isExactItem) {
+            return
+        }
+        else {
+            val args = bundleOf("CourseId" to itemModel.courseId, "Title" to itemModel.title)
+            findNavController().navigate(R.id.action_open_course, args)
+        }
+    }
+
+    private fun updateUiWithCoursesFailed(errorString: String) {
+        Toast.makeText(requireContext(), errorString, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/first_purple"
-    tools:context="teachingsolutions.presentation_layer.fragments.login.LoginFragment">
+    tools:context="teachingsolutions.presentation_layer.fragments.login_registration.login.LoginFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/register_toolbar"
@@ -124,6 +124,7 @@
         android:layout_marginBottom="64dp"
         android:visibility="gone"
         android:backgroundTint="@color/first_brown"
+        android:progressTint="@color/first_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/edit_texts_container"
         app:layout_constraintStart_toStartOf="@+id/edit_texts_container"

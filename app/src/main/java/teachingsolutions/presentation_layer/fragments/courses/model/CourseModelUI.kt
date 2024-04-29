@@ -1,8 +1,12 @@
 package teachingsolutions.presentation_layer.fragments.courses.model
 
-data class CourseModelUI(
-    val title: String,
-    val subtitle: String,
-    val description: String,
-    val progressInPercent: Int
-)
+import teachingsolutions.presentation_layer.interfaces.IItemUIModel
+
+open class CourseModelUI(
+    open val courseId: Int,
+    open val title: String,
+    open val subtitle: String = "",
+    open val description: String = "",
+    open val progressInPercent: Int = 0,
+    open val isExactItem: Boolean = false
+): IItemUIModel

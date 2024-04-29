@@ -7,9 +7,9 @@ import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressT
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
 import teachingsolutions.domain_layer.mapping_models.courses.CourseModel
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
-import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsResult
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsResultUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
-import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResult
+import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResultUI
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,9 +20,10 @@ class CoursesRepository @Inject constructor(
     private var coursesCached = emptyList<CourseModel>()
     private var coursesItemsCached = emptyList<CourseItemModel>()
 
-    suspend fun getCourses(userId: Long): ActionResult<CoursesResult> {
-        if (coursesCached.isNotEmpty()) return ActionResult.Success(CoursesResult(coursesCached.map {
+    suspend fun getCourses(userId: Long): ActionResult<CoursesResultUI> {
+        if (coursesCached.isNotEmpty()) return ActionResult.Success(CoursesResultUI(coursesCached.map {
             CourseModelUI(
+                it.courseId,
                 it.title,
                 it.subtitle,
                 it.description,
@@ -32,6 +33,7 @@ class CoursesRepository @Inject constructor(
 
         when (val result = coursesDataSource.getCourses(userId)) {
             is ActionResult.Success -> {
+                result.data.courses.sortBy { it.position }
                 coursesCached = result.data.courses.map {
                     CourseModel(
                         it.courseId,
@@ -43,8 +45,9 @@ class CoursesRepository @Inject constructor(
                     )
                 }
 
-                return ActionResult.Success(CoursesResult(coursesCached.map {
+                return ActionResult.Success(CoursesResultUI(coursesCached.map {
                     CourseModelUI(
+                        it.courseId,
                         it.title,
                         it.subtitle,
                         it.description,
@@ -53,7 +56,7 @@ class CoursesRepository @Inject constructor(
                 }, null))
             }
             is ActionResult.NormalError -> {
-                return ActionResult.NormalError(CoursesResult(null, result.data.errors?.joinToString { it } ?: "Error while getting courses"))
+                return ActionResult.NormalError(CoursesResultUI(null, result.data.errors?.joinToString { it } ?: "Error while getting courses"))
             }
             is ActionResult.ExceptionError -> {
                 return ActionResult.ExceptionError(result.exception)
@@ -62,14 +65,19 @@ class CoursesRepository @Inject constructor(
         }
     }
 
-    suspend fun getCourseItems(userId: Long, courseId: Int): ActionResult<CourseItemsResult> {
-        if (coursesItemsCached.isNotEmpty()) return ActionResult.Success(CourseItemsResult(coursesItemsCached.map {
-            CourseItemModelUI(
-                it.title,
-                it.courseItemType,
-                it.courseItemProgressType
-            )
-        }, null))
+    suspend fun getCourseItems(userId: Long, courseId: Int): ActionResult<CourseItemsResultUI> {
+        val neededCourseItemsFromCache = coursesItemsCached.filter { it.courseId == courseId }.sortedBy { it.position }
+        if (neededCourseItemsFromCache.isNotEmpty()) {
+            return ActionResult.Success(CourseItemsResultUI(neededCourseItemsFromCache.map {
+                CourseItemModelUI(
+                    it.courseId,
+                    it.title,
+                    it.courseItemType,
+                    it.courseItemProgressType,
+                    it.courseItemId
+                )
+            }, null))
+        }
 
         when (val result = coursesDataSource.getCourseItems(userId, courseId)) {
             is ActionResult.Success -> {
@@ -84,16 +92,19 @@ class CoursesRepository @Inject constructor(
                     )
                 }
 
-                return ActionResult.Success(CourseItemsResult(coursesItemsCached.map {
+                val sortedCourseItems = coursesItemsCached.filter { it.courseId == courseId }.sortedBy { it.position }
+                return ActionResult.Success(CourseItemsResultUI(sortedCourseItems.map {
                     CourseItemModelUI(
+                        it.courseId,
                         it.title,
                         it.courseItemType,
-                        it.courseItemProgressType
+                        it.courseItemProgressType,
+                        it.courseItemId
                     )
                 }, null))
             }
             is ActionResult.NormalError -> {
-                return ActionResult.NormalError(CourseItemsResult(null, result.data.errors?.joinToString { it } ?: "Error while getting course items"))
+                return ActionResult.NormalError(CourseItemsResultUI(null, result.data.errors?.joinToString { it } ?: "Error while getting course items"))
             }
             is ActionResult.ExceptionError -> {
                 return ActionResult.ExceptionError(result.exception)

@@ -6,9 +6,9 @@ import teachingsolutions.data_access_layer.DAL_models.user.JwtTokens
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequest
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponse
-import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequest
-import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResponse
-import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequest
+import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequestApi
+import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResponseApi
+import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequestApi
 import teachingsolutions.data_access_layer.login_registration.UserDataSource
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
 import java.time.Instant
@@ -70,7 +70,7 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun register(username: String, email: String, password: String, confirmPassword: String): ActionResult<LoginUserResponse> {
-        val result = dataSource.register(RegisterUserRequest(username, email, password, confirmPassword, listOf("user")))
+        val result = dataSource.register(RegisterUserRequestApi(username, email, password, confirmPassword, listOf("user")))
 
         if (result is ActionResult.Success) {
             setLoggedInUser(result.data)
@@ -79,8 +79,8 @@ class UserRepository @Inject constructor(
         return result
     }
 
-    suspend fun refreshUserTokens(jwtTokens: JwtTokens): ActionResult<RefreshUserTokensResponse> {
-        return dataSource.refreshUserTokens(RefreshUserTokensRequest(jwtTokens))
+    suspend fun refreshUserTokens(jwtTokens: JwtTokens): ActionResult<RefreshUserTokensResponseApi> {
+        return dataSource.refreshUserTokens(RefreshUserTokensRequestApi(jwtTokens))
     }
 
     private fun setLoggedInUser(loginUserResponse: LoginUserResponse) {

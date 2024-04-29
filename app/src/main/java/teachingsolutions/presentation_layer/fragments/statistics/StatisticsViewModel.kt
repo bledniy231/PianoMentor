@@ -6,6 +6,7 @@ import com.example.pianomentor.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import teachingsolutions.domain_layer.login_registration.UserRepository
 import teachingsolutions.domain_layer.mapping_models.statistics.CoursesProgressModel
 import teachingsolutions.domain_layer.mapping_models.statistics.ExercisesProgressModel
@@ -47,7 +48,7 @@ class StatisticsViewModel @Inject constructor(private var userRepository: UserRe
     fun isUserStillAvailable(): Boolean {
         var result: Boolean = false
         viewModelScope.launch {
-            with(Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
                 result = userRepository.checkIfCurrentUserValid()
             }
         }

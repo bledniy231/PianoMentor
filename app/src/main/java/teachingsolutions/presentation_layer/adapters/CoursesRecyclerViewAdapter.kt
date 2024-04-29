@@ -18,12 +18,13 @@ import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
 import teachingsolutions.domain_layer.mapping_models.courses.CourseModel
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemModel
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseImplementation
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 class CoursesRecyclerViewAdapter(
-    private val listener: ISelectRecyclerViewItemListener<CourseModel>,
-    private val courseImplementation: CourseImplementation
-)
+    private val listener: ISelectRecyclerViewItemListener<CourseModelUI>,
+    private val courseImplementation: CourseImplementation)
     : RecyclerView.Adapter<CoursesRecyclerViewAdapter.CoursesRecyclerViewViewHolder>() {
     inner class CoursesRecyclerViewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val title: TextView = itemView.findViewById(R.id.title1)
@@ -36,8 +37,8 @@ class CoursesRecyclerViewAdapter(
         private val circleBackground: ImageView = itemView.findViewById(R.id.circle_background)
         private val courseItemImage: ImageView = itemView.findViewById(R.id.course_item_image)
 
-        internal fun bind(courseModel: CourseModel?) {
-            if (courseModel == null) {
+        internal fun bind(courseModelUI: CourseModelUI?) {
+            if (courseModelUI == null) {
                 return
             }
 
@@ -47,18 +48,19 @@ class CoursesRecyclerViewAdapter(
                 description.visibility = View.VISIBLE
                 progressBar.visibility = View.VISIBLE
                 courseItemInfo.setPadding(5, 16, 16, 16)
-                title.text = courseModel.title
-                subtitle.text = courseModel.subtitle
-                description.text = courseModel.description
-                progressBar.progress = courseModel.progressInPercent
+                title.text = courseModelUI.title
+                subtitle.text = courseModelUI.subtitle
+                description.text = courseModelUI.description
+                progressBar.progress = courseModelUI.progressInPercent
             } else {
                 courseItemImageContainer.visibility = View.VISIBLE
+                title.visibility = View.VISIBLE
                 subtitle.visibility = View.GONE
                 description.visibility = View.GONE
                 progressBar.visibility = View.GONE
-                val innerCourseItemModel = courseModel as CourseItemModel
-                title.text = innerCourseItemModel.title
-                when (innerCourseItemModel.courseItemType) {
+                val courseItemModelUI = courseModelUI as CourseItemModelUI
+                title.text = courseItemModelUI.title
+                when (courseItemModelUI.courseItemType) {
                     CourseItemType.LECTURE -> {
                         courseItemImage.setBackgroundResource(R.drawable.icon_lectures)
                     }
@@ -70,7 +72,7 @@ class CoursesRecyclerViewAdapter(
                     }
                 }
 
-                when (innerCourseItemModel.courseItemProgressType) {
+                when (courseItemModelUI.courseItemProgressType) {
                     CourseItemProgressType.NOT_STARTED -> {
                         circleBackground.setColorFilter(ContextCompat.getColor(itemView.context, R.color.light_gray))
                         courseItemImage.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.black))
@@ -92,13 +94,13 @@ class CoursesRecyclerViewAdapter(
         }
     }
 
-    private var models: List<CourseModel>? = null
+    private var models: List<CourseModelUI>? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): CoursesRecyclerViewViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.course_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.course_card, parent, false)
         return CoursesRecyclerViewViewHolder(view)
     }
 
@@ -109,12 +111,12 @@ class CoursesRecyclerViewAdapter(
     override fun onBindViewHolder(holder: CoursesRecyclerViewViewHolder, position: Int) {
         holder.bind(models?.get(position))
         holder.card.setOnClickListener {
-            models?.get(position)?.let { it1 -> listener.onItemSelected(it1) }
+            models?.get(position)?.let { listener.onItemSelected(it) }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public fun setModelsList(list: List<CourseModel>) {
+    public fun setModelsList(list: List<CourseModelUI>) {
         models = list
         notifyDataSetChanged()
     }

@@ -4,9 +4,9 @@ import retrofit2.Response
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequest
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponse
-import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequest
-import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResponse
-import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequest
+import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequestApi
+import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResponseApi
+import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequestApi
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
 import java.io.IOException
 import javax.inject.Inject
@@ -29,7 +29,7 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
         }
     }
 
-    suspend fun register(request: RegisterUserRequest): ActionResult<LoginUserResponse> {
+    suspend fun register(request: RegisterUserRequestApi): ActionResult<LoginUserResponse> {
         return try {
             val callResult = apiService.registerUser(request)
             when (callResult.failedMessage) {
@@ -54,7 +54,7 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
         }
     }
 
-    suspend fun refreshUserTokens(request: RefreshUserTokensRequest): ActionResult<RefreshUserTokensResponse> {
+    suspend fun refreshUserTokens(request: RefreshUserTokensRequestApi): ActionResult<RefreshUserTokensResponseApi> {
         return try {
             val result = apiService.refreshUserTokens(request)
             when (result.errors) {
