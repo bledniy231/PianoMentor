@@ -12,13 +12,25 @@
         tools:layout="@layout/fragment_statistics">
         <action
             android:id="@+id/action_choose_register_or_login"
-            app:destination="@id/chooseLoginOrRegisterFragment"/>
+            app:destination="@id/chooseLoginOrRegisterFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_choose_profile"
-            app:destination="@id/profileFragment"/>
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_choose_courses"
-            app:destination="@id/coursesFragment"/>
+            app:destination="@id/coursesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -28,13 +40,25 @@
         tools:layout="@layout/fragment_choose_login_or_register">
         <action
             android:id="@+id/action_start_register"
-            app:destination="@id/registrationFragment"/>
+            app:destination="@id/registrationFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_start_login"
-            app:destination="@id/loginFragment"/>
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_back_arrow_choose_to_statisticsFragment"
-            app:destination="@id/statisticsFragment"/>
+            app:destination="@id/statisticsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -43,10 +67,18 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_back_arrow_login_to_choose"
-            app:destination="@id/chooseLoginOrRegisterFragment"/>
+            app:destination="@id/chooseLoginOrRegisterFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_successful_loggedIn"
-            app:destination="@id/statisticsFragment"/>
+            app:destination="@id/statisticsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -54,10 +86,18 @@
         android:label="RegistrationFragment">
         <action
             android:id="@+id/action_back_arrow_login_to_choose"
-            app:destination="@id/chooseLoginOrRegisterFragment"/>
+            app:destination="@id/chooseLoginOrRegisterFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_successful_registered"
-            app:destination="@id/statisticsFragment"/>
+            app:destination="@id/statisticsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -65,10 +105,18 @@
         android:label="PersonalFragment">
         <action
             android:id="@+id/action_back_arrow_profile_to_statistics"
-            app:destination="@id/statisticsFragment"/>
+            app:destination="@id/statisticsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_open_about_app"
-            app:destination="@id/aboutAppFragment"/>
+            app:destination="@id/aboutAppFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/coursesFragment"
@@ -76,13 +124,25 @@
         android:label="CoursesFragment">
         <action
             android:id="@+id/action_back_arrow_courses_to_statistics"
-            app:destination="@id/statisticsFragment"/>
+            app:destination="@id/statisticsFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
         <action
             android:id="@+id/action_open_course"
-            app:destination="@id/coursesFragment"/>
+            app:destination="@id/coursesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_back_arrow_courses_to_courses"
-            app:destination="@id/coursesFragment"/>
+            app:destination="@id/coursesFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/aboutAppFragment"
@@ -90,7 +150,11 @@
         android:label="AboutAppFragment">
         <action
             android:id="@+id/action_back_arrow_about_to_profile"
-            app:destination="@id/profileFragment"/>
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
 
 </navigation>

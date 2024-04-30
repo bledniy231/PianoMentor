@@ -36,4 +36,5 @@
     <string name="app_version_text"><u>Версия приложения:</u> 1.0.0</string>
     <string name="app_creator_text"><u>Создатель приложения:</u>\nСеряков Егор Сергеевич\nСтудент ЮУрГУ\nкафедры Системного программирования\nГруппы КЭ-402</string>
     <string name="diploma_text">Это приложение является дипломной работой бакалавра.</string>
+    <string name="about_app_title_text">О приложении</string>
 </resources>

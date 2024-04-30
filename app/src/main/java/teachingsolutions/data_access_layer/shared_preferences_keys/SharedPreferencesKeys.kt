@@ -5,7 +5,10 @@ import javax.inject.Singleton
 
 @Singleton
 class SharedPreferencesKeys @Inject constructor() {
-    public val PREF_NAME = "teaching_solutions"
+    companion object {
+        public val PREF_NAME = "teaching_solutions"
+    }
+
     public val KEY_USER_TOKENS = "user_tokens"
     public val KEY_AUTH_TOKEN = "auth_token"
     public val KEY_AUTH_TOKEN_EXPIRY_TIME = "auth_token_expiry_time"

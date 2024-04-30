@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
@@ -47,7 +48,7 @@ class CoursesRecyclerViewAdapter(
                 subtitle.visibility = View.VISIBLE
                 description.visibility = View.VISIBLE
                 progressBar.visibility = View.VISIBLE
-                courseItemInfo.setPadding(5, 16, 16, 16)
+                courseItemInfo.setPadding(32)
                 title.text = courseModelUI.title
                 subtitle.text = courseModelUI.subtitle
                 description.text = courseModelUI.description
@@ -59,35 +60,37 @@ class CoursesRecyclerViewAdapter(
                 description.visibility = View.GONE
                 progressBar.visibility = View.GONE
                 val courseItemModelUI = courseModelUI as CourseItemModelUI
+                courseItemInfo.setPadding(16, 48, 32, 48)
                 title.text = courseItemModelUI.title
+                title.textSize = 18f
                 when (courseItemModelUI.courseItemType) {
                     CourseItemType.LECTURE -> {
-                        courseItemImage.setBackgroundResource(R.drawable.icon_lectures)
+                        courseItemImage.setImageResource(R.drawable.icon_lectures)
                     }
                     CourseItemType.EXERCISE -> {
-                        courseItemImage.setBackgroundResource(R.drawable.icon_practice)
+                        courseItemImage.setImageResource(R.drawable.icon_practice)
                     }
                     else -> {
-                        courseItemImage.setBackgroundResource(R.drawable.icon_lectures_tests)
+                        courseItemImage.setImageResource(R.drawable.icon_tests)
                     }
                 }
 
                 when (courseItemModelUI.courseItemProgressType) {
                     CourseItemProgressType.NOT_STARTED -> {
-                        circleBackground.setColorFilter(ContextCompat.getColor(itemView.context, R.color.light_gray))
-                        courseItemImage.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.black))
+                        circleBackground.setColorFilter(ContextCompat.getColor(itemView.context, R.color.bright_purple))
+                        courseItemImage.setColorFilter(ContextCompat.getColor(itemView.context, R.color.dark_gray))
                     }
                     CourseItemProgressType.IN_PROGRESS -> {
-                        circleBackground.setColorFilter(ContextCompat.getColor(itemView.context, R.color.light_blue))
-                        courseItemImage.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.black))
+                        circleBackground.setColorFilter(ContextCompat.getColor(itemView.context, R.color.bright_blue))
+                        courseItemImage.setColorFilter(ContextCompat.getColor(itemView.context, R.color.dark_gray))
                     }
                     CourseItemProgressType.COMPLETED -> {
                         circleBackground.setColorFilter(ContextCompat.getColor(itemView.context, R.color.first_green))
-                        courseItemImage.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.ultra_light_purple))
+                        courseItemImage.setColorFilter(ContextCompat.getColor(itemView.context, R.color.ultra_light_purple))
                     }
                     else -> {
                         circleBackground.setColorFilter(ContextCompat.getColor(itemView.context, R.color.deep_coral))
-                        courseItemImage.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.ultra_light_purple))
+                        courseItemImage.setColorFilter(ContextCompat.getColor(itemView.context, R.color.ultra_light_purple))
                     }
                 }
             }

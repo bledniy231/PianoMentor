@@ -25,7 +25,7 @@
         android:gravity="center_vertical"
         android:paddingStart="16dp"
         android:textColor="@color/dark_gray"
-        tools:text="О приложении"
+        android:text="@string/about_app_title_text"
         android:textStyle="bold"/>
 
     <LinearLayout
@@ -45,7 +45,7 @@
             android:paddingVertical="30dp"
             android:paddingHorizontal="16dp"
             android:textSize="22sp"
-            tools:text="@string/app_version_text"/>
+            android:text="@string/app_version_text"/>
 
         <TextView
             android:id="@+id/app_creator"
@@ -54,7 +54,7 @@
             android:paddingVertical="30dp"
             android:paddingHorizontal="16dp"
             android:textSize="22sp"
-            tools:text="@string/app_creator_text"/>
+            android:text="@string/app_creator_text"/>
 
         <TextView
             android:id="@+id/app_description"
@@ -63,7 +63,7 @@
             android:paddingVertical="30dp"
             android:paddingHorizontal="16dp"
             android:textSize="22sp"
-            tools:text="@string/diploma_text"/>
+            android:text="@string/diploma_text"/>
 
 
     </LinearLayout>

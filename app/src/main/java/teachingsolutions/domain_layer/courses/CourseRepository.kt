@@ -10,6 +10,7 @@ import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemMo
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsResultUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResultUI
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -115,7 +116,7 @@ class CoursesRepository @Inject constructor(
 
     private fun getCourseItemType(courseItemTypeInString: String): CourseItemType {
         return try {
-            CourseItemType.valueOf(courseItemTypeInString)
+            CourseItemType.valueOf(courseItemTypeInString.uppercase(Locale.ROOT))
         } catch (e: Exception) {
             CourseItemType.LECTURE
         }
@@ -123,7 +124,7 @@ class CoursesRepository @Inject constructor(
 
     private fun getCourseItemProgressType(courseItemProgressTypeInString: String): CourseItemProgressType {
         return try {
-            CourseItemProgressType.valueOf(courseItemProgressTypeInString)
+            CourseItemProgressType.valueOf(courseItemProgressTypeInString.uppercase(Locale.ROOT))
         } catch (e: Exception) {
             CourseItemProgressType.NOT_STARTED
         }

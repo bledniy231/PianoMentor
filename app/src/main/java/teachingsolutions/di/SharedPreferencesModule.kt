@@ -7,7 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import teachingsolutions.data_access_layer.common.SharedPreferencesKeys
+import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module

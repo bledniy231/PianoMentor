@@ -11,6 +11,7 @@ import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResp
 import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequestApi
 import teachingsolutions.data_access_layer.login_registration.UserDataSource
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
+import teachingsolutions.domain_layer.common.CustomGson
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -21,11 +22,12 @@ import javax.inject.Singleton
 class UserRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val prefKeys: SharedPreferencesKeys,
-    private val dataSource: UserDataSource
+    private val dataSource: UserDataSource,
+    private val customGson: CustomGson
 ) {
 
     private var user: LoginUserResponse? = null
-    private val gson = Gson()
+    private val gson = customGson.getCustomGsonObject()
 
     val userId: Long?
         get() = user?.userId
@@ -35,6 +37,8 @@ class UserRepository @Inject constructor(
 
     val isLoggedIn: Boolean
         get() = user != null
+
+    private var isFirstCheckUserAvailability: Boolean = true
 
     init {
         user = null
@@ -63,7 +67,7 @@ class UserRepository @Inject constructor(
         val result = dataSource.login(LoginUserRequest(username, password))
 
         if (result is ActionResult.Success) {
-            setLoggedInUser(result.data)
+            setLoggedInUser(result.data, true)
         }
 
         return result
@@ -73,7 +77,7 @@ class UserRepository @Inject constructor(
         val result = dataSource.register(RegisterUserRequestApi(username, email, password, confirmPassword, listOf("user")))
 
         if (result is ActionResult.Success) {
-            setLoggedInUser(result.data)
+            setLoggedInUser(result.data, true)
         }
 
         return result
@@ -83,20 +87,28 @@ class UserRepository @Inject constructor(
         return dataSource.refreshUserTokens(RefreshUserTokensRequestApi(jwtTokens))
     }
 
-    private fun setLoggedInUser(loginUserResponse: LoginUserResponse) {
+    fun setLoggedInUser(loginUserResponse: LoginUserResponse, addToSharedPrefs: Boolean) {
         this.user = loginUserResponse
 
-        with(sharedPreferences.edit()) {
-            putString(prefKeys.KEY_USER_TOKENS, gson.toJson(loginUserResponse.jwtTokensModel))
-            putString(prefKeys.KEY_USERID, loginUserResponse.userId.toString())
-            putString(prefKeys.KEY_USERNAME, loginUserResponse.userName)
-            putString(prefKeys.KEY_EMAIL, loginUserResponse.email)
-            putStringSet(prefKeys.KEY_ROLES, loginUserResponse.roles.toSet())
-            apply()
+        if (addToSharedPrefs) {
+            with(sharedPreferences.edit()) {
+                putString(prefKeys.KEY_USER_TOKENS, gson.toJson(loginUserResponse.jwtTokensModel))
+                putString(prefKeys.KEY_USERID, loginUserResponse.userId.toString())
+                putString(prefKeys.KEY_USERNAME, loginUserResponse.userName)
+                putString(prefKeys.KEY_EMAIL, loginUserResponse.email)
+                putStringSet(prefKeys.KEY_ROLES, loginUserResponse.roles.toSet())
+                apply()
+            }
         }
     }
 
     public suspend fun checkIfCurrentUserValid(): Boolean {
+        //sharedPreferences.edit().clear().apply()
+        if (!isFirstCheckUserAvailability) {
+            return true
+        }
+
+        isFirstCheckUserAvailability = false
         val jwtTokens = sharedPreferences.getString(prefKeys.KEY_USER_TOKENS, null)?.let { gson.fromJson(it, JwtTokens::class.java) }
         val userId = sharedPreferences.getString(prefKeys.KEY_USERID, null)?.toLong()
         val userName = sharedPreferences.getString(prefKeys.KEY_USERNAME, null)
@@ -107,7 +119,7 @@ class UserRepository @Inject constructor(
         {
             if (!isTokenExpired(jwtTokens.accessTokenExpireTime) && !isTokenExpired(jwtTokens.refreshTokenExpireTime))
             {
-                setLoggedInUser(LoginUserResponse(userId, userName, email, jwtTokens, roles))
+                setLoggedInUser(LoginUserResponse(userId, userName, email, jwtTokens, roles), false)
                 return true
             }
             else if (!isTokenExpired(jwtTokens.refreshTokenExpireTime))
@@ -116,9 +128,9 @@ class UserRepository @Inject constructor(
                 if (result is ActionResult.Success)
                 {
                     result.data.jwtTokens?.let { newTokens ->
-                        setLoggedInUser(LoginUserResponse(userId, userName, email, newTokens, roles))
-                        return true
+                        setLoggedInUser(LoginUserResponse(userId, userName, email, newTokens, roles), addToSharedPrefs = true)
                     }
+                    return true
                 }
                 logout()
                 return false
@@ -136,6 +148,6 @@ class UserRepository @Inject constructor(
     }
 
     private fun isTokenExpired(tokenExpireTime: LocalDateTime?): Boolean {
-        return tokenExpireTime?.isBefore(LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)) == true
+        return tokenExpireTime?.isBefore(LocalDateTime.now(ZoneOffset.UTC)) ?: false
     }
 }

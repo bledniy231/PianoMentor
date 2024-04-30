@@ -14,8 +14,7 @@ import javax.inject.Inject
 
 class UserDataSource @Inject constructor(private val apiService: IPianoMentorApiService) {
     suspend fun login(request: LoginUserRequest): ActionResult<LoginUserResponse> {
-        return try {
-            val callResult = apiService.loginUser(request)
+        return try {val callResult = apiService.loginUser(request)
             when (callResult.failedMessage) {
                 null -> {
                     ActionResult.Success(callResult)
@@ -25,7 +24,7 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
                 }
             }
         } catch (e: Exception) {
-            ActionResult.ExceptionError(IOException("Error login in, response not successful, ${e.message}"))
+            ActionResult.ExceptionError(IOException(/*"Error login in, response not successful, ${*/e.message))
         }
     }
 
@@ -41,7 +40,7 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
                 }
             }
         } catch (e: Exception) {
-            ActionResult.ExceptionError(IOException("Error register in, response not successful"))
+            ActionResult.ExceptionError(IOException(e.message))
         }
     }
 

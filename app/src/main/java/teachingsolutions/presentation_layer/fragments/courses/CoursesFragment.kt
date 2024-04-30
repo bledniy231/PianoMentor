@@ -46,7 +46,7 @@ class CoursesFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         binding.coursesToolbar.setNavigationOnClickListener {
-            when (val courseId = arguments?.getString("CourseId")?.toInt() ?: 0) {
+            when (val courseId = arguments?.getInt("CourseId") ?: 0) {
                 0 -> findNavController().navigate(R.id.action_back_arrow_courses_to_statistics)
                 else -> {
                     //val args = bundleOf("CourseId" to courseId)
@@ -73,7 +73,6 @@ class CoursesFragment : Fragment(),
                 coursesResultUI.success?.let {
                     val adapter = CoursesRecyclerViewAdapter(this, courseImpl ?: CourseImplementation.BASE_COURSES)
                     adapter.setModelsList(coursesResultUI.success)
-
                     binding.coursesRecyclerView.adapter = adapter
                 }
         })
@@ -91,7 +90,6 @@ class CoursesFragment : Fragment(),
                 courseItemsResultUI.success?.let {
                     val adapter = CoursesRecyclerViewAdapter(this, courseImpl ?: CourseImplementation.EXACT_COURSE_ITEMS)
                     adapter.setModelsList(courseItemsResultUI.success)
-
                     binding.coursesRecyclerView.adapter = adapter
                 }
         })
@@ -100,7 +98,7 @@ class CoursesFragment : Fragment(),
     }
 
     private fun initialReceivingElements() {
-        when (val courseId = arguments?.getString("CourseId")?.toInt() ?: 0) {
+        when (val courseId = arguments?.getInt("CourseId") ?: 0) {
             0 -> {
                 courseImpl = CourseImplementation.BASE_COURSES
                 viewModel.getCoursesList(userId ?: 0)

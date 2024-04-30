@@ -1,5 +1,6 @@
 package teachingsolutions.presentation_layer.fragments.statistics
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,15 +8,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentStatisticsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -48,9 +52,11 @@ class StatisticsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (!viewModel.isUserStillAvailable()) {
-            Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            val isUserAvailable = viewModel.isUserStillAvailable()
+            if (!isUserAvailable) {
+                Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_SHORT).show()
+            }
         }
 
         initialStatisticsViewPager()

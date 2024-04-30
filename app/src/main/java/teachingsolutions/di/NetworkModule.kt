@@ -2,6 +2,11 @@ package teachingsolutions.di
 
 import android.content.Context
 import com.example.pianomentor.R
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,10 +19,15 @@ import retrofit2.Retrofit.*
 import retrofit2.converter.gson.GsonConverterFactory
 import teachingsolutions.data_access_layer.api.AuthInterceptor
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
+import java.lang.reflect.Type
 import java.security.KeyStore
 import java.security.SecureRandom
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Arrays
 import javax.inject.Singleton
 import javax.net.ssl.KeyManagerFactory
@@ -136,8 +146,23 @@ object NetworkModule {
         if (okHttpClient == null) {
             throw IllegalArgumentException("OkHttpClient is null")
         }
+
+        val gson = GsonBuilder()
+            .registerTypeAdapter(LocalDateTime::class.java, object : JsonDeserializer<LocalDateTime> {
+                override fun deserialize(
+                    json: JsonElement,
+                    typeOfT: Type?,
+                    context: JsonDeserializationContext?
+                ): LocalDateTime {
+                    val dateTimeString = json.asString
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
+                    return LocalDateTime.parse(dateTimeString, formatter)
+                }
+            })
+            .create()
+
         return Builder()
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .build()
