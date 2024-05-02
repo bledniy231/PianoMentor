@@ -36,7 +36,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.profileToolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.action_back_arrow_profile_to_statistics)
+            findNavController().popBackStack()
         }
         binding.aboutAppCard.setOnClickListener {
             findNavController().navigate(R.id.action_open_about_app)
@@ -54,7 +54,7 @@ class ProfileFragment : Fragment() {
                         viewModel.logout()
                         Toast.makeText(requireContext(),
                             getString(R.string.you_have_been_logged_out), Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.action_back_arrow_profile_to_statistics)
+                        findNavController().popBackStack(R.id.action_back_arrow_choose_to_statisticsFragment, false)
                     }
                     .setNegativeButton(getString(R.string.no_word), null)
                     .show()

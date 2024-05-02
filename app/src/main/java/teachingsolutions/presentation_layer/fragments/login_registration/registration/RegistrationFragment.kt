@@ -76,7 +76,7 @@ class RegistrationFragment : Fragment() {
                 }
                 registerResult.success?.let {
                     updateUiWithUser(it)
-                    findNavController().navigate(R.id.action_successful_registered)
+                    findNavController().popBackStack(R.id.action_back_arrow_choose_to_statisticsFragment, false)
                 }
             })
 
@@ -125,7 +125,7 @@ class RegistrationFragment : Fragment() {
         }
 
         binding.registerToolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.action_back_arrow_login_to_choose)
+            findNavController().popBackStack()
         }
     }
 

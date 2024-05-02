@@ -1,5 +1,7 @@
 package teachingsolutions.data_access_layer.api
 
+import okhttp3.ResponseBody
+import retrofit2.Response
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequest
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponse
 import retrofit2.http.POST
@@ -30,4 +32,7 @@ interface IPianoMentorApiService {
 
     @GET("api/Courses/GetCourseItems")
     suspend fun getCourseItems(@Query("userId") userId: Long, @Query("courseId") courseId: Int): CourseItemsResponseApi
+
+    @GET("api/Courses/DownloadLecturePdf")
+    suspend fun getLecturePdf(@Query("courseItemId") courseItemId: Int): Response<ResponseBody>
 }

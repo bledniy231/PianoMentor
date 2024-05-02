@@ -30,7 +30,7 @@ class ChooseLoginOrRegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.regOrLoginToolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.action_back_arrow_choose_to_statisticsFragment)
+            findNavController().popBackStack()
         }
         binding.startLoginBtn.setOnClickListener {
             findNavController().navigate(R.id.action_start_login)

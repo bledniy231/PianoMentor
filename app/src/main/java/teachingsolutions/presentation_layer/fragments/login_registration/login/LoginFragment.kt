@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
@@ -68,7 +69,7 @@ class LoginFragment : Fragment() {
                 }
                 loginResult.success?.let {
                     updateUiWithUser(it)
-                    findNavController().navigate(R.id.action_successful_loggedIn)
+                    findNavController().popBackStack(R.id.action_back_arrow_choose_to_statisticsFragment, false)
                 }
             })
 
@@ -109,7 +110,7 @@ class LoginFragment : Fragment() {
         }
 
         loginToolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.action_back_arrow_login_to_choose)
+            findNavController().popBackStack()
         }
     }
 

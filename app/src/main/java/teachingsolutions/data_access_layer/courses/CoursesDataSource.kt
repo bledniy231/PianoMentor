@@ -1,5 +1,6 @@
 package teachingsolutions.data_access_layer.courses
 
+import okhttp3.ResponseBody
 import teachingsolutions.data_access_layer.DAL_models.courses.CourseItemsResponseApi
 import teachingsolutions.data_access_layer.DAL_models.courses.CoursesResponseApi
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
@@ -37,6 +38,16 @@ class CoursesDataSource @Inject constructor(private val apiService: IPianoMentor
             }
         } catch (e: Exception) {
             ActionResult.ExceptionError(IOException("Error while getting course items of course: ${courseId}, response not successful, ${e.message}"))
+        }
+    }
+
+    suspend fun getLecturePdf(courseItemId: Int): ActionResult<ResponseBody> {
+        val response = apiService.getLecturePdf(courseItemId)
+        return if (response.isSuccessful) {
+            ActionResult.Success(response.body()!!)
+        } else {
+            val errorBody = response.errorBody()?.string() ?: response.body()?.string()
+            ActionResult.ExceptionError(IOException("$errorBody"))
         }
     }
 }

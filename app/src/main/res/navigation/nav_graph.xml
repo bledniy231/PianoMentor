@@ -143,6 +143,13 @@
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_open_lecture"
+            app:destination="@id/lectureFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/aboutAppFragment"
@@ -155,6 +162,18 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"/>
+    </fragment>
+    <fragment
+        android:id="@+id/lectureFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.lecture.LectureFragment"
+        android:label="LectureFragment">
+        <action
+            android:id="@+id/action_back_arrow_lecture_to_courses"
+            app:destination="@id/coursesFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
 
 </navigation>

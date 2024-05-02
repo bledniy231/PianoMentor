@@ -14,6 +14,7 @@ import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.domain_layer.login_registration.UserRepository
 import teachingsolutions.presentation_layer.fragments.login_registration.common_model.LoggedInUserModelUI
 import teachingsolutions.presentation_layer.fragments.login_registration.common_model.LoginResultUI
+import teachingsolutions.presentation_layer.fragments.login_registration.common_model.RegistrationFormState
 import javax.inject.Inject
 
 @HiltViewModel

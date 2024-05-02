@@ -13,8 +13,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentCoursesBinding
 import dagger.hilt.android.AndroidEntryPoint
+import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
 import teachingsolutions.presentation_layer.adapters.CoursesRecyclerViewAdapter
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseImplementation
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
@@ -46,13 +48,14 @@ class CoursesFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         binding.coursesToolbar.setNavigationOnClickListener {
-            when (val courseId = arguments?.getInt("CourseId") ?: 0) {
-                0 -> findNavController().navigate(R.id.action_back_arrow_courses_to_statistics)
-                else -> {
-                    //val args = bundleOf("CourseId" to courseId)
-                    findNavController().navigate(R.id.action_back_arrow_courses_to_courses/*, args*/)
-                }
-            }
+            findNavController().popBackStack()
+//            when (val courseId = arguments?.getInt("CourseId") ?: 0) {
+//                0 -> findNavController().navigate(R.id.action_back_arrow_courses_to_statistics)
+//                else -> {
+//                    //val args = bundleOf("CourseId" to courseId)
+//                    findNavController().navigate(R.id.action_back_arrow_courses_to_courses/*, args*/)
+//                }
+//            }
         }
         binding.coursesLoading.visibility = View.VISIBLE
         binding.coursesRecyclerView.visibility = View.GONE
@@ -112,7 +115,22 @@ class CoursesFragment : Fragment(),
 
     override fun onItemSelected(itemModel: CourseModelUI) {
         if (itemModel.isExactItem) {
-            return
+            val courseItemModel = itemModel as CourseItemModelUI
+            when (courseItemModel.courseItemType) {
+                CourseItemType.LECTURE -> {
+                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseName" to courseItemModel.title)
+                    findNavController().navigate(R.id.action_open_lecture, args)
+                }
+                CourseItemType.QUIZ -> {
+                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseName" to courseItemModel.title)
+                    //findNavController().navigate(R.id.action_open_test, args)
+                }
+                CourseItemType.EXERCISE -> {
+                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseName" to courseItemModel.title)
+                    //findNavController().navigate(R.id.action_open_practice, args)
+                }
+
+            }
         }
         else {
             val args = bundleOf("CourseId" to itemModel.courseId, "Title" to itemModel.title)

@@ -40,11 +40,20 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    configurations {
+        all {
+            exclude("com.android.support", "support-media-compat")
+            exclude("com.android.support", "support-compat")
+        }
+    }
 }
 
 dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
@@ -52,7 +61,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     implementation("io.getstream:avatarview-coil:1.0.7")
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

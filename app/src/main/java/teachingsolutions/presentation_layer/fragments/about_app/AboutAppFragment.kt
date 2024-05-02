@@ -26,7 +26,7 @@ class AboutAppFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.aboutAppToolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.action_back_arrow_about_to_profile)
+            findNavController().popBackStack()
         }
     }
     override fun onDestroyView() {

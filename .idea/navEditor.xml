@@ -17,6 +17,15 @@
                             <option name="y" value="869" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_back_arrow_about_to_profile">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -62,6 +71,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_back_arrow_courses_to_courses">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_back_arrow_courses_to_statistics">
                               <value>
                                 <LayoutPositions />
@@ -73,6 +87,18 @@
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="lectureFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="575" />
+                            <option name="y" value="-717" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -115,6 +141,11 @@
                         <option name="myPositions">
                           <map>
                             <entry key="action_back_arrow_profile_to_statistics">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_open_about_app">
                               <value>
                                 <LayoutPositions />
                               </value>

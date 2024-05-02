@@ -2,6 +2,7 @@ package teachingsolutions.domain_layer.courses
 
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.data_access_layer.courses.CoursesDataSource
+import teachingsolutions.domain_layer.common.FileStorageManager
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemModel
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
@@ -10,13 +11,16 @@ import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemMo
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsResultUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResultUI
+import teachingsolutions.presentation_layer.fragments.lecture.model.LecturePdfResultUI
+import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CoursesRepository @Inject constructor(
-    private val coursesDataSource: CoursesDataSource
+    private val coursesDataSource: CoursesDataSource,
+    private val fileStorageManager: FileStorageManager
 ) {
     private var coursesCached = emptyList<CourseModel>()
     private var coursesItemsCached = emptyList<CourseItemModel>()
@@ -114,6 +118,27 @@ class CoursesRepository @Inject constructor(
         }
     }
 
+    suspend fun getLecturePdfFile(courseItemId: Int, courseName: String): ActionResult<LecturePdfResultUI> {
+        val localFile = fileStorageManager.getLecturePdf(courseItemId, courseName)
+        if (localFile != null) {
+            val lecturePdfResultUI = LecturePdfResultUI(localFile, null)
+            return ActionResult.Success(lecturePdfResultUI)
+        }
+
+        return when (val result = coursesDataSource.getLecturePdf(courseItemId)) {
+            is ActionResult.Success -> {
+                val file = fileStorageManager.saveLecturePdf(courseItemId, courseName, result.data)
+                ActionResult.Success(LecturePdfResultUI(file, null))
+            }
+            is ActionResult.NormalError -> {
+                ActionResult.NormalError(LecturePdfResultUI(null, result.data.string()))
+            }
+            is ActionResult.ExceptionError -> {
+                ActionResult.ExceptionError(result.exception)
+            }
+        }
+    }
+
     private fun getCourseItemType(courseItemTypeInString: String): CourseItemType {
         return try {
             CourseItemType.valueOf(courseItemTypeInString.uppercase(Locale.ROOT))
@@ -128,5 +153,9 @@ class CoursesRepository @Inject constructor(
         } catch (e: Exception) {
             CourseItemProgressType.NOT_STARTED
         }
+    }
+
+    fun deleteLecturePdfFile(courseItemId: Int, courseName: String) {
+        fileStorageManager.deleteLecturePdf(courseItemId, courseName)
     }
 }

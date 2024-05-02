@@ -23,7 +23,7 @@ class StatisticsViewModel @Inject constructor(private var userRepository: UserRe
             MainMenuItemModelUI(R.drawable.icon_cources, "Курсы"),
             MainMenuItemModelUI(R.drawable.icon_practice, "Практические занятия"),
             MainMenuItemModelUI(R.drawable.icon_lectures, "Лекции по теории"),
-            MainMenuItemModelUI(R.drawable.icon_lectures_tests, "Тесты по теории"),
+            MainMenuItemModelUI(R.drawable.icon_tests, "Тесты по теории"),
             MainMenuItemModelUI(R.drawable.icon_hearing, "Тренировка слуха"),
             MainMenuItemModelUI(R.drawable.icon_sound_analyze, "Анализатор звука")
         )
