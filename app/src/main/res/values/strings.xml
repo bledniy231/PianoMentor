@@ -6,6 +6,7 @@
     <string name="pianomentor">PianoMentor</string>
     <string name="register">Зарегистрироваться</string>
     <string name="login">Войти</string>
+    <string name="page_counter">Страница %1$d из %2$d</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Пароль</string>

@@ -53,7 +53,6 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
-    implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
