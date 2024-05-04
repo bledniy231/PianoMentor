@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
-import teachingsolutions.presentation_layer.fragments.statistics.StatisticsViewPagerItemModelUI
+import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 
 class StatisticsViewPagerAdapter(
     fragmentContext: Context) :

@@ -1,10 +1,10 @@
 package teachingsolutions.domain_layer.mapping_models.statistics
 
-import teachingsolutions.presentation_layer.fragments.statistics.StatisticsViewPagerItemModelUI
+import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 
 data class UserStatisticsModel(
     var statListViewPagerItems: List<StatisticsViewPagerItemModelUI>,
-    var exercisesProgressModel: ExercisesProgressModel,
-    var lecturesProgressModel: LecturesProgressModel,
-    var coursesProgressModel: CoursesProgressModel
+    var exercisesProgressModel: BaseStatisticsModel,
+    var lecturesProgressModel: BaseStatisticsModel,
+    var coursesProgressModel: BaseStatisticsModel
 )

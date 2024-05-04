@@ -12,7 +12,6 @@ import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsR
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResultUI
 import teachingsolutions.presentation_layer.fragments.lecture.model.LecturePdfResultUI
-import java.io.File
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,8 +24,8 @@ class CoursesRepository @Inject constructor(
     private var coursesCached = emptyList<CourseModel>()
     private var coursesItemsCached = emptyList<CourseItemModel>()
 
-    suspend fun getCourses(userId: Long): ActionResult<CoursesResultUI> {
-        if (coursesCached.isNotEmpty()) return ActionResult.Success(CoursesResultUI(coursesCached.map {
+    suspend fun getCourses(userId: Long): CoursesResultUI {
+        if (coursesCached.isNotEmpty()) return CoursesResultUI(coursesCached.map {
             CourseModelUI(
                 it.courseId,
                 it.title,
@@ -34,9 +33,9 @@ class CoursesRepository @Inject constructor(
                 it.description,
                 it.progressInPercent
             )
-        }, null))
+        }, null)
 
-        when (val result = coursesDataSource.getCourses(userId)) {
+        return when (val result = coursesDataSource.getCourses(userId)) {
             is ActionResult.Success -> {
                 result.data.courses.sortBy { it.position }
                 coursesCached = result.data.courses.map {
@@ -50,7 +49,7 @@ class CoursesRepository @Inject constructor(
                     )
                 }
 
-                return ActionResult.Success(CoursesResultUI(coursesCached.map {
+                CoursesResultUI(coursesCached.map {
                     CourseModelUI(
                         it.courseId,
                         it.title,
@@ -58,22 +57,21 @@ class CoursesRepository @Inject constructor(
                         it.description,
                         it.progressInPercent
                     )
-                }, null))
+                }, null)
             }
             is ActionResult.NormalError -> {
-                return ActionResult.NormalError(CoursesResultUI(null, result.data.errors?.joinToString { it } ?: "Error while getting courses"))
+                CoursesResultUI(null, result.data.errors?.joinToString { it } ?: "Error while getting courses")
             }
             is ActionResult.ExceptionError -> {
-                return ActionResult.ExceptionError(result.exception)
+                CoursesResultUI(null, result.exception.message ?: "Exception while getting courses")
             }
-            else -> return ActionResult.ExceptionError(Exception("OTHER_EX: No courses found or no internet connection"))
         }
     }
 
-    suspend fun getCourseItems(userId: Long, courseId: Int): ActionResult<CourseItemsResultUI> {
+    suspend fun getCourseItems(userId: Long, courseId: Int): CourseItemsResultUI {
         val neededCourseItemsFromCache = coursesItemsCached.filter { it.courseId == courseId }.sortedBy { it.position }
         if (neededCourseItemsFromCache.isNotEmpty()) {
-            return ActionResult.Success(CourseItemsResultUI(neededCourseItemsFromCache.map {
+            return CourseItemsResultUI(neededCourseItemsFromCache.map {
                 CourseItemModelUI(
                     it.courseId,
                     it.title,
@@ -81,10 +79,10 @@ class CoursesRepository @Inject constructor(
                     it.courseItemProgressType,
                     it.courseItemId
                 )
-            }, null))
+            }, null)
         }
 
-        when (val result = coursesDataSource.getCourseItems(userId, courseId)) {
+        return when (val result = coursesDataSource.getCourseItems(userId, courseId)) {
             is ActionResult.Success -> {
                 coursesItemsCached = result.data.courseItems.map {
                     CourseItemModel(
@@ -98,7 +96,7 @@ class CoursesRepository @Inject constructor(
                 }
 
                 val sortedCourseItems = coursesItemsCached.filter { it.courseId == courseId }.sortedBy { it.position }
-                return ActionResult.Success(CourseItemsResultUI(sortedCourseItems.map {
+                CourseItemsResultUI(sortedCourseItems.map {
                     CourseItemModelUI(
                         it.courseId,
                         it.title,
@@ -106,35 +104,33 @@ class CoursesRepository @Inject constructor(
                         it.courseItemProgressType,
                         it.courseItemId
                     )
-                }, null))
+                }, null)
             }
             is ActionResult.NormalError -> {
-                return ActionResult.NormalError(CourseItemsResultUI(null, result.data.errors?.joinToString { it } ?: "Error while getting course items"))
+                CourseItemsResultUI(null, result.data.errors?.joinToString { it } ?: "Error while getting courses")
             }
             is ActionResult.ExceptionError -> {
-                return ActionResult.ExceptionError(result.exception)
+                CourseItemsResultUI(null, result.exception.message ?: "Exception while getting courses")
             }
-            else -> return ActionResult.ExceptionError(Exception("OTHER_EX: No course items found or no internet connection"))
         }
     }
 
-    suspend fun getLecturePdfFile(courseItemId: Int, courseName: String): ActionResult<LecturePdfResultUI> {
+    suspend fun getLecturePdfFile(courseItemId: Int, courseName: String): LecturePdfResultUI {
         val localFile = fileStorageManager.getLecturePdf(courseItemId, courseName)
         if (localFile != null) {
-            val lecturePdfResultUI = LecturePdfResultUI(localFile, null)
-            return ActionResult.Success(lecturePdfResultUI)
+            return LecturePdfResultUI(localFile, null)
         }
 
         return when (val result = coursesDataSource.getLecturePdf(courseItemId)) {
             is ActionResult.Success -> {
                 val file = fileStorageManager.saveLecturePdf(courseItemId, courseName, result.data)
-                ActionResult.Success(LecturePdfResultUI(file, null))
+                LecturePdfResultUI(file, null)
             }
             is ActionResult.NormalError -> {
-                ActionResult.NormalError(LecturePdfResultUI(null, result.data.string()))
+                LecturePdfResultUI(null, result.data.string())
             }
             is ActionResult.ExceptionError -> {
-                ActionResult.ExceptionError(result.exception)
+                LecturePdfResultUI(null, result.exception.message)
             }
         }
     }
@@ -157,5 +153,10 @@ class CoursesRepository @Inject constructor(
 
     fun deleteLecturePdfFile(courseItemId: Int, courseName: String) {
         fileStorageManager.deleteLecturePdf(courseItemId, courseName)
+    }
+
+    fun clearCache() {
+        coursesCached = emptyList()
+        coursesItemsCached = emptyList()
     }
 }

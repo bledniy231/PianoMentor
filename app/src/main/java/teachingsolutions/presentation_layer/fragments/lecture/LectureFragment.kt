@@ -15,11 +15,14 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentLectureBinding
 import dagger.hilt.android.AndroidEntryPoint
+import teachingsolutions.presentation_layer.fragments.lecture.model.LectureAnimation
+import teachingsolutions.presentation_layer.fragments.lecture.model.SwipeDirection
 import java.io.File
 import kotlin.math.abs
 
@@ -34,15 +37,17 @@ class LectureFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: LectureViewModel by viewModels()
+    private var popupMenu: PopupMenu? = null
 
     private var fileDescriptor: ParcelFileDescriptor? = null
     private var pdfRenderer: PdfRenderer? = null
     private var file: File? = null
     private var gestureDetector: GestureDetector? = null
 
+    private var lectureAnimation: LectureAnimation = LectureAnimation.NONE
     private val SWIPE_THRESHOLD = 100
     private val SWIPE_VELOCITY_THRESHOLD = 100
-    private var currentPageIndex = 0
+    private var newPageIndex = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,34 +67,7 @@ class LectureFragment : Fragment() {
 
         binding.lectureToolbar.title = requireArguments().getString("CourseName")
         binding.lecturesLoading.visibility = View.VISIBLE
-        gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
-            override fun onFling(
-                e1: MotionEvent?,
-                e2: MotionEvent,
-                velocityX: Float,
-                velocityY: Float
-            ): Boolean {
-                if (e1 != null) {
-                    // Свайп влево
-                    if (e1.x - e2.x > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD && pdfRenderer != null) {
-                        if (currentPageIndex + 1 < pdfRenderer!!.pageCount) {
-                            currentPageIndex++
-                            file?.let { displayPdf() }
-                        }
-                        return true
-                    }
-                    // Свайп вправо
-                    else if (e2.x - e1.x > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (currentPageIndex > 0) {
-                            currentPageIndex--
-                            file?.let { displayPdf() }
-                        }
-                        return true
-                    }
-                }
-                return false
-            }
-        })
+        gestureDetector = getGestureDetector()
         binding.pdfView.setOnTouchListener { v, event ->
             gestureDetector?.onTouchEvent(event)
             if (event.action == MotionEvent.ACTION_UP) {
@@ -99,16 +77,16 @@ class LectureFragment : Fragment() {
         }
 
         binding.buttonNext.setOnClickListener {
-            if (currentPageIndex + 1 < (pdfRenderer?.pageCount ?: 0)) {
-                currentPageIndex++
-                file?.let { displayPdf() }
+            if (newPageIndex + 1 < (pdfRenderer?.pageCount ?: 0)) {
+                newPageIndex++
+                file?.let { displayPdf(SwipeDirection.RIGHT) }
             }
         }
 
         binding.buttonPrevious.setOnClickListener {
-            if (currentPageIndex > 0) {
-                currentPageIndex--
-                file?.let { displayPdf() }
+            if (newPageIndex > 0) {
+                newPageIndex--
+                file?.let { displayPdf(SwipeDirection.LEFT) }
             }
         }
 
@@ -122,7 +100,11 @@ class LectureFragment : Fragment() {
                         findNavController().popBackStack()
                     }
                     pdfRenderer = PdfRenderer(fileDescriptor!!)
-                    displayPdf()
+                    displayPdf(SwipeDirection.NONE)
+                }
+                resultUI.error?.let { error ->
+                    Toast.makeText(requireContext(), "FAIL: $error", Toast.LENGTH_LONG).show()
+                    findNavController().popBackStack()
                 }
             }
         }
@@ -140,40 +122,128 @@ class LectureFragment : Fragment() {
         binding.lectureToolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        lectureAnimation = viewModel.getLectureAnimationSettings()
+
+        popupMenu = PopupMenu(requireContext(), binding.settingsButton).apply {
+            inflate(R.menu.lecture_menu)
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_no_anim -> {
+                        menuItem.isChecked = true
+                        lectureAnimation = LectureAnimation.NONE
+                        viewModel.saveLectureAnimationSettings(lectureAnimation)
+                        true
+                    }
+                    R.id.action_fade -> {
+                        menuItem.isChecked = true
+                        lectureAnimation = LectureAnimation.FADE
+                        viewModel.saveLectureAnimationSettings(lectureAnimation)
+                        true
+                    }
+                    R.id.action_slide -> {
+                        menuItem.isChecked = true
+                        lectureAnimation = LectureAnimation.SLIDE
+                        viewModel.saveLectureAnimationSettings(lectureAnimation)
+                        true
+                    }
+                    else -> false
+                }
+            }
+            when (lectureAnimation) {
+                LectureAnimation.NONE -> menu.findItem(R.id.action_no_anim).isChecked = true
+                LectureAnimation.FADE -> menu.findItem(R.id.action_fade).isChecked = true
+                LectureAnimation.SLIDE -> menu.findItem(R.id.action_slide).isChecked = true
+            }
+        }
+        binding.settingsButton.setOnClickListener {
+            popupMenu?.show()
+        }
     }
 
-    private fun displayPdf() {
+    private fun displayPdf(direction: SwipeDirection) {
         val pageCount = pdfRenderer?.pageCount
-        val currentPage = pdfRenderer?.openPage(currentPageIndex)
+        val currentPage = pdfRenderer?.openPage(newPageIndex)
 
         val bitmap = Bitmap.createBitmap(currentPage?.width ?: 0, currentPage?.height ?: 0, Bitmap.Config.ARGB_8888)
         currentPage?.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
 
-        imageViewAnimatedChange(requireContext(), binding.pdfView, bitmap.copy(bitmap.config, true))
+        if (lectureAnimation == LectureAnimation.NONE) {
+            binding.pdfView.setImageBitmap(bitmap)
+        }
+        else {
+            imageViewAnimatedChange(requireContext(), binding.pdfView, bitmap.copy(bitmap.config, true), direction)
+        }
 
-        binding.pageCounter.text = getString(R.string.page_counter, currentPageIndex + 1, pageCount)
+        binding.pageCounter.text = getString(R.string.page_counter, newPageIndex + 1, pageCount)
         currentPage?.close()
 
         binding.lecturesLoading.visibility = View.GONE
     }
 
-    private fun imageViewAnimatedChange(context: Context, imageView: ImageView, newImage: Bitmap) {
-        val animOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_out)
-        val animIn  = AnimationUtils.loadAnimation(context, android.R.anim.fade_in)
-        animOut.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationRepeat(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                imageView.setImageBitmap(newImage)
-                animIn.setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationStart(animation: Animation) {}
-                    override fun onAnimationRepeat(animation: Animation) {}
-                    override fun onAnimationEnd(animation: Animation) {}
-                })
-                imageView.startAnimation(animIn)
+    private fun imageViewAnimatedChange(context: Context, imageView: ImageView, newImage: Bitmap, direction: SwipeDirection) {
+        if (lectureAnimation == LectureAnimation.FADE) {
+            val (animOutId, animInId) = Pair(android.R.anim.fade_out, android.R.anim.fade_in)
+            val animOut = AnimationUtils.loadAnimation(context, animOutId)
+            val animIn = AnimationUtils.loadAnimation(context, animInId)
+
+            animOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) { }
+                override fun onAnimationEnd(animation: Animation) {
+                    imageView.setImageBitmap(newImage)
+                    imageView.startAnimation(animIn)
+                }
+                override fun onAnimationRepeat(animation: Animation?) { }
+            })
+            imageView.startAnimation(animOut)
+
+        } else {
+            val (animOutId, animInId) = if (direction == SwipeDirection.LEFT) {
+                Pair(R.anim.image_view_slide_out_right, R.anim.image_view_slide_in_left)
+            } else {
+                Pair(R.anim.image_view_slide_out_left, R.anim.image_view_slide_in_right)
+            }
+
+            val animOut = AnimationUtils.loadAnimation(context, animOutId)
+            val animIn = AnimationUtils.loadAnimation(context, animInId)
+
+            animOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {
+                }
+                override fun onAnimationEnd(animation: Animation) {
+                    imageView.setImageBitmap(newImage)
+                    imageView.startAnimation(animIn)
+                }
+                override fun onAnimationRepeat(animation: Animation?) { }
+            })
+            imageView.startAnimation(animOut)
+        }
+    }
+
+    private fun getGestureDetector(): GestureDetector {
+        return GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                if (e1 != null) {
+                    // Свайп влево
+                    if (e1.x - e2.x > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD && pdfRenderer != null) {
+                        if (newPageIndex + 1 < pdfRenderer!!.pageCount) {
+                            newPageIndex++
+                            file?.let { displayPdf(SwipeDirection.LEFT) }
+                        }
+                        return true
+                    }
+                    // Свайп вправо
+                    else if (e2.x - e1.x > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (newPageIndex > 0) {
+                            newPageIndex--
+                            file?.let { displayPdf(SwipeDirection.RIGHT) }
+                        }
+                        return true
+                    }
+                }
+                return false
             }
         })
-        imageView.startAnimation(animOut)
     }
 
     override fun onDestroyView() {

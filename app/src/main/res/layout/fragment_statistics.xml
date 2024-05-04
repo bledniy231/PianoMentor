@@ -48,7 +48,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/statistics_root_view_group"
             android:layout_width="match_parent"
-            android:layout_height="580dp"
+            android:layout_height="match_parent"
             android:paddingHorizontal="16dp">
 
             <LinearLayout

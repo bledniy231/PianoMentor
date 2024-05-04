@@ -7,10 +7,14 @@ import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponse
 import retrofit2.http.POST
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Query
+import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequestApi
 import teachingsolutions.data_access_layer.DAL_models.courses.CourseItemsResponseApi
 import teachingsolutions.data_access_layer.DAL_models.courses.CoursesResponseApi
+import teachingsolutions.data_access_layer.DAL_models.statistics.SetCourseItemProgressRequestApi
+import teachingsolutions.data_access_layer.DAL_models.statistics.GetUserStatisticsResponseApi
 import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequestApi
 import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResponseApi
 
@@ -35,4 +39,10 @@ interface IPianoMentorApiService {
 
     @GET("api/Courses/DownloadLecturePdf")
     suspend fun getLecturePdf(@Query("courseItemId") courseItemId: Int): Response<ResponseBody>
+
+    @PUT("api/Courses/SetCourseItemProgress")
+    suspend fun setCourseItemProgress(@Body request: SetCourseItemProgressRequestApi): DefaultResponseApi
+
+    @GET("api/ApplicationUser/GetUserStatistics")
+    suspend fun getUserStatistics(@Query("userId") userId: Long): GetUserStatisticsResponseApi
 }

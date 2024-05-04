@@ -6,13 +6,11 @@ import com.example.pianomentor.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import teachingsolutions.domain_layer.login_registration.UserRepository
-import teachingsolutions.domain_layer.mapping_models.statistics.CoursesProgressModel
-import teachingsolutions.domain_layer.mapping_models.statistics.ExercisesProgressModel
-import teachingsolutions.domain_layer.mapping_models.statistics.LecturesProgressModel
+import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsModel
+import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
+import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
+import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,9 +33,9 @@ class StatisticsViewModel @Inject constructor(private var userRepository: UserRe
             StatisticsViewPagerItemModelUI(1, 33, "Завершено курсов", "Вы завершили 1 курс, это большой шаг!")
         )
 
-        val exercisesProgressModel = ExercisesProgressModel(21, 90, "Упражнение")
-        val lecturesProgressModel = LecturesProgressModel(3, 33, "Лекции")
-        val coursesProgressModel = CoursesProgressModel(1, 100, "Курсы")
+        val exercisesProgressModel = BaseStatisticsModel(21, 90, "Упражнение")
+        val lecturesProgressModel = BaseStatisticsModel(3, 33, "Лекции")
+        val coursesProgressModel = BaseStatisticsModel(1, 100, "Курс \"Введение\"")
 
         return UserStatisticsModel(statListViewPagerItems, exercisesProgressModel, lecturesProgressModel, coursesProgressModel)
     }

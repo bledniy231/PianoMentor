@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import teachingsolutions.domain_layer.login_registration.UserRepository
+import teachingsolutions.domain_layer.user.UserRepository
 import javax.inject.Inject
 
 @HiltViewModel

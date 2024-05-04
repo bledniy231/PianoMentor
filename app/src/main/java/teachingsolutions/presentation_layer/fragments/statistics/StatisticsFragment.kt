@@ -1,6 +1,5 @@
 package teachingsolutions.presentation_layer.fragments.statistics
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +17,8 @@ import kotlinx.coroutines.launch
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
+import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
-import javax.inject.Inject
 
 
 @AndroidEntryPoint

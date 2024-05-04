@@ -18,4 +18,5 @@ class SharedPreferencesKeys @Inject constructor() {
     public val KEY_USERNAME = "username"
     public val KEY_EMAIL = "email"
     public val KEY_ROLES = "roles"
+    public val KEY_LECTURE_ANIMATION = "lecture_animation"
 }

@@ -38,4 +38,7 @@
     <string name="app_creator_text"><u>Создатель приложения:</u>\nСеряков Егор Сергеевич\nСтудент ЮУрГУ\nкафедры Системного программирования\nГруппы КЭ-402</string>
     <string name="diploma_text">Это приложение является дипломной работой бакалавра.</string>
     <string name="about_app_title_text">О приложении</string>
+    <string name="fade_animation">Анимация наплывом</string>
+    <string name="swipe_animation">Анимация переходом</string>
+    <string name="no_animation">Без анимации</string>
 </resources>

@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import teachingsolutions.data_access_layer.common.ActionResult
-import teachingsolutions.domain_layer.login_registration.UserRepository
+import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.login_registration.common_model.LoggedInUserModelUI
 import teachingsolutions.presentation_layer.fragments.login_registration.common_model.LoginResultUI
 import teachingsolutions.presentation_layer.fragments.login_registration.common_model.RegistrationFormState

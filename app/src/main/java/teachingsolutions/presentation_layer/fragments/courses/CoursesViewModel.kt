@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.domain_layer.courses.CoursesRepository
-import teachingsolutions.domain_layer.login_registration.UserRepository
+import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsResultUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResultUI
 import javax.inject.Inject
@@ -29,17 +29,8 @@ class CoursesViewModel @Inject constructor(
     fun getCoursesList(userId: Long) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                when (val result = coursesRepository.getCourses((userId))) {
-                    is ActionResult.Success -> {
-                        _coursesResult.postValue(result.data)
-                    }
-                    is ActionResult.NormalError -> {
-                        _coursesResult.postValue(result.data)
-                    }
-                    is ActionResult.ExceptionError -> {
-                        _coursesResult.postValue(CoursesResultUI(null, result.exception.message))
-                    }
-                }
+                val result = coursesRepository.getCourses((userId))
+                _coursesResult.postValue(result)
             }
         }
 
@@ -48,17 +39,8 @@ class CoursesViewModel @Inject constructor(
     fun getExactCourseItemsList(userId: Long, courseId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                when (val result = coursesRepository.getCourseItems(userId, courseId)) {
-                    is ActionResult.Success -> {
-                        _courseItemsResult.postValue(result.data)
-                    }
-                    is ActionResult.NormalError -> {
-                        _courseItemsResult.postValue(result.data)
-                    }
-                    is ActionResult.ExceptionError -> {
-                        _courseItemsResult.postValue(CourseItemsResultUI(null, result.exception.message))
-                    }
-                }
+                val result = coursesRepository.getCourseItems(userId, courseId)
+                _courseItemsResult.postValue(result)
             }
         }
     }

@@ -49,13 +49,6 @@ class CoursesFragment : Fragment(),
 
         binding.coursesToolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
-//            when (val courseId = arguments?.getInt("CourseId") ?: 0) {
-//                0 -> findNavController().navigate(R.id.action_back_arrow_courses_to_statistics)
-//                else -> {
-//                    //val args = bundleOf("CourseId" to courseId)
-//                    findNavController().navigate(R.id.action_back_arrow_courses_to_courses/*, args*/)
-//                }
-//            }
         }
         binding.coursesLoading.visibility = View.VISIBLE
         binding.coursesRecyclerView.visibility = View.GONE

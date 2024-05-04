@@ -7,7 +7,9 @@ import teachingsolutions.data_access_layer.api.IPianoMentorApiService
 import teachingsolutions.data_access_layer.common.ActionResult
 import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class CoursesDataSource @Inject constructor(private val apiService: IPianoMentorApiService) {
     suspend fun getCourses(userId: Long): ActionResult<CoursesResponseApi> {
         return try {
