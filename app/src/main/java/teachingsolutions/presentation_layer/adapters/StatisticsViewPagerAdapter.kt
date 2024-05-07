@@ -53,8 +53,8 @@ class StatisticsViewPagerAdapter(
             progressBarAnim.start()
             textValueAnim.start()
 
-            title.text = statModel.titleText
-            description.text = statModel.descriptionText
+            title.text = statModel.titleText.ifEmpty { "Упс..." }
+            description.text = statModel.descriptionText.ifEmpty { "Скоро здесь что-то появится..." }
         }
     }
 

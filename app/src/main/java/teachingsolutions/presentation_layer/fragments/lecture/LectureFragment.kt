@@ -117,7 +117,7 @@ class LectureFragment : Fragment() {
         val courseItemId = requireArguments().getInt("CourseItemId")
         val courseName = requireArguments().getString("CourseName")
         if (courseItemId > 0 && !courseName.isNullOrEmpty()) {
-            //viewModel.deleteLecturePdf(courseItemId, courseName)
+            viewModel.deleteLecturePdf(courseItemId, courseName)
             viewModel.getLecturePdf(courseItemId, courseName)
         } else {
             Toast.makeText(requireContext(), "FAIL: Incorrect arguments", Toast.LENGTH_SHORT).show()
@@ -262,20 +262,28 @@ class LectureFragment : Fragment() {
     }
 
     private fun onExit(courseItemId: Int) {
-        checkIfLectureCompleted(courseItemId)
-        viewModel.setLectureProgressResult.observe(viewLifecycleOwner,
-            Observer { defResponse ->
-                defResponse.message?.let {
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                }
-                findNavController().popBackStack()
-            })
+        val shouldWaitResult = checkIfLectureCompleted(courseItemId)
+        if (shouldWaitResult) {
+            viewModel.setLectureProgressResult.observe(viewLifecycleOwner,
+                Observer { defResponse ->
+                    defResponse.message?.let {
+                        Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                    }
+                    findNavController().popBackStack()
+                })
+        }
+        else {
+            findNavController().popBackStack()
+        }
     }
 
-    private fun checkIfLectureCompleted(courseItemId: Int) {
-        if (currentPageIndex == (pdfRenderer?.pageCount ?: 0) - 1
+    private fun checkIfLectureCompleted(courseItemId: Int): Boolean {
+        return if (currentPageIndex == (pdfRenderer?.pageCount ?: 0) - 1
             && requireArguments().getString("CourseItemProgressType") != CourseItemProgressType.COMPLETED.value) {
             viewModel.setLectureProgress(courseItemId, CourseItemProgressType.COMPLETED)
+            true
+        } else {
+            false
         }
     }
 

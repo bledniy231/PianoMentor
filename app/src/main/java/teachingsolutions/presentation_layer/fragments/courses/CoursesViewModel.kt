@@ -33,7 +33,6 @@ class CoursesViewModel @Inject constructor(
                 _coursesResult.postValue(result)
             }
         }
-
     }
 
     fun getExactCourseItemsList(userId: Long, courseId: Int) {

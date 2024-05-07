@@ -41,5 +41,12 @@
     <string name="fade_animation">Анимация наплывом</string>
     <string name="swipe_animation">Анимация переходом</string>
     <string name="no_animation">Без анимации</string>
-    <string name="login_for_statistics">Для отображения статистики необходимо войти в аккаунт</string>
+    <string name="login_for_statistics">Для отображения и сохранения статистики необходимо войти в аккаунт</string>
+    <string name="tests_done">Выполнено тестов</string>
+    <string name="zero_tests_done">Вы прошли 0 тестов по теории, самое время, чтобы начать</string>
+    <string name="courses_done">Завершено курсов</string>
+    <string name="zero_courses_done">Вы завершили 0 курсов, начните с курса \"Введение\", чтобы освоить азы</string>
+    <string name="exercise">Упражнение</string>
+    <string name="lectures">Лекции</string>
+    <string name="introduction_course">Курс \"Введение\"</string>
 </resources>

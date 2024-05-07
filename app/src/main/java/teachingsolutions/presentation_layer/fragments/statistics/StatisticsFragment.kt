@@ -10,16 +10,15 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentStatisticsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsModel
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
@@ -83,12 +82,12 @@ class StatisticsFragment : Fragment(),
                             updateUiWithStatisticsFailed(error)
                             initialStatisticsViewPager(UserStatisticsModel(
                                 listOf(
-                                    StatisticsViewPagerItemModelUI(0, 0, "Выполнено тестов", "Вы прошли 0 тестов по теории, самое время, чтобы начать"),
-                                    StatisticsViewPagerItemModelUI(0, 0, "Завершено курсов", "Вы завершили 0 курсов")
+                                    StatisticsViewPagerItemModelUI(0, 0, getString(R.string.tests_done), getString(R.string.zero_tests_done)),
+                                    StatisticsViewPagerItemModelUI(0, 0, getString(R.string.courses_done), getString(R.string.zero_courses_done))
                                 ),
-                                BaseStatisticsModel(0, 0, "Упражнение"),
-                                BaseStatisticsModel(0, 0, "Лекции"),
-                                BaseStatisticsModel(0, 0, "Курс \"Введение\"")
+                                BaseStatisticsModel(0, 0, getString(R.string.exercise)),
+                                BaseStatisticsModel(0, 0, getString(R.string.lectures)),
+                                BaseStatisticsModel(0, 0, getString(R.string.introduction_course))
                             ))
                         }
                     })
@@ -139,6 +138,9 @@ class StatisticsFragment : Fragment(),
                 binding.statViewPager.currentItem = 0
             }
         }
+
+        binding.exercisesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_green, resources.newTheme())
+        binding.lecturesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_brown, resources.newTheme())
 
         val exerciseProgressAnim = getObjectAnimator(binding.exercisesCircleProgressBar, statResult.exercisesProgressModel.progressValueInPercent)
         val exerciseTextAnim = getValueAnimator(binding.exercisesCounterText, statResult.exercisesProgressModel.progressValueAbsolute)

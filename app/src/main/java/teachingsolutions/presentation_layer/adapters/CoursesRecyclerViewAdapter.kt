@@ -85,7 +85,7 @@ class CoursesRecyclerViewAdapter(
                         courseItemImage.setColorFilter(ContextCompat.getColor(itemView.context, R.color.ultra_light_purple))
                     }
                     CourseItemProgressType.COMPLETED -> {
-                        circleBackground.setColorFilter(ContextCompat.getColor(itemView.context, R.color.first_green))
+                        circleBackground.setColorFilter(ContextCompat.getColor(itemView.context, R.color.navy_green))
                         courseItemImage.setColorFilter(ContextCompat.getColor(itemView.context, R.color.ultra_light_purple))
                     }
                     else -> {

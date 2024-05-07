@@ -28,8 +28,8 @@ class StatisticsRepository @Inject constructor(private val statisticsDataSource:
                         StatisticsViewPagerItemModelUI(
                             it?.progressValueAbsolute ?: 0,
                             it?.progressValueInPercent ?: 0,
-                            it?.titleText ?: "Иди нахуй",
-                            it?.descriptionText ?: "Заебал",
+                            it?.title ?: "",
+                            it?.description ?: "",
                         )
                     },
                     BaseStatisticsModel(
