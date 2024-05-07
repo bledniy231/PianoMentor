@@ -17,10 +17,15 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentLectureBinding
 import dagger.hilt.android.AndroidEntryPoint
+import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
 import teachingsolutions.presentation_layer.fragments.lecture.model.LectureAnimation
 import teachingsolutions.presentation_layer.fragments.lecture.model.SwipeDirection
 import java.io.File
@@ -47,7 +52,7 @@ class LectureFragment : Fragment() {
     private var lectureAnimation: LectureAnimation = LectureAnimation.NONE
     private val SWIPE_THRESHOLD = 100
     private val SWIPE_VELOCITY_THRESHOLD = 100
-    private var newPageIndex = 0
+    private var currentPageIndex = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,15 +82,15 @@ class LectureFragment : Fragment() {
         }
 
         binding.buttonNext.setOnClickListener {
-            if (newPageIndex + 1 < (pdfRenderer?.pageCount ?: 0)) {
-                newPageIndex++
+            if (currentPageIndex + 1 < (pdfRenderer?.pageCount ?: 0)) {
+                currentPageIndex++
                 file?.let { displayPdf(SwipeDirection.RIGHT) }
             }
         }
 
         binding.buttonPrevious.setOnClickListener {
-            if (newPageIndex > 0) {
-                newPageIndex--
+            if (currentPageIndex > 0) {
+                currentPageIndex--
                 file?.let { displayPdf(SwipeDirection.LEFT) }
             }
         }
@@ -120,8 +125,14 @@ class LectureFragment : Fragment() {
         }
 
         binding.lectureToolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            onExit(courseItemId)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onExit(courseItemId)
+            }
+        })
 
         lectureAnimation = viewModel.getLectureAnimationSettings()
 
@@ -159,11 +170,15 @@ class LectureFragment : Fragment() {
         binding.settingsButton.setOnClickListener {
             popupMenu?.show()
         }
+
+        if (requireArguments().getString("CourseItemProgressType") == CourseItemProgressType.NOT_STARTED.value) {
+            viewModel.setLectureProgress(courseItemId, CourseItemProgressType.IN_PROGRESS)
+        }
     }
 
     private fun displayPdf(direction: SwipeDirection) {
         val pageCount = pdfRenderer?.pageCount
-        val currentPage = pdfRenderer?.openPage(newPageIndex)
+        val currentPage = pdfRenderer?.openPage(currentPageIndex)
 
         val bitmap = Bitmap.createBitmap(currentPage?.width ?: 0, currentPage?.height ?: 0, Bitmap.Config.ARGB_8888)
         currentPage?.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
@@ -175,7 +190,7 @@ class LectureFragment : Fragment() {
             imageViewAnimatedChange(requireContext(), binding.pdfView, bitmap.copy(bitmap.config, true), direction)
         }
 
-        binding.pageCounter.text = getString(R.string.page_counter, newPageIndex + 1, pageCount)
+        binding.pageCounter.text = getString(R.string.page_counter, currentPageIndex + 1, pageCount)
         currentPage?.close()
 
         binding.lecturesLoading.visibility = View.GONE
@@ -226,16 +241,16 @@ class LectureFragment : Fragment() {
                 if (e1 != null) {
                     // Свайп влево
                     if (e1.x - e2.x > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD && pdfRenderer != null) {
-                        if (newPageIndex + 1 < pdfRenderer!!.pageCount) {
-                            newPageIndex++
+                        if (currentPageIndex + 1 < pdfRenderer!!.pageCount) {
+                            currentPageIndex++
                             file?.let { displayPdf(SwipeDirection.LEFT) }
                         }
                         return true
                     }
                     // Свайп вправо
                     else if (e2.x - e1.x > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (newPageIndex > 0) {
-                            newPageIndex--
+                        if (currentPageIndex > 0) {
+                            currentPageIndex--
                             file?.let { displayPdf(SwipeDirection.RIGHT) }
                         }
                         return true
@@ -244,6 +259,24 @@ class LectureFragment : Fragment() {
                 return false
             }
         })
+    }
+
+    private fun onExit(courseItemId: Int) {
+        checkIfLectureCompleted(courseItemId)
+        viewModel.setLectureProgressResult.observe(viewLifecycleOwner,
+            Observer { defResponse ->
+                defResponse.message?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                }
+                findNavController().popBackStack()
+            })
+    }
+
+    private fun checkIfLectureCompleted(courseItemId: Int) {
+        if (currentPageIndex == (pdfRenderer?.pageCount ?: 0) - 1
+            && requireArguments().getString("CourseItemProgressType") != CourseItemProgressType.COMPLETED.value) {
+            viewModel.setLectureProgress(courseItemId, CourseItemProgressType.COMPLETED)
+        }
     }
 
     override fun onDestroyView() {

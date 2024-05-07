@@ -41,4 +41,5 @@
     <string name="fade_animation">Анимация наплывом</string>
     <string name="swipe_animation">Анимация переходом</string>
     <string name="no_animation">Без анимации</string>
+    <string name="login_for_statistics">Для отображения статистики необходимо войти в аккаунт</string>
 </resources>

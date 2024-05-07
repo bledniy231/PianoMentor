@@ -76,7 +76,11 @@ class RegistrationFragment : Fragment() {
                 }
                 registerResult.success?.let {
                     updateUiWithUser(it)
-                    findNavController().popBackStack(R.id.action_back_arrow_choose_to_statisticsFragment, false)
+                    val fragmentManager = requireActivity().supportFragmentManager
+                    while (fragmentManager.backStackEntryCount > 0) {
+                        fragmentManager.popBackStackImmediate()
+                    }
+                    findNavController().navigate(R.id.action_successful_registered)
                 }
             })
 

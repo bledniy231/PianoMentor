@@ -68,7 +68,7 @@ class CoursesFragment : Fragment(),
 
                 coursesResultUI.success?.let {
                     val adapter = CoursesRecyclerViewAdapter(this, courseImpl ?: CourseImplementation.BASE_COURSES)
-                    adapter.setModelsList(coursesResultUI.success)
+                    adapter.setModelsList(it)
                     binding.coursesRecyclerView.adapter = adapter
                 }
         })
@@ -85,7 +85,7 @@ class CoursesFragment : Fragment(),
 
                 courseItemsResultUI.success?.let {
                     val adapter = CoursesRecyclerViewAdapter(this, courseImpl ?: CourseImplementation.EXACT_COURSE_ITEMS)
-                    adapter.setModelsList(courseItemsResultUI.success)
+                    adapter.setModelsList(it)
                     binding.coursesRecyclerView.adapter = adapter
                 }
         })
@@ -111,7 +111,7 @@ class CoursesFragment : Fragment(),
             val courseItemModel = itemModel as CourseItemModelUI
             when (courseItemModel.courseItemType) {
                 CourseItemType.LECTURE -> {
-                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseName" to courseItemModel.title)
+                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseName" to courseItemModel.title, "CourseItemProgressType" to courseItemModel.courseItemProgressType.value)
                     findNavController().navigate(R.id.action_open_lecture, args)
                 }
                 CourseItemType.QUIZ -> {

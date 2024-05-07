@@ -137,7 +137,7 @@ class CoursesRepository @Inject constructor(
 
     private fun getCourseItemType(courseItemTypeInString: String): CourseItemType {
         return try {
-            CourseItemType.valueOf(courseItemTypeInString.uppercase(Locale.ROOT))
+            CourseItemType.from(courseItemTypeInString)
         } catch (e: Exception) {
             CourseItemType.LECTURE
         }
@@ -145,7 +145,7 @@ class CoursesRepository @Inject constructor(
 
     private fun getCourseItemProgressType(courseItemProgressTypeInString: String): CourseItemProgressType {
         return try {
-            CourseItemProgressType.valueOf(courseItemProgressTypeInString.uppercase(Locale.ROOT))
+            CourseItemProgressType.from(courseItemProgressTypeInString)
         } catch (e: Exception) {
             CourseItemProgressType.NOT_STARTED
         }
@@ -153,6 +153,14 @@ class CoursesRepository @Inject constructor(
 
     fun deleteLecturePdfFile(courseItemId: Int, courseName: String) {
         fileStorageManager.deleteLecturePdf(courseItemId, courseName)
+    }
+
+    fun getCourseIdByCourseItemId(courseItemId: Int): Int {
+        return coursesItemsCached.find { it.courseItemId == courseItemId }?.courseId ?: 0
+    }
+
+    fun setCourseItemProgress(courseItemId: Int, courseItemProgressType: CourseItemProgressType) {
+        coursesItemsCached.find { it.courseItemId == courseItemId }?.courseItemProgressType = courseItemProgressType
     }
 
     fun clearCache() {

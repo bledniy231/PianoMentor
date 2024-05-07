@@ -1,21 +1,31 @@
 package teachingsolutions.presentation_layer.fragments.statistics
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pianomentor.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsModel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import teachingsolutions.domain_layer.user.UserRepository
-import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
+import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
-import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
+import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsResultUI
 import javax.inject.Inject
 
 @HiltViewModel
-class StatisticsViewModel @Inject constructor(private var userRepository: UserRepository) : ViewModel() {
+class StatisticsViewModel @Inject constructor(
+    private val userRepository: UserRepository,
+    private val statRepository: StatisticsRepository) : ViewModel() {
 
+    private val _userStatistics = MutableLiveData<StatisticsResultUI>()
+    val userStatstics: LiveData<StatisticsResultUI> = _userStatistics
+
+    private val _isUserStillAvailable = MutableLiveData<Boolean>()
+    val isUserStillAvailable: LiveData<Boolean> = _isUserStillAvailable
     fun getMainMenuItems(): List<MainMenuItemModelUI> {
         return listOf(
             MainMenuItemModelUI(R.drawable.icon_cources, "Курсы"),
@@ -27,26 +37,25 @@ class StatisticsViewModel @Inject constructor(private var userRepository: UserRe
         )
     }
 
-    fun getUserStatistics(): UserStatisticsModel {
-        val statListViewPagerItems: List<StatisticsViewPagerItemModelUI> = listOf(
-            StatisticsViewPagerItemModelUI(1,10, "Выполнено тестов", "Вы прошли 1 тест по теории, продолжайте в том же духе"),
-            StatisticsViewPagerItemModelUI(1, 33, "Завершено курсов", "Вы завершили 1 курс, это большой шаг!")
-        )
-
-        val exercisesProgressModel = BaseStatisticsModel(21, 90, "Упражнение")
-        val lecturesProgressModel = BaseStatisticsModel(3, 33, "Лекции")
-        val coursesProgressModel = BaseStatisticsModel(1, 100, "Курс \"Введение\"")
-
-        return UserStatisticsModel(statListViewPagerItems, exercisesProgressModel, lecturesProgressModel, coursesProgressModel)
+    fun getUserStatistics() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = statRepository.getUserStatistics(userRepository.userId ?: 0)
+                _userStatistics.postValue(result)
+            }
+        }
     }
 
     fun isUserLoggedIn(): Boolean {
         return userRepository.isLoggedIn
     }
 
-    suspend fun isUserStillAvailable(): Boolean {
-        return viewModelScope.async(Dispatchers.IO) {
-            userRepository.checkIfCurrentUserValid()
-        }.await()
+    fun isUserStillAvailable() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val flag = userRepository.checkIfCurrentUserValid()
+                _isUserStillAvailable.postValue(flag)
+            }
+        }
     }
 }

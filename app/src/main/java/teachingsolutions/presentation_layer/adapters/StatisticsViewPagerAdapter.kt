@@ -1,11 +1,14 @@
 package teachingsolutions.presentation_layer.adapters
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
@@ -14,7 +17,7 @@ import com.example.pianomentor.R
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 
 class StatisticsViewPagerAdapter(
-    fragmentContext: Context) :
+    private val fragmentContext: Context) :
     RecyclerView.Adapter<StatisticsViewPagerAdapter.StatisticsViewPagerViewHolder>() {
 
     inner class StatisticsViewPagerViewHolder(itemView: View)
@@ -32,13 +35,24 @@ class StatisticsViewPagerAdapter(
                 return
             }
 
-            if (position % 2 == 0) {
-                progressBarView.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_green, resources.newTheme())
-            } else {
-                progressBarView.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_brown, resources.newTheme())
+            when (position % 3) {
+                0 -> progressBarView.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_green, resources.newTheme())
+                1 -> progressBarView.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_brown, resources.newTheme())
+                2 -> progressBarView.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_blue, resources.newTheme())
             }
-            progressBarView.progress = statModel.progressValueInPercent
-            progressCounter.text = statModel.progressValueAbsolute.toString()
+            val progressBarAnim = ObjectAnimator.ofInt(progressBarView, "progress", 0, statModel.progressValueInPercent)
+            progressBarAnim.duration = 500
+            progressBarAnim.interpolator = DecelerateInterpolator()
+
+            val textValueAnim = ValueAnimator.ofInt(0, statModel.progressValueAbsolute)
+            textValueAnim.duration = 500
+            textValueAnim.addUpdateListener { anim ->
+                progressCounter.text = anim.animatedValue.toString()
+            }
+
+            progressBarAnim.start()
+            textValueAnim.start()
+
             title.text = statModel.titleText
             description.text = statModel.descriptionText
         }
@@ -53,11 +67,12 @@ class StatisticsViewPagerAdapter(
     }
 
     override fun getItemCount(): Int {
-        return models?.size ?: 0
+        return Integer.MAX_VALUE
     }
 
     override fun onBindViewHolder(holder: StatisticsViewPagerViewHolder, position: Int) {
-        holder.bind(models?.get(position), position, fragmentContextInstance.resources)
+        val realPosition = position % models?.size!!
+        holder.bind(models?.get(realPosition), realPosition, fragmentContext.resources)
     }
 
     @SuppressLint("NotifyDataSetChanged")

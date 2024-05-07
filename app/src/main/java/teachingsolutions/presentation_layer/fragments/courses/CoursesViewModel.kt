@@ -46,13 +46,6 @@ class CoursesViewModel @Inject constructor(
     }
 
     fun getUserId(): Long? {
-        var userId: Long? = null
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                 userId = userRepository.userId
-            }
-        }
-
-        return userId
+        return userRepository.userId
     }
 }

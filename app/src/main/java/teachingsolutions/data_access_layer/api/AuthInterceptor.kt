@@ -7,6 +7,7 @@ import okhttp3.Response
 import teachingsolutions.data_access_layer.DAL_models.user.JwtTokens
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
 import teachingsolutions.domain_layer.common.CustomGson
+import teachingsolutions.domain_layer.user.UserRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +21,7 @@ class AuthInterceptor @Inject constructor(
         val originalRequest = chain.request()
         val requestUrl = originalRequest.url
 
-        if (ApiEndpointsWithoutAuth.entries.any { it.value.equals(requestUrl) }) {
+        if (!ApiEndpointsWithoutAuth.entries.any { it.value.equals(requestUrl) }) {
             val requestWithAuth = originalRequest.newBuilder()
                 .addHeader("Authorization", "Bearer " + getTokenFromStorage())
                 .build()

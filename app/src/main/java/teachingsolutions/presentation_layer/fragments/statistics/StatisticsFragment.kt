@@ -1,12 +1,18 @@
 package teachingsolutions.presentation_layer.fragments.statistics
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
@@ -14,10 +20,12 @@ import com.example.pianomentor.databinding.FragmentStatisticsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsModel
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
 import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
+import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 
@@ -43,7 +51,6 @@ class StatisticsFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentStatisticsBinding.inflate(inflater, container, false)
-
         val behavior = BottomSheetBehavior.from(binding.bottomSheet)
         behavior.isShouldRemoveExpandedCorners = false
         return binding.root
@@ -51,32 +58,60 @@ class StatisticsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            val isUserAvailable = viewModel.isUserStillAvailable()
-            if (!isUserAvailable) {
-                Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_SHORT).show()
-            }
-        }
 
-        initialStatisticsViewPager()
-        initialMainMenuRecyclerView()
-        binding.toolBarUserIconGoLogin.setOnClickListener {
-            if (viewModel.isUserLoggedIn()) {
-                findNavController().navigate(R.id.action_choose_profile)
-            } else {
-                findNavController().navigate(R.id.action_choose_register_or_login)
-            }
-        }
+        viewModel.isUserStillAvailable()
+        viewModel.isUserStillAvailable.observe(viewLifecycleOwner,
+            Observer { isUserAvailable ->
+                if (!isUserAvailable) {
+                    Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_LONG).show()
+                }
+
+                initialMainMenuRecyclerView()
+                viewModel.getUserStatistics()
+                viewModel.userStatstics.observe(viewLifecycleOwner,
+                    Observer { statResultUI ->
+                        statResultUI.success?.let {
+                            initialStatisticsViewPager(it)
+                        }
+
+                        statResultUI.error?.let {
+                            val error = if (it == "Unauthorized") {
+                                getString(R.string.login_for_statistics)
+                            } else {
+                                it
+                            }
+                            updateUiWithStatisticsFailed(error)
+                            initialStatisticsViewPager(UserStatisticsModel(
+                                listOf(
+                                    StatisticsViewPagerItemModelUI(0, 0, "Выполнено тестов", "Вы прошли 0 тестов по теории, самое время, чтобы начать"),
+                                    StatisticsViewPagerItemModelUI(0, 0, "Завершено курсов", "Вы завершили 0 курсов")
+                                ),
+                                BaseStatisticsModel(0, 0, "Упражнение"),
+                                BaseStatisticsModel(0, 0, "Лекции"),
+                                BaseStatisticsModel(0, 0, "Курс \"Введение\"")
+                            ))
+                        }
+                    })
+
+                binding.toolBarUserIconGoLogin.setOnClickListener {
+                    if (viewModel.isUserLoggedIn()) {
+                        findNavController().navigate(R.id.action_choose_profile)
+                    } else {
+                        findNavController().navigate(R.id.action_choose_register_or_login)
+                    }
+                }
+            })
     }
 
-    private fun initialStatisticsViewPager() {
-        val userStatistics: UserStatisticsModel = viewModel.getUserStatistics()
-
+    private fun initialStatisticsViewPager(statResult: UserStatisticsModel) {
         val statisticsViewPagerAdapter = context?.let { StatisticsViewPagerAdapter(it) }
-        statisticsViewPagerAdapter?.setModelsList(userStatistics.statListViewPagerItems)
+        statisticsViewPagerAdapter?.setModelsList(statResult.statListViewPagerItems)
         binding.statViewPager.adapter = statisticsViewPagerAdapter
         binding.statViewPager.offscreenPageLimit = 2
         binding.statViewPager.isUserInputEnabled = false
+        val middle = Integer.MAX_VALUE / 2
+        val start = middle - (middle % (statisticsViewPagerAdapter?.itemCount ?: 1))
+        binding.statViewPager.currentItem = start
 
         binding.previousViewpagerButton.setOnClickListener {
             val currentIndex = binding.statViewPager.currentItem
@@ -105,17 +140,24 @@ class StatisticsFragment : Fragment(),
             }
         }
 
-        binding.exercisesCircleProgressBar.progress = userStatistics.exercisesProgressModel.progressValueInPercent
-        binding.exercisesCounterText.text = userStatistics.exercisesProgressModel.progressValueAbsolute.toString()
-        binding.exercisesText.text = userStatistics.exercisesProgressModel.text
+        val exerciseProgressAnim = getObjectAnimator(binding.exercisesCircleProgressBar, statResult.exercisesProgressModel.progressValueInPercent)
+        val exerciseTextAnim = getValueAnimator(binding.exercisesCounterText, statResult.exercisesProgressModel.progressValueAbsolute)
+        val lectureProgressAnim = getObjectAnimator(binding.lecturesCircleProgressBar, statResult.lecturesProgressModel.progressValueInPercent)
+        val lectureTextAnim = getValueAnimator(binding.lecturesCounterText, statResult.lecturesProgressModel.progressValueAbsolute)
+        val courseProgressAnim = getObjectAnimator(binding.coursesLinearProgressBar, statResult.coursesProgressModel.progressValueInPercent)
 
-        binding.lecturesCircleProgressBar.progress = userStatistics.lecturesProgressModel.progressValueInPercent
-        binding.lecturesCounterText.text = userStatistics.lecturesProgressModel.progressValueAbsolute.toString()
-        binding.lecturesText.text = userStatistics.lecturesProgressModel.text
+        exerciseProgressAnim.start()
+        exerciseTextAnim.start()
+        lectureProgressAnim.start()
+        lectureTextAnim.start()
+        courseProgressAnim.start()
 
-        binding.coursesLinearProgressBar.progress = userStatistics.coursesProgressModel.progressValueInPercent
-        binding.coursesPercentText.text = "${userStatistics.coursesProgressModel.progressValueInPercent.toString()}%"
-        binding.coursesNameText.text = userStatistics.coursesProgressModel.text
+        binding.exercisesText.text = statResult.exercisesProgressModel.title
+
+        binding.lecturesText.text = statResult.lecturesProgressModel.title
+
+        binding.coursesPercentText.text = "${statResult.coursesProgressModel.progressValueInPercent.toString()}%"
+        binding.coursesNameText.text = statResult.coursesProgressModel.title
     }
 
     private fun initialMainMenuRecyclerView() {
@@ -147,6 +189,26 @@ class StatisticsFragment : Fragment(),
                 //findNavController().navigate(R.id.action_statisticsFragment_to_soundAnalyzerFragment)
             }
         }
+    }
+
+    private fun updateUiWithStatisticsFailed(error: String) {
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getObjectAnimator(progressBar: ProgressBar, progressValue: Int): ObjectAnimator {
+        val progressAnim = ObjectAnimator.ofInt(progressBar, "progress", 0, progressValue)
+        progressAnim.duration = 500
+        progressAnim.interpolator = DecelerateInterpolator()
+        return progressAnim
+    }
+
+    private fun getValueAnimator(textView: TextView, textValue: Int): ValueAnimator {
+        val textValueAnim = ValueAnimator.ofInt(0, textValue)
+        textValueAnim.duration = 500
+        textValueAnim.addUpdateListener { anim ->
+            textView.text = anim.animatedValue.toString()
+        }
+        return textValueAnim
     }
 
     override fun onDestroyView() {

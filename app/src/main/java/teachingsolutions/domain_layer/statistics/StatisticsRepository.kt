@@ -2,8 +2,12 @@ package teachingsolutions.domain_layer.statistics
 
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.data_access_layer.statistics.StatisticsDataSource
+import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsModel
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
+import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsResultUI
+import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,16 +23,61 @@ class StatisticsRepository @Inject constructor(private val statisticsDataSource:
 
         when (val result = statisticsDataSource.getUserStatistics(userId)) {
             is ActionResult.Success -> {
+                val userStatModel = UserStatisticsModel(
+                    result.data.viewPagerTexts.map {
+                        StatisticsViewPagerItemModelUI(
+                            it?.progressValueAbsolute ?: 0,
+                            it?.progressValueInPercent ?: 0,
+                            it?.titleText ?: "Иди нахуй",
+                            it?.descriptionText ?: "Заебал",
+                        )
+                    },
+                    BaseStatisticsModel(
+                        result.data.exerciseStatistics.progressValueAbsolute,
+                        result.data.exerciseStatistics.progressValueInPercent,
+                        result.data.exerciseStatistics.title
+                    ),
+                    BaseStatisticsModel(
+                        result.data.lectureStatistics.progressValueAbsolute,
+                        result.data.lectureStatistics.progressValueInPercent,
+                        result.data.lectureStatistics.title
+                    ),
+                    BaseStatisticsModel(
+                        result.data.courseStatistics.progressValueAbsolute,
+                        result.data.courseStatistics.progressValueInPercent,
+                        result.data.courseStatistics.title
+                    )
+                )
 
-                return cachedStatistics
+                cachedStatistics = userStatModel
+
+                return StatisticsResultUI(cachedStatistics!!)
             }
             is ActionResult.NormalError -> {
                 return StatisticsResultUI(null, result.data.errors?.joinToString { it } ?: "Error while getting statistics")
             }
             is ActionResult.ExceptionError -> {
-                return StatisticsResultUI(null, result.exception.message ?: "Exception while getting statistics")
+                return if (result.exception.message == "Unauthorized") {
+                    StatisticsResultUI(null, "Unauthorized")
+                } else {
+                    StatisticsResultUI(null, result.exception.message ?: "Exception while getting statistics")
+                }
             }
-            else -> return ActionResult.ExceptionError(Exception("OTHER_EX: No courses found or no internet connection"))
+        }
+    }
+
+    suspend fun setCourseItemProgress(userId: Long, courseId: Int, courseItemId: Int, progress: CourseItemProgressType): DefaultResponseUI {
+        cachedStatistics = null
+        return when (val result = statisticsDataSource.setCourseItemProgress(userId, courseId, courseItemId, progress.value)) {
+            is ActionResult.Success -> {
+                DefaultResponseUI()
+            }
+            is ActionResult.NormalError -> {
+                DefaultResponseUI(result.data._errors?.joinToString { it } ?: "Error while setting course item progress")
+            }
+            is ActionResult.ExceptionError -> {
+                DefaultResponseUI(result.exception.message ?: "Exception while setting course item progress")
+            }
         }
     }
 }

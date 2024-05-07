@@ -44,5 +44,5 @@ interface IPianoMentorApiService {
     suspend fun setCourseItemProgress(@Body request: SetCourseItemProgressRequestApi): DefaultResponseApi
 
     @GET("api/ApplicationUser/GetUserStatistics")
-    suspend fun getUserStatistics(@Query("userId") userId: Long): GetUserStatisticsResponseApi
+    suspend fun getUserStatistics(@Query("userId") userId: Long): Response<GetUserStatisticsResponseApi>
 }

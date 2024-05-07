@@ -5,6 +5,6 @@ data class CourseItemModel(
     val position: Int,
     val title: String,
     val courseItemType: CourseItemType,
-    val courseItemProgressType: CourseItemProgressType,
+    var courseItemProgressType: CourseItemProgressType,
     val courseId: Int
 )

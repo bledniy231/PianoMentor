@@ -96,7 +96,6 @@
             android:indeterminateOnly="false"
             android:layout_gravity="center_vertical"
             android:progressDrawable="@drawable/circle_progress_bar_blue"
-            android:indeterminateDrawable="@drawable/circle_loader_animation"
             tools:progress="29"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

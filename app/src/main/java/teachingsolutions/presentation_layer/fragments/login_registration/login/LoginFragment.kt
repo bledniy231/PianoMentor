@@ -69,7 +69,11 @@ class LoginFragment : Fragment() {
                 }
                 loginResult.success?.let {
                     updateUiWithUser(it)
-                    findNavController().popBackStack(R.id.action_back_arrow_choose_to_statisticsFragment, false)
+                    val fragmentManager = requireActivity().supportFragmentManager
+                    while (fragmentManager.backStackEntryCount > 0) {
+                        fragmentManager.popBackStackImmediate()
+                    }
+                    findNavController().navigate(R.id.action_successful_loggedIn)
                 }
             })
 
@@ -77,11 +81,9 @@ class LoginFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 // ignore
             }
-
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 // ignore
             }
-
             override fun afterTextChanged(s: Editable) {
                 loginViewModel.loginDataChanged(
                     emailEditText.text.toString(),

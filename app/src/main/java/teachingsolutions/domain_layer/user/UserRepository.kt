@@ -44,6 +44,10 @@ class UserRepository @Inject constructor(
         user = null
     }
 
+    public fun getUserAuthToken(): String {
+        return user?.jwtTokensModel?.accessToken ?: ""
+    }
+
     suspend fun logout() {
         dataSource.logout()
         coursesRepository.clearCache()

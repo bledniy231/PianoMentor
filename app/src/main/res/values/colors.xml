@@ -20,5 +20,6 @@
     <color name="navy_blue">#1A237E</color>
     <color name="light_blue">#95B9D5</color>
     <color name="bright_blue">#569AEA</color>
+    <color name="bright_blue_for_course_icon">#76ADED</color>
     <color name="light_deep_blue">#1E4D97</color>
 </resources>
