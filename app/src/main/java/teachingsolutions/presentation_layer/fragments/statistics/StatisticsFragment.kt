@@ -24,6 +24,7 @@ import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
 import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
+import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsResultUI
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
@@ -59,47 +60,51 @@ class StatisticsFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.isUserStillAvailable()
-        viewModel.isUserStillAvailable.observe(viewLifecycleOwner,
-            Observer { isUserAvailable ->
-                if (!isUserAvailable) {
-                    Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_LONG).show()
+
+        val userStatisticsObserver = Observer<StatisticsResultUI?> { statResultUI ->
+            statResultUI ?: return@Observer
+            statResultUI.success?.let {
+                initialStatisticsViewPager(it)
+            }
+
+            statResultUI.error?.let {
+                val error = if (it == "Unauthorized") {
+                    getString(R.string.login_for_statistics)
+                } else {
+                    it
                 }
+                updateUiWithStatisticsFailed(error)
+                initialStatisticsViewPager(UserStatisticsModel(
+                    listOf(
+                        StatisticsViewPagerItemModelUI(0, 0, getString(R.string.tests_done), getString(R.string.zero_tests_done)),
+                        StatisticsViewPagerItemModelUI(0, 0, getString(R.string.courses_done), getString(R.string.zero_courses_done))
+                    ),
+                    BaseStatisticsModel(0, 0, getString(R.string.exercise)),
+                    BaseStatisticsModel(0, 0, getString(R.string.lectures)),
+                    BaseStatisticsModel(0, 0, getString(R.string.introduction_course))
+                ))
+            }
+        }
 
-                initialMainMenuRecyclerView()
-                viewModel.getUserStatistics()
-                viewModel.userStatstics.observe(viewLifecycleOwner,
-                    Observer { statResultUI ->
-                        statResultUI.success?.let {
-                            initialStatisticsViewPager(it)
-                        }
+        val userAvailabilityObserver = Observer<Boolean?> { isUserAvailable ->
+            isUserAvailable ?: return@Observer
+            if (!isUserAvailable) {
+                Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_LONG).show()
+            }
 
-                        statResultUI.error?.let {
-                            val error = if (it == "Unauthorized") {
-                                getString(R.string.login_for_statistics)
-                            } else {
-                                it
-                            }
-                            updateUiWithStatisticsFailed(error)
-                            initialStatisticsViewPager(UserStatisticsModel(
-                                listOf(
-                                    StatisticsViewPagerItemModelUI(0, 0, getString(R.string.tests_done), getString(R.string.zero_tests_done)),
-                                    StatisticsViewPagerItemModelUI(0, 0, getString(R.string.courses_done), getString(R.string.zero_courses_done))
-                                ),
-                                BaseStatisticsModel(0, 0, getString(R.string.exercise)),
-                                BaseStatisticsModel(0, 0, getString(R.string.lectures)),
-                                BaseStatisticsModel(0, 0, getString(R.string.introduction_course))
-                            ))
-                        }
-                    })
-
-                binding.toolBarUserIconGoLogin.setOnClickListener {
-                    if (viewModel.isUserLoggedIn()) {
-                        findNavController().navigate(R.id.action_choose_profile)
-                    } else {
-                        findNavController().navigate(R.id.action_choose_register_or_login)
-                    }
+            initialMainMenuRecyclerView()
+            viewModel.getUserStatistics()
+            viewModel.userStatstics.observe(viewLifecycleOwner, userStatisticsObserver)
+            binding.toolBarUserIconGoLogin.setOnClickListener {
+                if (viewModel.isUserLoggedIn()) {
+                    findNavController().navigate(R.id.action_choose_profile)
+                } else {
+                    findNavController().navigate(R.id.action_choose_register_or_login)
                 }
-            })
+            }
+        }
+
+        viewModel.isUserStillAvailable.observe(viewLifecycleOwner, userAvailabilityObserver)
     }
 
     private fun initialStatisticsViewPager(statResult: UserStatisticsModel) {
@@ -139,8 +144,8 @@ class StatisticsFragment : Fragment(),
             }
         }
 
-        binding.exercisesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_green, resources.newTheme())
-        binding.lecturesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_brown, resources.newTheme())
+//        binding.exercisesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_green, resources.newTheme())
+//        binding.lecturesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_brown, resources.newTheme())
 
         val exerciseProgressAnim = getObjectAnimator(binding.exercisesCircleProgressBar, statResult.exercisesProgressModel.progressValueInPercent)
         val exerciseTextAnim = getValueAnimator(binding.exercisesCounterText, statResult.exercisesProgressModel.progressValueAbsolute)

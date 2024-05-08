@@ -58,4 +58,9 @@ class StatisticsViewModel @Inject constructor(
             }
         }
     }
+
+    fun clearStatisticsAfterLogout() {
+        _userStatistics.postValue(StatisticsResultUI(null, "Unauthorized"))
+        _isUserStillAvailable.postValue(false)
+    }
 }

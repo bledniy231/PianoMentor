@@ -54,7 +54,7 @@ class ProfileFragment : Fragment() {
                         viewModel.logout()
                         Toast.makeText(requireContext(),
                             getString(R.string.you_have_been_logged_out), Toast.LENGTH_SHORT).show()
-                        findNavController().popBackStack(R.id.action_back_arrow_choose_to_statisticsFragment, false)
+                        findNavController().popBackStack(R.id.action_back_arrow_profile_to_statistics, false)
                     }
                     .setNegativeButton(getString(R.string.no_word), null)
                     .show()

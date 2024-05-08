@@ -22,18 +22,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ProgressBar
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:background="@android:color/transparent"
                 android:id="@+id/cardview_progress_bar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:indeterminateOnly="false"
+                tools:indicatorColor="@color/first_brown"
+                app:trackThickness="6.5dp"
+                app:trackCornerRadius="3dp"
+                tools:trackColor="@color/second_brown"
+                app:indicatorSize="85dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:progress = "40"
-                tools:progressDrawable="@drawable/circle_progress_bar_green"/>
+                tools:progress="40"/>
 
             <TextView
                 android:background="@android:color/transparent"

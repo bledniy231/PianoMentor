@@ -53,6 +53,7 @@ class LectureFragment : Fragment() {
     private val SWIPE_THRESHOLD = 100
     private val SWIPE_VELOCITY_THRESHOLD = 100
     private var currentPageIndex = 0
+    private var isEndedReading = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,6 +71,7 @@ class LectureFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+        isEndedReading = requireArguments().getString("CourseItemProgressType") == CourseItemProgressType.COMPLETED.value
         binding.lectureToolbar.title = requireArguments().getString("CourseName")
         binding.lecturesLoading.visibility = View.VISIBLE
         gestureDetector = getGestureDetector()
@@ -179,6 +181,9 @@ class LectureFragment : Fragment() {
     private fun displayPdf(direction: SwipeDirection) {
         val pageCount = pdfRenderer?.pageCount
         val currentPage = pdfRenderer?.openPage(currentPageIndex)
+        if (pageCount != null && currentPageIndex == pageCount - 1) {
+            isEndedReading = true
+        }
 
         val bitmap = Bitmap.createBitmap(currentPage?.width ?: 0, currentPage?.height ?: 0, Bitmap.Config.ARGB_8888)
         currentPage?.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
@@ -278,8 +283,7 @@ class LectureFragment : Fragment() {
     }
 
     private fun checkIfLectureCompleted(courseItemId: Int): Boolean {
-        return if (currentPageIndex == (pdfRenderer?.pageCount ?: 0) - 1
-            && requireArguments().getString("CourseItemProgressType") != CourseItemProgressType.COMPLETED.value) {
+        return if (isEndedReading && requireArguments().getString("CourseItemProgressType") != CourseItemProgressType.COMPLETED.value) {
             viewModel.setLectureProgress(courseItemId, CourseItemProgressType.COMPLETED)
             true
         } else {

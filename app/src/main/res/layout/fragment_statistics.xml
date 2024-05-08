@@ -36,7 +36,7 @@
                 android:id="@+id/tool_bar_user_icon_go_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
+                android:layout_marginEnd="16dp"
                 android:clickable="true"
                 android:src="@drawable/icon_user"
                 app:layout_constraintTop_toTopOf="parent"
@@ -65,16 +65,19 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical">
 
-                    <ProgressBar
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/exercises_circle_progress_bar"
-                        android:layout_width="135dp"
-                        android:layout_height="109dp"
-                        android:layout_centerInParent="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:indeterminateOnly="false"
-                        android:padding="10dp"
-                        tools:progressDrawable="@drawable/circle_progress_bar_green"
+                        app:indicatorColor="@color/first_green"
+                        app:trackThickness="6.5dp"
+                        app:trackCornerRadius="3dp"
+                        app:trackColor="@color/second_green"
+                        app:indicatorSize="90dp"
                         app:layout_constraintBottom_toTopOf="@+id/exercises_text"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -112,16 +115,19 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical">
 
-                    <ProgressBar
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/lectures_circle_progress_bar"
-                        android:layout_width="135dp"
-                        android:layout_height="109dp"
-                        android:layout_centerInParent="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:indicatorColor="@color/first_brown"
+                        app:trackThickness="6.5dp"
+                        app:trackCornerRadius="3dp"
+                        app:trackColor="@color/second_brown"
+                        app:indicatorSize="90dp"
                         android:indeterminateOnly="false"
-                        android:padding="10dp"
-                        tools:progressDrawable="@drawable/circle_progress_bar_brown"
                         app:layout_constraintBottom_toTopOf="@+id/lectures_text"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -203,8 +209,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:indeterminateOnly="false"
-                    android:minHeight="18dp"
+                    android:minHeight="16dp"
                     android:progressDrawable="@drawable/linear_progress_bar"
+                    android:background="@drawable/linear_progress_bar_background"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -232,7 +240,7 @@
                     android:id="@+id/previous_viewpager_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
+                    android:background="?android:attr/selectableItemBackground"
                     android:gravity="center"
                     android:maxLines="1"
                     android:state_pressed="true"
@@ -249,7 +257,7 @@
                     android:id="@+id/next_viewpager_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
+                    android:background="?android:attr/selectableItemBackground"
                     android:gravity="center"
                     android:maxLines="1"
                     android:state_pressed="true"

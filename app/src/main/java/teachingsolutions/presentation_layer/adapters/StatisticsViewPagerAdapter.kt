@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 
 class StatisticsViewPagerAdapter(
@@ -22,7 +23,7 @@ class StatisticsViewPagerAdapter(
 
     inner class StatisticsViewPagerViewHolder(itemView: View)
         : RecyclerView.ViewHolder(itemView) {
-        private val progressBarView: ProgressBar = itemView.findViewById(R.id.cardview_progress_bar)
+        private val progressBarView: CircularProgressIndicator = itemView.findViewById(R.id.cardview_progress_bar)
         private val progressCounter: TextView = itemView.findViewById(R.id.cardview_counter_text)
         private val title: TextView = itemView.findViewById(R.id.cardview_title_text)
         private val description: TextView = itemView.findViewById(R.id.cardview_description_text)
@@ -35,11 +36,21 @@ class StatisticsViewPagerAdapter(
                 return
             }
 
-            when (position % 3) {
-                0 -> progressBarView.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_green, resources.newTheme())
-                1 -> progressBarView.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_brown, resources.newTheme())
-                2 -> progressBarView.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_blue, resources.newTheme())
+            val trackColor = when (position % 3) {
+                0 -> ResourcesCompat.getColor(resources, R.color.second_green, resources.newTheme())
+                1 -> ResourcesCompat.getColor(resources, R.color.second_brown, resources.newTheme())
+                2 -> ResourcesCompat.getColor(resources, R.color.light_blue, resources.newTheme())
+                else -> ResourcesCompat.getColor(resources, R.color.second_green, resources.newTheme())
             }
+            val indicatorColor = when (position % 3) {
+                0 -> ResourcesCompat.getColor(resources, R.color.first_green, resources.newTheme())
+                1 -> ResourcesCompat.getColor(resources, R.color.first_brown, resources.newTheme())
+                2 -> ResourcesCompat.getColor(resources, R.color.light_deep_blue, resources.newTheme())
+                else -> ResourcesCompat.getColor(resources, R.color.first_green, resources.newTheme())
+            }
+
+            progressBarView.trackColor = trackColor
+            progressBarView.setIndicatorColor(indicatorColor)
             val progressBarAnim = ObjectAnimator.ofInt(progressBarView, "progress", 0, statModel.progressValueInPercent)
             progressBarAnim.duration = 500
             progressBarAnim.interpolator = DecelerateInterpolator()
