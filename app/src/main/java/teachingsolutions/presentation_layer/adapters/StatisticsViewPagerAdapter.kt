@@ -17,12 +17,10 @@ import com.example.pianomentor.R
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 
-class StatisticsViewPagerAdapter(
-    private val fragmentContext: Context) :
+class StatisticsViewPagerAdapter(private val fragmentContext: Context) :
     RecyclerView.Adapter<StatisticsViewPagerAdapter.StatisticsViewPagerViewHolder>() {
 
-    inner class StatisticsViewPagerViewHolder(itemView: View)
-        : RecyclerView.ViewHolder(itemView) {
+    inner class StatisticsViewPagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val progressBarView: CircularProgressIndicator = itemView.findViewById(R.id.cardview_progress_bar)
         private val progressCounter: TextView = itemView.findViewById(R.id.cardview_counter_text)
         private val title: TextView = itemView.findViewById(R.id.cardview_title_text)
@@ -70,7 +68,6 @@ class StatisticsViewPagerAdapter(
     }
 
     private var models: List<StatisticsViewPagerItemModelUI>? = null
-    private val fragmentContextInstance: Context = fragmentContext
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatisticsViewPagerViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.statistics_viewpager_item, parent, false)

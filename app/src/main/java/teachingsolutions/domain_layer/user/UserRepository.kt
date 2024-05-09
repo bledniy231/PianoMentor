@@ -10,7 +10,7 @@ import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResp
 import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequestApi
 import teachingsolutions.data_access_layer.user.UserDataSource
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
-import teachingsolutions.domain_layer.common.CustomGson
+import teachingsolutions.domain_layer.common.CustomGsonSupplier
 import teachingsolutions.domain_layer.courses.CoursesRepository
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -22,12 +22,12 @@ class UserRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val prefKeys: SharedPreferencesKeys,
     private val dataSource: UserDataSource,
-    private val customGson: CustomGson,
+    private val customGsonSupplier: CustomGsonSupplier,
     private val coursesRepository: CoursesRepository
 ) {
 
     private var user: LoginUserResponse? = null
-    private val gson = customGson.getCustomGsonObject()
+    private val gson = customGsonSupplier.getCustomGsonObject()
 
     val userId: Long?
         get() = user?.userId
@@ -48,8 +48,11 @@ class UserRepository @Inject constructor(
         return user?.jwtTokensModel?.accessToken ?: ""
     }
 
-    suspend fun logout() {
-        dataSource.logout()
+    suspend fun logout(isAccessTokenExpired: Boolean) {
+        if (!isAccessTokenExpired) {
+            dataSource.logout()
+        }
+
         coursesRepository.clearCache()
         user = null
         with(sharedPreferences.edit()) {
@@ -88,11 +91,11 @@ class UserRepository @Inject constructor(
         return result
     }
 
-    suspend fun refreshUserTokens(jwtTokens: JwtTokens): ActionResult<RefreshUserTokensResponseApi> {
+    private suspend fun refreshUserTokens(jwtTokens: JwtTokens): ActionResult<RefreshUserTokensResponseApi> {
         return dataSource.refreshUserTokens(RefreshUserTokensRequestApi(jwtTokens))
     }
 
-    fun setLoggedInUser(loginUserResponse: LoginUserResponse, addToSharedPrefs: Boolean) {
+    private fun setLoggedInUser(loginUserResponse: LoginUserResponse, addToSharedPrefs: Boolean) {
         this.user = loginUserResponse
 
         if (addToSharedPrefs) {
@@ -107,7 +110,7 @@ class UserRepository @Inject constructor(
         }
     }
 
-    public suspend fun checkIfCurrentUserValid(): Boolean {
+    public suspend fun refreshUserIfNeeds(): Boolean {
         //sharedPreferences.edit().clear().apply()
         if (!isFirstCheckUserAvailability) {
             return true
@@ -137,12 +140,12 @@ class UserRepository @Inject constructor(
                     }
                     return true
                 }
-                logout()
+                logout(true)
                 return false
             }
             else
             {
-                logout()
+                logout(true)
                 return false
             }
         }

@@ -14,7 +14,7 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository): 
     fun logout() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                userRepository.logout()
+                userRepository.logout(false)
             }
         }
     }

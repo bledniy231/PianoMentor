@@ -10,7 +10,6 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -59,10 +58,11 @@ class StatisticsFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.isUserStillAvailable()
+        viewModel.refreshUserIfNeeds()
 
         val userStatisticsObserver = Observer<StatisticsResultUI?> { statResultUI ->
             statResultUI ?: return@Observer
+
             statResultUI.success?.let {
                 initialStatisticsViewPager(it)
             }
@@ -86,11 +86,12 @@ class StatisticsFragment : Fragment(),
             }
         }
 
-        val userAvailabilityObserver = Observer<Boolean?> { isUserAvailable ->
-            isUserAvailable ?: return@Observer
-            if (!isUserAvailable) {
-                Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_LONG).show()
-            }
+        val refreshingCheckedObserver = Observer<Boolean?> { isRefreshingChecked ->
+            isRefreshingChecked ?: return@Observer
+
+//            if (!isUserAvailable) {
+//                Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_LONG).show()
+//            }
 
             initialMainMenuRecyclerView()
             viewModel.getUserStatistics()
@@ -102,9 +103,11 @@ class StatisticsFragment : Fragment(),
                     findNavController().navigate(R.id.action_choose_register_or_login)
                 }
             }
+
+            viewModel.clearLiveData()
         }
 
-        viewModel.isUserStillAvailable.observe(viewLifecycleOwner, userAvailabilityObserver)
+        viewModel.isRefreshingChecked.observe(viewLifecycleOwner, refreshingCheckedObserver)
     }
 
     private fun initialStatisticsViewPager(statResult: UserStatisticsModel) {

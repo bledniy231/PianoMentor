@@ -29,6 +29,7 @@ class QuizFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_quiz, container, false)
+        _binding = FragmentQuizBinding.inflate(inflater, container, false)
+        return binding.root
     }
 }

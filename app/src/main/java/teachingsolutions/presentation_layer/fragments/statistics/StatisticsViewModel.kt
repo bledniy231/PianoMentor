@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pianomentor.R
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,8 +23,8 @@ class StatisticsViewModel @Inject constructor(
     private val _userStatistics = MutableLiveData<StatisticsResultUI>()
     val userStatstics: LiveData<StatisticsResultUI> = _userStatistics
 
-    private val _isUserStillAvailable = MutableLiveData<Boolean>()
-    val isUserStillAvailable: LiveData<Boolean> = _isUserStillAvailable
+    private val _isRefreshingChecked = MutableLiveData<Boolean>()
+    val isRefreshingChecked: LiveData<Boolean> = _isRefreshingChecked
     fun getMainMenuItems(): List<MainMenuItemModelUI> {
         return listOf(
             MainMenuItemModelUI(R.drawable.icon_cources, "Курсы"),
@@ -50,17 +49,22 @@ class StatisticsViewModel @Inject constructor(
         return userRepository.isLoggedIn
     }
 
-    fun isUserStillAvailable() {
+    fun refreshUserIfNeeds() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val flag = userRepository.checkIfCurrentUserValid()
-                _isUserStillAvailable.postValue(flag)
+                val flag = userRepository.refreshUserIfNeeds()
+                _isRefreshingChecked.postValue(flag)
             }
         }
     }
 
     fun clearStatisticsAfterLogout() {
         _userStatistics.postValue(StatisticsResultUI(null, "Unauthorized"))
-        _isUserStillAvailable.postValue(false)
+        _isRefreshingChecked.postValue(false)
+    }
+
+    fun clearLiveData() {
+        _userStatistics.postValue(null)
+        _isRefreshingChecked.postValue(null)
     }
 }

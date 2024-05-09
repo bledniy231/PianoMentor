@@ -7,6 +7,9 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -157,6 +160,16 @@ object NetworkModule {
                     val dateTimeString = json.asString
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
                     return LocalDateTime.parse(dateTimeString, formatter)
+                }
+            })
+            .registerTypeAdapter(LocalDateTime::class.java, object : JsonSerializer<LocalDateTime> {
+                override fun serialize(
+                    src: LocalDateTime?,
+                    typeOfSrc: Type?,
+                    context: JsonSerializationContext?
+                ): JsonElement {
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
+                    return JsonPrimitive(src?.format(formatter))
                 }
             })
             .create()

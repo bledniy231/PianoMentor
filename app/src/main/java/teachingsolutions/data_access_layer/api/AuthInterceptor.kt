@@ -1,13 +1,11 @@
 package teachingsolutions.data_access_layer.api
 
 import android.content.SharedPreferences
-import com.google.gson.Gson
 import okhttp3.Interceptor
 import okhttp3.Response
 import teachingsolutions.data_access_layer.DAL_models.user.JwtTokens
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
-import teachingsolutions.domain_layer.common.CustomGson
-import teachingsolutions.domain_layer.user.UserRepository
+import teachingsolutions.domain_layer.common.CustomGsonSupplier
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,7 +13,7 @@ import javax.inject.Singleton
 class AuthInterceptor @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val prefKeys: SharedPreferencesKeys,
-    private val customGson: CustomGson
+    private val customGsonSupplier: CustomGsonSupplier
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
@@ -32,7 +30,7 @@ class AuthInterceptor @Inject constructor(
         return chain.proceed(originalRequest)
     }
 
-    private val gson = customGson.getCustomGsonObject()
+    private val gson = customGsonSupplier.getCustomGsonObject()
     private fun getTokenFromStorage(): String {
         val jwtTokens = sharedPreferences.getString(prefKeys.KEY_USER_TOKENS, null)?.let { gson.fromJson(it, JwtTokens::class.java) }
         return jwtTokens?.accessToken ?: ""
