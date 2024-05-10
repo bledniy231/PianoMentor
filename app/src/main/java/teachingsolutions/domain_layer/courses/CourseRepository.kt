@@ -12,7 +12,6 @@ import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsR
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResultUI
 import teachingsolutions.presentation_layer.fragments.lecture.model.LecturePdfResultUI
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -115,15 +114,15 @@ class CoursesRepository @Inject constructor(
         }
     }
 
-    suspend fun getLecturePdfFile(courseItemId: Int, courseName: String): LecturePdfResultUI {
-        val localFile = fileStorageManager.getLecturePdf(courseItemId, courseName)
+    suspend fun getLecturePdfFile(courseItemId: Int, courseItemTitle: String): LecturePdfResultUI {
+        val localFile = fileStorageManager.getLecturePdf(courseItemId, courseItemTitle)
         if (localFile != null) {
             return LecturePdfResultUI(localFile, null)
         }
 
-        return when (val result = coursesDataSource.getLecturePdf(courseItemId)) {
+        return when (val result = coursesDataSource.getCourseItemFile(courseItemId)) {
             is ActionResult.Success -> {
-                val file = fileStorageManager.saveLecturePdf(courseItemId, courseName, result.data)
+                val file = fileStorageManager.saveLecturePdf(courseItemId, courseItemTitle, result.data)
                 LecturePdfResultUI(file, null)
             }
             is ActionResult.NormalError -> {

@@ -9,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
 import teachingsolutions.domain_layer.courses.CoursesRepository
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
@@ -35,10 +34,10 @@ class LectureViewModel @Inject constructor(
     private val _setLectureProgressResult = MutableLiveData<DefaultResponseUI>()
     val setLectureProgressResult: LiveData<DefaultResponseUI> = _setLectureProgressResult
 
-    fun getLecturePdf(courseItemId: Int, courseName: String) {
+    fun getLecturePdf(courseItemId: Int, courseItemTitle: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val result = coursesRepository.getLecturePdfFile(courseItemId, courseName)
+                val result = coursesRepository.getLecturePdfFile(courseItemId, courseItemTitle)
                 _lecturePdfResult.postValue(result)
             }
         }

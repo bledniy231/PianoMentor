@@ -6,9 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentQuizBinding
 import dagger.hilt.android.AndroidEntryPoint
+import teachingsolutions.presentation_layer.adapters.QuizViewPagerAdapter
+import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionViewPagerUI
 
 @AndroidEntryPoint
 class QuizFragment : Fragment() {
@@ -31,5 +36,67 @@ class QuizFragment : Fragment() {
     ): View {
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (arguments == null) {
+            Toast.makeText(requireContext(), "FAIL: Empty arguments", Toast.LENGTH_LONG).show()
+            findNavController().popBackStack()
+        }
+
+        val courseId = requireArguments().getInt("courseId")
+        val courseItemId = requireArguments().getInt("courseItemId")
+
+        viewModel.getQuizQuestions(courseId, courseItemId)
+        binding.quizLoading.visibility = View.VISIBLE
+
+        val adapter = context?.let { QuizViewPagerAdapter(it) }
+        if (adapter == null) {
+            Toast.makeText(requireContext(), "FAIL: Adapter is null", Toast.LENGTH_LONG).show()
+            findNavController().popBackStack()
+        }
+
+        viewModel.quizQuestions.observe(viewLifecycleOwner,
+            Observer { quizQuestions ->
+                quizQuestions ?: return@Observer
+
+                binding.quizLoading.visibility = View.GONE
+                quizQuestions.error?.let {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                    findNavController().popBackStack()
+                }
+
+                quizQuestions.success?.let { questions ->
+                    adapter?.setModelsList(questions)
+                    binding.quizViewPager.adapter = adapter
+                    binding.quizViewPager.isUserInputEnabled = true
+                }
+            })
+
+        binding.quizToolbar.setNavigationOnClickListener {
+            val resultModels = adapter?.models
+            viewModel.setQuizResult(courseId, courseItemId, false, resultModels ?: emptyList())
+            viewModel.quizSavingResult.observe(viewLifecycleOwner,
+                Observer { result ->
+                    result ?: return@Observer
+                    if (result.message != null) {
+                        Toast.makeText(requireContext(), "FAIL: Error while saving quiz result", Toast.LENGTH_LONG).show()
+                    }
+                    findNavController().popBackStack()
+                })
+        }
+
+        binding.quizCompleteButton.setOnClickListener {
+            // отправить ответы на сервер
+            // посчитать результат
+            findNavController().navigate(R.id.action_open_quiz_result)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

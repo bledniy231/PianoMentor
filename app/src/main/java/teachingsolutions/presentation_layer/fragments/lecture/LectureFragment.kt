@@ -20,12 +20,10 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentLectureBinding
 import dagger.hilt.android.AndroidEntryPoint
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
-import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
 import teachingsolutions.presentation_layer.fragments.lecture.model.LectureAnimation
 import teachingsolutions.presentation_layer.fragments.lecture.model.SwipeDirection
 import java.io.File
@@ -72,7 +70,7 @@ class LectureFragment : Fragment() {
         }
 
         isEndedReading = requireArguments().getString("CourseItemProgressType") == CourseItemProgressType.COMPLETED.value
-        binding.lectureToolbar.title = requireArguments().getString("CourseName")
+        binding.lectureToolbar.title = requireArguments().getString("CourseItemTitle")
         binding.lecturesLoading.visibility = View.VISIBLE
         gestureDetector = getGestureDetector()
         binding.pdfView.setOnTouchListener { v, event ->
@@ -98,29 +96,27 @@ class LectureFragment : Fragment() {
         }
 
         viewModel.lecturePdfResult.observe(viewLifecycleOwner) { lecturePdfResultUI ->
-            lecturePdfResultUI?.let { resultUI ->
-                resultUI.success?.let { file ->
-                    this.file = file
-                    fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-                    if (fileDescriptor == null) {
-                        Toast.makeText(requireContext(), "FAIL: File descriptor is null", Toast.LENGTH_SHORT).show()
-                        findNavController().popBackStack()
-                    }
-                    pdfRenderer = PdfRenderer(fileDescriptor!!)
-                    displayPdf(SwipeDirection.NONE)
-                }
-                resultUI.error?.let { error ->
-                    Toast.makeText(requireContext(), "FAIL: $error", Toast.LENGTH_LONG).show()
+            lecturePdfResultUI.success?.let { file ->
+                this.file = file
+                fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+                if (fileDescriptor == null) {
+                    Toast.makeText(requireContext(), "FAIL: File descriptor is null", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 }
+                pdfRenderer = PdfRenderer(fileDescriptor!!)
+                displayPdf(SwipeDirection.NONE)
+            }
+            lecturePdfResultUI.error?.let { error ->
+                Toast.makeText(requireContext(), "FAIL: $error", Toast.LENGTH_LONG).show()
+                findNavController().popBackStack()
             }
         }
 
         val courseItemId = requireArguments().getInt("CourseItemId")
-        val courseName = requireArguments().getString("CourseName")
-        if (courseItemId > 0 && !courseName.isNullOrEmpty()) {
-            viewModel.deleteLecturePdf(courseItemId, courseName)
-            viewModel.getLecturePdf(courseItemId, courseName)
+        val courseItemTitle = requireArguments().getString("CourseItemTitle")
+        if (courseItemId > 0 && !courseItemTitle.isNullOrEmpty()) {
+            //viewModel.deleteLecturePdf(courseItemId, courseName)
+            viewModel.getLecturePdf(courseItemId, courseItemTitle)
         } else {
             Toast.makeText(requireContext(), "FAIL: Incorrect arguments", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()

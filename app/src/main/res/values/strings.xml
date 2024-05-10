@@ -49,4 +49,9 @@
     <string name="exercise">Упражнение</string>
     <string name="lectures">Лекции</string>
     <string name="introduction_course">Курс \"Введение\"</string>
+    <string name="end_test">Завершить тест</string>
+    <string name="back_to_course_fragment">Выйти на экран курса</string>
+    <string name="back_to_statistics_fragment">Выйти на главный экран</string>
+    <string name="question_counter">Вопрос %1$d из %2$d</string>
+    <string name="question_title">Вопрос %1$d</string>
 </resources>

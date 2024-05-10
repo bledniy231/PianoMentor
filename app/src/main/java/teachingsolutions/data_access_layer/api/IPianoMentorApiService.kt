@@ -13,6 +13,8 @@ import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequestApi
 import teachingsolutions.data_access_layer.DAL_models.courses.CourseItemsResponseApi
 import teachingsolutions.data_access_layer.DAL_models.courses.CoursesResponseApi
+import teachingsolutions.data_access_layer.DAL_models.quiz.GetQuizResponseApi
+import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersRequestApi
 import teachingsolutions.data_access_layer.DAL_models.statistics.SetCourseItemProgressRequestApi
 import teachingsolutions.data_access_layer.DAL_models.statistics.GetUserStatisticsResponseApi
 import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequestApi
@@ -37,12 +39,21 @@ interface IPianoMentorApiService {
     @GET("api/Courses/GetCourseItems")
     suspend fun getCourseItems(@Query("userId") userId: Long, @Query("courseId") courseId: Int): CourseItemsResponseApi
 
-    @GET("api/Courses/DownloadLecturePdf")
-    suspend fun getLecturePdf(@Query("courseItemId") courseItemId: Int): Response<ResponseBody>
+    @GET("api/Courses/DownloadCourseItemFile")
+    suspend fun getCourseItemFile(@Query("courseItemId") courseItemId: Int): Response<ResponseBody>
 
     @PUT("api/Courses/SetCourseItemProgress")
     suspend fun setCourseItemProgress(@Body request: SetCourseItemProgressRequestApi): DefaultResponseApi
 
     @GET("api/ApplicationUser/GetUserStatistics")
     suspend fun getUserStatistics(@Query("userId") userId: Long): Response<GetUserStatisticsResponseApi>
+
+    @GET("api/Courses/GetCourseItemQuiz")
+    suspend fun getCourseItemQuiz(@Query("courseId") courseId: Int, @Query("courseItemId") courseItemId: Int, @Query("userId") userId: Long): GetQuizResponseApi
+
+    @POST("api/Courses/SetCourseItemQuizUserAnswers")
+    suspend fun setCourseItemQuizUserAnswers(@Body request: SetQuizUserAnswersRequestApi): DefaultResponseApi
+
+    @GET("api/Courses/DownloadQuizQuestionFile")
+    suspend fun getQuizQuestionFile(@Query("dataSetId") dataSetId: Long): Response<ResponseBody>
 }

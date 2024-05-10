@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentCoursesBinding
 import dagger.hilt.android.AndroidEntryPoint
+import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
 import teachingsolutions.presentation_layer.adapters.CoursesRecyclerViewAdapter
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseImplementation
@@ -46,6 +47,11 @@ class CoursesFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (arguments == null) {
+            Toast.makeText(requireContext(), "FAIL: Empty arguments", Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
+        }
 
         binding.coursesToolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -90,11 +96,11 @@ class CoursesFragment : Fragment(),
                 }
         })
 
-        binding.coursesToolbar.title = arguments?.getString("Title") ?: "Курсы"
+        binding.coursesToolbar.title = requireArguments().getString("Title") ?: "Курсы"
     }
 
     private fun initialReceivingElements() {
-        when (val courseId = arguments?.getInt("CourseId") ?: 0) {
+        when (val courseId = requireArguments().getInt("CourseId")) {
             0 -> {
                 courseImpl = CourseImplementation.BASE_COURSES
                 viewModel.getCoursesList(userId ?: 0)
@@ -111,11 +117,19 @@ class CoursesFragment : Fragment(),
             val courseItemModel = itemModel as CourseItemModelUI
             when (courseItemModel.courseItemType) {
                 CourseItemType.LECTURE -> {
-                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseName" to courseItemModel.title, "CourseItemProgressType" to courseItemModel.courseItemProgressType.value)
+                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseItemTitle" to courseItemModel.title, "CourseItemProgressType" to courseItemModel.courseItemProgressType.value)
                     findNavController().navigate(R.id.action_open_lecture, args)
                 }
                 CourseItemType.QUIZ -> {
-                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseName" to courseItemModel.title)
+                    if (courseItemModel.courseItemProgressType == CourseItemProgressType.COMPLETED) {
+                        Toast.makeText(requireContext(), "Тест уже пройден", Toast.LENGTH_LONG).show()
+                        return
+                    }
+                    if (viewModel.getUserId() == null || viewModel.getUserId() == 0L) {
+                        Toast.makeText(requireContext(), "Необходимо авторизоваться", Toast.LENGTH_LONG).show()
+                        return
+                    }
+                    val args = bundleOf("CourseId" to courseItemModel.courseId, "CourseItemId" to courseItemModel.courseItemId, "CourseName" to requireArguments().getString("Title"))
                     //findNavController().navigate(R.id.action_open_test, args)
                 }
                 CourseItemType.EXERCISE -> {

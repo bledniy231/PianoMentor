@@ -11,15 +11,15 @@ import javax.inject.Singleton
 
 @Singleton
 class FileStorageManager @Inject constructor(@ApplicationContext private val context: Context) {
-    fun getLecturePdf(courseItemId: Int, courseName: String): File? {
-        val fileName = "${courseItemId}_${courseName.replace(" ", "_", true)}.pdf"
+    fun getLecturePdf(courseItemId: Int, courseItemTitle: String): File? {
+        val fileName = "${courseItemId}_${courseItemTitle.replace(" ", "_", true)}.pdf"
         val file = File(context.filesDir, fileName)
         return if (file.exists()) file else null
     }
 
     @Throws(IOException::class)
-    fun saveLecturePdf(courseItemId: Int, courseName: String, body: ResponseBody): File {
-        val fileName = "${courseItemId}_${courseName.replace(" ", "_", true)}.pdf"
+    fun saveLecturePdf(courseItemId: Int, courseItemTitle: String, body: ResponseBody): File {
+        val fileName = "${courseItemId}_${courseItemTitle.replace(" ", "_", true)}.pdf"
         val file = File(context.filesDir, fileName)
 
         FileOutputStream(file).use { output ->

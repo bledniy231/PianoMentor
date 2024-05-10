@@ -1,9 +1,7 @@
-package teachingsolutions.data_access_layer.courses
+package teachingsolutions.data_access_layer.quiz
 
 import okhttp3.ResponseBody
 import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
-import teachingsolutions.data_access_layer.DAL_models.courses.CourseItemsResponseApi
-import teachingsolutions.data_access_layer.DAL_models.courses.CoursesResponseApi
 import teachingsolutions.data_access_layer.DAL_models.quiz.GetQuizResponseApi
 import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersRequestApi
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
@@ -13,10 +11,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CoursesDataSource @Inject constructor(private val apiService: IPianoMentorApiService) {
-    suspend fun getCourses(userId: Long): ActionResult<CoursesResponseApi> {
+class QuizDataSource @Inject constructor(private val apiService: IPianoMentorApiService) {
+    suspend fun getCourseItemQuiz(courseId: Int, courseItemId: Int, userId: Long): ActionResult<GetQuizResponseApi> {
         return try {
-            val result = apiService.getCourses(userId)
+            val result = apiService.getCourseItemQuiz(courseId, courseItemId, userId)
             when (result.errors) {
                 null -> {
                     ActionResult.Success(result)
@@ -26,14 +24,14 @@ class CoursesDataSource @Inject constructor(private val apiService: IPianoMentor
                 }
             }
         } catch (e: Exception) {
-            ActionResult.ExceptionError(IOException("Error while getting courses, response not successful, ${e.message}"))
+            ActionResult.ExceptionError(IOException("Error while getting quiz of course item: ${courseItemId}, response not successful, ${e.message}"))
         }
     }
 
-    suspend fun getCourseItems(userId: Long, courseId: Int): ActionResult<CourseItemsResponseApi> {
+    suspend fun setQuizUserAnswers(request: SetQuizUserAnswersRequestApi): ActionResult<DefaultResponseApi> {
         return try {
-            val result = apiService.getCourseItems(userId, courseId)
-            when (result.errors) {
+            val result = apiService.setCourseItemQuizUserAnswers(request)
+            when (result._errors) {
                 null -> {
                     ActionResult.Success(result)
                 }
@@ -42,12 +40,12 @@ class CoursesDataSource @Inject constructor(private val apiService: IPianoMentor
                 }
             }
         } catch (e: Exception) {
-            ActionResult.ExceptionError(IOException("Error while getting course items of course: ${courseId}, response not successful, ${e.message}"))
+            ActionResult.ExceptionError(IOException("Error while setting quiz answers, response not successful, ${e.message}"))
         }
     }
 
-    suspend fun getCourseItemFile(courseItemId: Int): ActionResult<ResponseBody> {
-        val response = apiService.getCourseItemFile(courseItemId)
+    suspend fun getQuizQuestionFile(dataSetId: Long): ActionResult<ResponseBody> {
+        val response = apiService.getQuizQuestionFile(dataSetId)
         return if (response.isSuccessful) {
             ActionResult.Success(response.body()!!)
         } else {
