@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:topLeftRadius="@dimen/radius_piano_item" android:topRightRadius="@dimen/radius_piano_item" android:bottomLeftRadius="@dimen/radius_piano_item" android:bottomRightRadius="@dimen/radius_piano_item"/>
+    <solid android:color="@color/light_gray"/>
+</shape>

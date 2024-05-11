@@ -213,5 +213,10 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+    <fragment
+        android:id="@+id/pianoFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.piano.PianoFragment"
+        android:label="fragment_piano"
+        tools:layout="@layout/fragment_piano" /><action android:id="@+id/action_global_pianoFragment" app:destination="@id/pianoFragment"/>
 
 </navigation>

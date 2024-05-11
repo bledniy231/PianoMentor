@@ -33,6 +33,18 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <ImageView
+                android:id="@+id/piano_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:tint="@color/white"
+                android:src="@drawable/icon_sound_analyze"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tool_bar_user_icon_go_login"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+            <ImageView
                 android:id="@+id/tool_bar_user_icon_go_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
