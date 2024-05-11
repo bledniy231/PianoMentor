@@ -24,4 +24,5 @@
     <color name="bright_blue">#569AEA</color>
     <color name="bright_blue_for_course_icon">#76ADED</color>
     <color name="light_deep_blue">#1E4D97</color>
+    <color name="transparent">#00000000</color>
 </resources>
