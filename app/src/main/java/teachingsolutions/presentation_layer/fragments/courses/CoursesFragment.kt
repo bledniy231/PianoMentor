@@ -48,11 +48,6 @@ class CoursesFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments == null) {
-            Toast.makeText(requireContext(), "FAIL: Empty arguments", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
-        }
-
         binding.coursesToolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -96,11 +91,11 @@ class CoursesFragment : Fragment(),
                 }
         })
 
-        binding.coursesToolbar.title = requireArguments().getString("CourseTitle") ?: "Курсы"
+        binding.coursesToolbar.title = arguments?.getString("CourseTitle") ?: "Курсы"
     }
 
     private fun initialReceivingElements() {
-        when (val courseId = requireArguments().getInt("CourseId")) {
+        when (val courseId = arguments?.getInt("CourseId") ?: 0) {
             0 -> {
                 courseImpl = CourseImplementation.BASE_COURSES
                 viewModel.getCoursesList(userId ?: 0)
@@ -117,7 +112,10 @@ class CoursesFragment : Fragment(),
             val courseItemModel = itemModel as CourseItemModelUI
             when (courseItemModel.courseItemType) {
                 CourseItemType.LECTURE -> {
-                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseItemTitle" to courseItemModel.title, "CourseItemProgressType" to courseItemModel.courseItemProgressType.value)
+                    val args = bundleOf(
+                        "CourseItemId" to courseItemModel.courseItemId,
+                        "CourseItemTitle" to courseItemModel.title,
+                        "CourseItemProgressType" to courseItemModel.courseItemProgressType.value)
                     findNavController().navigate(R.id.action_open_lecture, args)
                 }
                 CourseItemType.QUIZ -> {
@@ -129,8 +127,13 @@ class CoursesFragment : Fragment(),
                         Toast.makeText(requireContext(), "Необходимо авторизоваться", Toast.LENGTH_LONG).show()
                         return
                     }
-                    val args = bundleOf("CourseId" to courseItemModel.courseId, "CourseItemId" to courseItemModel.courseItemId, "CourseName" to requireArguments().getString("Title"))
-                    //findNavController().navigate(R.id.action_open_test, args)
+                    val courseName = arguments?.getString("Title") ?: "Курсы"
+                    val args = bundleOf(
+                        "CourseId" to courseItemModel.courseId,
+                        "CourseItemId" to courseItemModel.courseItemId,
+                        "CourseName" to courseName,
+                        "CourseItemProgressType" to courseItemModel.courseItemProgressType.value)
+                    findNavController().navigate(R.id.action_open_quiz, args)
                 }
                 CourseItemType.EXERCISE -> {
                     val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseName" to courseItemModel.title)

@@ -59,5 +59,9 @@
     <string name="correct_answers">Правильных ответов: %1$d</string>
     <string name="total_questions">Всего вопросов: %1$d</string>
     <string name="percent_completed">Процент выполнения: %.2f</string>
-    <string name="percent">%.0f%%</string>
+    <string name="percent">%d%%</string>
+    <string name="restart_quiz_or_show_results">Хотите ли вы перепройти тест или же просмотреть прошлые результаты теста?</string>
+    <string name="quiz_failed">Тест не сдан</string>
+    <string name="restart_quiz">Перепройти тест</string>
+    <string name="show_results">Показать результаты</string>
 </resources>

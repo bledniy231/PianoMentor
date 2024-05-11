@@ -86,7 +86,7 @@ class StatisticsViewModel @Inject constructor(
 
         if (stringResource != null) {
             textValueAnim.addUpdateListener { anim ->
-                textView.text = textView.context.getString(stringResource, anim.animatedValue as Float)
+                textView.text = textView.context.getString(stringResource, anim.animatedValue as Int)
             }
         } else {
             textValueAnim.addUpdateListener { anim ->

@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentQuizBinding
 import dagger.hilt.android.AndroidEntryPoint
+import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
 import teachingsolutions.presentation_layer.adapters.QuizViewPagerAdapter
 import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionViewPagerUI
 
@@ -58,6 +60,32 @@ class QuizFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+        val quizStatus = requireArguments().getString("CourseItemProgressType")?.let { CourseItemProgressType.valueOf(it) }
+        if (quizStatus == null) {
+            Toast.makeText(requireContext(), "FAIL: Quiz status is null", Toast.LENGTH_LONG).show()
+            findNavController().popBackStack()
+        }
+
+        binding.quizCompleteButton.visibility = View.VISIBLE
+        var restartQuiz = false
+        if (quizStatus == CourseItemProgressType.FAILED) {
+            AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.quiz_failed))
+                .setMessage(getString(R.string.are_you_sure_logout_dialog))
+                .setPositiveButton(getString(R.string.restart_quiz)) { _, _ ->
+                    restartQuiz = true
+                    binding.quizCompleteButton.visibility = View.VISIBLE
+                }
+                .setNegativeButton(getString(R.string.show_results)) { _, _ ->
+                    restartQuiz = false
+                    binding.quizCompleteButton.visibility = View.GONE
+                }
+                .show()
+        } else if (quizStatus == CourseItemProgressType.COMPLETED) {
+            restartQuiz = false
+            binding.quizCompleteButton.visibility = View.GONE
+        }
+
         viewModel.quizQuestions.observe(viewLifecycleOwner,
             Observer { quizQuestions ->
                 quizQuestions ?: return@Observer
@@ -69,13 +97,18 @@ class QuizFragment : Fragment() {
                 }
 
                 quizQuestions.success?.let { questions ->
-                    adapter?.setModelsList(questions)
+                    adapter?.setModelsList(questions, restartQuiz)
                     binding.quizViewPager.adapter = adapter
                     binding.quizViewPager.isUserInputEnabled = true
                 }
             })
 
         binding.quizToolbar.setNavigationOnClickListener {
+            if (!restartQuiz) {
+                findNavController().popBackStack()
+                return@setNavigationOnClickListener
+            }
+
             val resultModels = adapter?.models
             viewModel.setQuizResult(courseId, courseItemId, false, resultModels ?: emptyList())
             viewModel.quizSavingResult.observe(viewLifecycleOwner,
@@ -89,6 +122,12 @@ class QuizFragment : Fragment() {
         }
 
         binding.quizCompleteButton.setOnClickListener {
+            if (!restartQuiz) {
+                Toast.makeText(requireContext(), "FAIL: Quiz is not restarted", Toast.LENGTH_LONG).show()
+                findNavController().popBackStack()
+                return@setOnClickListener
+            }
+
             val resultModels = adapter?.models
             viewModel.setQuizResult(courseId, courseItemId, true, resultModels ?: emptyList())
             viewModel.quizSavingResult.observe(viewLifecycleOwner,

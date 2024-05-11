@@ -48,10 +48,10 @@ interface IPianoMentorApiService {
     @GET("api/ApplicationUser/GetUserStatistics")
     suspend fun getUserStatistics(@Query("userId") userId: Long): Response<GetUserStatisticsResponseApi>
 
-    @GET("api/Courses/GetCourseItemQuiz")
+    @GET("api/Courses/GetQuiz")
     suspend fun getCourseItemQuiz(@Query("courseId") courseId: Int, @Query("courseItemId") courseItemId: Int, @Query("userId") userId: Long): GetQuizResponseApi
 
-    @POST("api/Courses/SetCourseItemQuizUserAnswers")
+    @POST("api/Courses/SetQuizUserAnswers")
     suspend fun setCourseItemQuizUserAnswers(@Body request: SetQuizUserAnswersRequestApi): DefaultResponseApi
 
     @GET("api/Courses/DownloadQuizQuestionFile")

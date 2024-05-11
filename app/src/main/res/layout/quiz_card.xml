@@ -90,7 +90,7 @@
                 android:paddingHorizontal="10dp"
                 android:layout_marginVertical="3dp"
                 android:button="@drawable/btn_radio_padding"
-                android:background="@drawable/btn_radio_background"
+                android:background="@drawable/btn_radio_background_correct"
                 tools:text="Ответ 1"
                 tools:checked="true" />
 
@@ -102,7 +102,7 @@
                 android:paddingHorizontal="10dp"
                 android:layout_marginVertical="3dp"
                 android:button="@drawable/btn_radio_padding"
-                android:background="@drawable/btn_radio_background"
+                android:background="@drawable/btn_radio_background_correct"
                 tools:text="Ответ 2" />
 
             <RadioButton
@@ -113,7 +113,7 @@
                 android:paddingHorizontal="10dp"
                 android:layout_marginVertical="3dp"
                 android:button="@drawable/btn_radio_padding"
-                android:background="@drawable/btn_radio_background"
+                android:background="@drawable/btn_radio_background_correct"
                 tools:text="Ответ 3" />
 
             <RadioButton
@@ -124,7 +124,7 @@
                 android:paddingHorizontal="10dp"
                 android:layout_marginVertical="3dp"
                 android:button="@drawable/btn_radio_padding"
-                android:background="@drawable/btn_radio_background"
+                android:background="@drawable/btn_radio_background_correct"
                 tools:text="Ответ 4"/>
 
         </RadioGroup>

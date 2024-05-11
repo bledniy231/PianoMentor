@@ -43,6 +43,7 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
                 val radioButton = RadioButton(fragmentContext).apply {
                     text = answer.answerText
                     isChecked = answer.wasChosenByUser ?: false
+                    isClickable = _restartQuiz
                     layoutParams = RadioGroup.LayoutParams(
                         RadioGroup.LayoutParams.MATCH_PARENT,
                         RadioGroup.LayoutParams.WRAP_CONTENT
@@ -52,8 +53,15 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
                     }
                     setPadding(10, 0, 10, 0)
                     buttonDrawable = AppCompatResources.getDrawable(context, R.drawable.btn_radio_padding)
-                    background = AppCompatResources.getDrawable(context, R.drawable.btn_radio_background)
+                    background = if (_restartQuiz) {
+                        AppCompatResources.getDrawable(context, R.drawable.btn_radio_background_correct)
+                    } else if (!answer.isCorrect) {
+                        AppCompatResources.getDrawable(context, R.drawable.btn_radio_background_incorrect)
+                    } else {
+                        AppCompatResources.getDrawable(context, R.drawable.btn_radio_background_correct)
+                    }
                 }
+                radioButton.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
                 radioGroup.addView(radioButton)
             }
 
@@ -66,6 +74,8 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
 
     private var _models: List<QuestionViewPagerUI>? = null
     val models: List<QuestionViewPagerUI> = _models!!
+
+    private var _restartQuiz: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewPagerViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.quiz_card, parent, false)
@@ -81,8 +91,9 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public fun setModelsList(list: List<QuestionViewPagerUI>) {
+    public fun setModelsList(list: List<QuestionViewPagerUI>, restartQuiz: Boolean) {
         _models = list
+        _restartQuiz = restartQuiz
         notifyDataSetChanged()
     }
 }

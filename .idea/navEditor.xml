@@ -29,6 +29,11 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="action_global_pianoFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="chooseLoginOrRegisterFragment">
                     <value>
                       <LayoutPositions>
@@ -91,6 +96,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_open_quiz">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -143,6 +153,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="pianoFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-434" />
+                            <option name="y" value="35" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="profileFragment">
                     <value>
                       <LayoutPositions>
@@ -178,6 +200,20 @@
                             <option name="y" value="-303" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_back_arrow_quiz_to_courses">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_open_quiz_result">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -189,6 +225,20 @@
                             <option name="x" value="1105" />
                             <option name="y" value="-314" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_quiz_result_to_courses">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_quiz_result_to_statistics">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
