@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/icon_success_quiz" />
+            tools:src="@drawable/icon_success_quiz" />
 
         <TextView
             android:id="@+id/testStatusTextView"
@@ -45,9 +45,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="15dp"
             android:layout_gravity="center_horizontal"
             tools:text="Total Questions: 0"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/percentCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center_horizontal"
+            tools:text="Percent Completed: 0%"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -56,6 +65,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_back_to_course"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -63,6 +73,7 @@
                 android:text="@string/back_to_course_fragment"/>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_back_to_statistics"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

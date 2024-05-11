@@ -1,5 +1,10 @@
 package teachingsolutions.presentation_layer.fragments.statistics
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.view.animation.DecelerateInterpolator
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,11 +25,11 @@ class StatisticsViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val statRepository: StatisticsRepository) : ViewModel() {
 
-    private val _userStatistics = MutableLiveData<StatisticsResultUI>()
-    val userStatstics: LiveData<StatisticsResultUI> = _userStatistics
+    private val _userStatistics = MutableLiveData<StatisticsResultUI?>()
+    val userStatstics: LiveData<StatisticsResultUI?> = _userStatistics
 
-    private val _isRefreshingChecked = MutableLiveData<Boolean>()
-    val isRefreshingChecked: LiveData<Boolean> = _isRefreshingChecked
+    private val _isRefreshingChecked = MutableLiveData<Boolean?>()
+    val isRefreshingChecked: LiveData<Boolean?> = _isRefreshingChecked
     fun getMainMenuItems(): List<MainMenuItemModelUI> {
         return listOf(
             MainMenuItemModelUI(R.drawable.icon_cources, "Курсы"),
@@ -66,5 +71,28 @@ class StatisticsViewModel @Inject constructor(
     fun clearLiveData() {
         _userStatistics.postValue(null)
         _isRefreshingChecked.postValue(null)
+    }
+
+    fun getObjectAnimator(progressBar: ProgressBar, progressValue: Int): ObjectAnimator {
+        val progressAnim = ObjectAnimator.ofInt(progressBar, "progress", 0, progressValue)
+        progressAnim.duration = 500
+        progressAnim.interpolator = DecelerateInterpolator()
+        return progressAnim
+    }
+
+    fun getValueAnimator(textView: TextView, textValue: Int, stringResource: Int? = null): ValueAnimator {
+        val textValueAnim = ValueAnimator.ofInt(0, textValue)
+        textValueAnim.duration = 500
+
+        if (stringResource != null) {
+            textValueAnim.addUpdateListener { anim ->
+                textView.text = textView.context.getString(stringResource, anim.animatedValue as Float)
+            }
+        } else {
+            textValueAnim.addUpdateListener { anim ->
+                textView.text = anim.animatedValue.toString()
+            }
+        }
+        return textValueAnim
     }
 }

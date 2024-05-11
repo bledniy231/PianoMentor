@@ -46,8 +46,8 @@ class QuizFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        val courseId = requireArguments().getInt("courseId")
-        val courseItemId = requireArguments().getInt("courseItemId")
+        val courseId = requireArguments().getInt("CourseId")
+        val courseItemId = requireArguments().getInt("CourseItemId")
 
         viewModel.getQuizQuestions(courseId, courseItemId)
         binding.quizLoading.visibility = View.VISIBLE
@@ -89,9 +89,27 @@ class QuizFragment : Fragment() {
         }
 
         binding.quizCompleteButton.setOnClickListener {
-            // отправить ответы на сервер
-            // посчитать результат
-            findNavController().navigate(R.id.action_open_quiz_result)
+            val resultModels = adapter?.models
+            viewModel.setQuizResult(courseId, courseItemId, true, resultModels ?: emptyList())
+            viewModel.quizSavingResult.observe(viewLifecycleOwner,
+                Observer { result ->
+                    result ?: return@Observer
+                    if (result.message != null) {
+                        Toast.makeText(requireContext(), "FAIL: Error while saving quiz result", Toast.LENGTH_LONG).show()
+                        findNavController().popBackStack()
+                    }
+
+                    val (correctAnswers, correctUserAnswers, correctAnswersPercentage) = viewModel.calculateQuizResults(resultModels ?: emptyList())
+                    val bundle = Bundle().apply {
+                        putInt("CourseId", courseId)
+                        putInt("CourseItemId", courseItemId)
+                        putString("CourseTitle", requireArguments().getString("courseTitle"))
+                        putInt("CorrectUserAnswers", correctUserAnswers)
+                        putInt("CorrectAnswers", correctAnswers)
+                        putDouble("CorrectAnswersPercentage", correctAnswersPercentage)
+                    }
+                    findNavController().navigate(R.id.action_open_quiz_result, bundle)
+                })
         }
     }
 

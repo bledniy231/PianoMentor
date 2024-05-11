@@ -96,7 +96,7 @@ class CoursesFragment : Fragment(),
                 }
         })
 
-        binding.coursesToolbar.title = requireArguments().getString("Title") ?: "Курсы"
+        binding.coursesToolbar.title = requireArguments().getString("CourseTitle") ?: "Курсы"
     }
 
     private fun initialReceivingElements() {
@@ -140,7 +140,7 @@ class CoursesFragment : Fragment(),
             }
         }
         else {
-            val args = bundleOf("CourseId" to itemModel.courseId, "Title" to itemModel.title)
+            val args = bundleOf("CourseId" to itemModel.courseId, "CourseTitle" to itemModel.title)
             findNavController().navigate(R.id.action_open_course, args)
         }
     }

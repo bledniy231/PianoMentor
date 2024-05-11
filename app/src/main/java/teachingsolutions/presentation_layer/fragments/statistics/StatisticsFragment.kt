@@ -150,23 +150,22 @@ class StatisticsFragment : Fragment(),
 //        binding.exercisesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_green, resources.newTheme())
 //        binding.lecturesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_brown, resources.newTheme())
 
-        val exerciseProgressAnim = getObjectAnimator(binding.exercisesCircleProgressBar, statResult.exercisesProgressModel.progressValueInPercent)
-        val exerciseTextAnim = getValueAnimator(binding.exercisesCounterText, statResult.exercisesProgressModel.progressValueAbsolute)
-        val lectureProgressAnim = getObjectAnimator(binding.lecturesCircleProgressBar, statResult.lecturesProgressModel.progressValueInPercent)
-        val lectureTextAnim = getValueAnimator(binding.lecturesCounterText, statResult.lecturesProgressModel.progressValueAbsolute)
-        val courseProgressAnim = getObjectAnimator(binding.coursesLinearProgressBar, statResult.coursesProgressModel.progressValueInPercent)
+        val exerciseProgressAnim = viewModel.getObjectAnimator(binding.exercisesCircleProgressBar, statResult.exercisesProgressModel.progressValueInPercent)
+        val exerciseTextAnim = viewModel.getValueAnimator(binding.exercisesCounterText, statResult.exercisesProgressModel.progressValueAbsolute)
+        val lectureProgressAnim = viewModel.getObjectAnimator(binding.lecturesCircleProgressBar, statResult.lecturesProgressModel.progressValueInPercent)
+        val lectureTextAnim = viewModel.getValueAnimator(binding.lecturesCounterText, statResult.lecturesProgressModel.progressValueAbsolute)
+        val courseProgressAnim = viewModel.getObjectAnimator(binding.coursesLinearProgressBar, statResult.coursesProgressModel.progressValueInPercent)
+        val courseTextAnim = viewModel.getValueAnimator(binding.coursesPercentText, statResult.coursesProgressModel.progressValueInPercent, R.string.percent)
 
         exerciseProgressAnim.start()
         exerciseTextAnim.start()
         lectureProgressAnim.start()
         lectureTextAnim.start()
         courseProgressAnim.start()
+        courseTextAnim.start()
 
         binding.exercisesText.text = statResult.exercisesProgressModel.title
-
         binding.lecturesText.text = statResult.lecturesProgressModel.title
-
-        binding.coursesPercentText.text = "${statResult.coursesProgressModel.progressValueInPercent.toString()}%"
         binding.coursesNameText.text = statResult.coursesProgressModel.title
     }
 
@@ -203,22 +202,6 @@ class StatisticsFragment : Fragment(),
 
     private fun updateUiWithStatisticsFailed(error: String) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun getObjectAnimator(progressBar: ProgressBar, progressValue: Int): ObjectAnimator {
-        val progressAnim = ObjectAnimator.ofInt(progressBar, "progress", 0, progressValue)
-        progressAnim.duration = 500
-        progressAnim.interpolator = DecelerateInterpolator()
-        return progressAnim
-    }
-
-    private fun getValueAnimator(textView: TextView, textValue: Int): ValueAnimator {
-        val textValueAnim = ValueAnimator.ofInt(0, textValue)
-        textValueAnim.duration = 500
-        textValueAnim.addUpdateListener { anim ->
-            textView.text = anim.animatedValue.toString()
-        }
-        return textValueAnim
     }
 
     override fun onDestroyView() {

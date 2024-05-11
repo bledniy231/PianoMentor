@@ -43,4 +43,22 @@ class QuizViewModel @Inject constructor(
             }
         }
     }
+
+    fun calculateQuizResults(questions: List<QuestionViewPagerUI>): Triple<Int, Int, Double> {
+        var correctUserAnswers = 0
+        var correctAnswers = 0
+        for (question in questions) {
+            for (answer in question.answers) {
+                if (answer.isCorrect && answer.wasChosenByUser == true) {
+                    correctUserAnswers++
+                }
+                if (answer.isCorrect) {
+                    correctAnswers++
+                }
+            }
+        }
+
+        val correctAnswersPercentage = if (correctAnswers > 0) correctUserAnswers.toDouble() / correctAnswers * 100 else 0.0
+        return Triple(correctAnswers, correctUserAnswers, correctAnswersPercentage)
+    }
 }

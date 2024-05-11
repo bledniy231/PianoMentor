@@ -54,4 +54,10 @@
     <string name="back_to_statistics_fragment">Выйти на главный экран</string>
     <string name="question_counter">Вопрос %1$d из %2$d</string>
     <string name="question_title">Вопрос %1$d</string>
+    <string name="quiz_result_success">Вы успешно сдали тест!</string>
+    <string name="quiz_result_fail">Увы, но вы совершили ошибки в тесте</string>
+    <string name="correct_answers">Правильных ответов: %1$d</string>
+    <string name="total_questions">Всего вопросов: %1$d</string>
+    <string name="percent_completed">Процент выполнения: %.2f</string>
+    <string name="percent">%.0f%%</string>
 </resources>
