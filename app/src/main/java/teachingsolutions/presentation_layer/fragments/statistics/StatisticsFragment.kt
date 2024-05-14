@@ -119,7 +119,7 @@ class StatisticsFragment : Fragment(),
         statisticsViewPagerAdapter?.setModelsList(statResult.statListViewPagerItems)
         binding.statViewPager.adapter = statisticsViewPagerAdapter
         binding.statViewPager.offscreenPageLimit = 2
-        binding.statViewPager.isUserInputEnabled = true
+        binding.statViewPager.isUserInputEnabled = false
         val middle = Integer.MAX_VALUE / 2
         val start = middle - (middle % (statisticsViewPagerAdapter?.itemCount ?: 1))
         binding.statViewPager.currentItem = start

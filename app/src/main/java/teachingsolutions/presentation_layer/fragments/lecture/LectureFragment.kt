@@ -38,6 +38,7 @@ class LectureFragment : Fragment() {
 
     private var _binding: FragmentLectureBinding? = null
     private val binding get() = _binding!!
+    private lateinit var args: Bundle
 
     private val viewModel: LectureViewModel by viewModels()
     private var popupMenu: PopupMenu? = null
@@ -64,13 +65,16 @@ class LectureFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments == null) {
+        try {
+            args = requireArguments()
+        } catch (e: Exception) {
             Toast.makeText(requireContext(), "FAIL: Empty arguments", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
+            return
         }
 
-        isEndedReading = requireArguments().getString("CourseItemProgressType") == CourseItemProgressType.COMPLETED.value
-        binding.lectureToolbar.title = requireArguments().getString("CourseItemTitle")
+        isEndedReading = args.getString("CourseItemProgressType") == CourseItemProgressType.COMPLETED.value
+        binding.lectureToolbar.title = args.getString("CourseItemTitle")
         binding.lecturesLoading.visibility = View.VISIBLE
         gestureDetector = getGestureDetector()
         binding.pdfView.setOnTouchListener { v, event ->
@@ -112,8 +116,8 @@ class LectureFragment : Fragment() {
             }
         }
 
-        val courseItemId = requireArguments().getInt("CourseItemId")
-        val courseItemTitle = requireArguments().getString("CourseItemTitle")
+        val courseItemId = args.getInt("CourseItemId")
+        val courseItemTitle = args.getString("CourseItemTitle")
         if (courseItemId > 0 && !courseItemTitle.isNullOrEmpty()) {
             //viewModel.deleteLecturePdf(courseItemId, courseName)
             viewModel.getLecturePdf(courseItemId, courseItemTitle)
@@ -279,7 +283,7 @@ class LectureFragment : Fragment() {
     }
 
     private fun checkIfLectureCompleted(courseItemId: Int): Boolean {
-        return if (isEndedReading && requireArguments().getString("CourseItemProgressType") != CourseItemProgressType.COMPLETED.value) {
+        return if (isEndedReading && args.getString("CourseItemProgressType") != CourseItemProgressType.COMPLETED.value) {
             viewModel.setLectureProgress(courseItemId, CourseItemProgressType.COMPLETED)
             true
         } else {

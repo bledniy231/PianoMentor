@@ -1,5 +1,7 @@
 package teachingsolutions.presentation_layer.fragments.quiz
 
+import android.content.Context
+import android.graphics.Rect
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,14 +10,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentQuizBinding
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
 import teachingsolutions.presentation_layer.adapters.QuizViewPagerAdapter
+import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
+import teachingsolutions.presentation_layer.fragments.quiz.model.GetQuizResponseUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionViewPagerUI
+import teachingsolutions.presentation_layer.fragments.quiz.model.StartQuizModel
 
 @AndroidEntryPoint
 class QuizFragment : Fragment() {
@@ -25,8 +33,11 @@ class QuizFragment : Fragment() {
 
     private var _binding: FragmentQuizBinding? = null
     private val binding get() = _binding!!
+    private lateinit var args: Bundle
 
     private val viewModel: QuizViewModel by viewModels()
+    private var resultModels: List<QuestionViewPagerUI>? = null
+    private val startQuizModel: StartQuizModel = StartQuizModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,16 +54,13 @@ class QuizFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments == null) {
-            Toast.makeText(requireContext(), "FAIL: Empty arguments", Toast.LENGTH_LONG).show()
+        try {
+            args = requireArguments()
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "FAIL: Empty arguments", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
+            return
         }
-
-        val courseId = requireArguments().getInt("CourseId")
-        val courseItemId = requireArguments().getInt("CourseItemId")
-
-        viewModel.getQuizQuestions(courseId, courseItemId)
-        binding.quizLoading.visibility = View.VISIBLE
 
         val adapter = context?.let { QuizViewPagerAdapter(it) }
         if (adapter == null) {
@@ -60,96 +68,104 @@ class QuizFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        val quizStatus = requireArguments().getString("CourseItemProgressType")?.let { CourseItemProgressType.valueOf(it) }
+        val quizStatus = args.getString("CourseItemProgressType")?.let { CourseItemProgressType.from(it) }
         if (quizStatus == null) {
             Toast.makeText(requireContext(), "FAIL: Quiz status is null", Toast.LENGTH_LONG).show()
             findNavController().popBackStack()
         }
 
+        val courseId = args.getInt("CourseId")
+        val courseItemId = args.getInt("CourseItemId")
+
+        viewModel.getQuizQuestions(courseId, courseItemId)
+        binding.quizLoading.visibility = View.VISIBLE
         binding.quizCompleteButton.visibility = View.VISIBLE
-        var restartQuiz = false
-        if (quizStatus == CourseItemProgressType.FAILED) {
-            AlertDialog.Builder(requireContext())
-                .setTitle(getString(R.string.quiz_failed))
-                .setMessage(getString(R.string.are_you_sure_logout_dialog))
-                .setPositiveButton(getString(R.string.restart_quiz)) { _, _ ->
-                    restartQuiz = true
-                    binding.quizCompleteButton.visibility = View.VISIBLE
-                }
-                .setNegativeButton(getString(R.string.show_results)) { _, _ ->
-                    restartQuiz = false
-                    binding.quizCompleteButton.visibility = View.GONE
-                }
-                .show()
-        } else if (quizStatus == CourseItemProgressType.COMPLETED) {
-            restartQuiz = false
-            binding.quizCompleteButton.visibility = View.GONE
-        }
+        viewModel.showAlertDialog(quizStatus!!, requireContext(), binding.quizCompleteButton)
 
-        viewModel.quizQuestions.observe(viewLifecycleOwner,
-            Observer { quizQuestions ->
-                quizQuestions ?: return@Observer
+        val quizQuestionsObserver = Observer<GetQuizResponseUI?> { quizQuestions ->
+            quizQuestions ?: return@Observer
 
-                binding.quizLoading.visibility = View.GONE
-                quizQuestions.error?.let {
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-                    findNavController().popBackStack()
-                }
-
-                quizQuestions.success?.let { questions ->
-                    adapter?.setModelsList(questions, restartQuiz)
-                    binding.quizViewPager.adapter = adapter
-                    binding.quizViewPager.isUserInputEnabled = true
-                }
-            })
-
-        binding.quizToolbar.setNavigationOnClickListener {
-            if (!restartQuiz) {
+            binding.quizLoading.visibility = View.GONE
+            quizQuestions.error?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
                 findNavController().popBackStack()
-                return@setNavigationOnClickListener
             }
 
-            val resultModels = adapter?.models
-            viewModel.setQuizResult(courseId, courseItemId, false, resultModels ?: emptyList())
-            viewModel.quizSavingResult.observe(viewLifecycleOwner,
-                Observer { result ->
-                    result ?: return@Observer
-                    if (result.message != null) {
-                        Toast.makeText(requireContext(), "FAIL: Error while saving quiz result", Toast.LENGTH_LONG).show()
+            quizQuestions.success?.let { questions ->
+                adapter?.setModelsList(questions, startQuizModel.startQuiz ?: true, quizStatus)
+                binding.quizViewPager.adapter = adapter
+                binding.quizViewPager.isUserInputEnabled = true
+                binding.quizViewPager.addItemDecoration(object : RecyclerView.ItemDecoration() {
+                    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                        with(outRect) {
+                            if (parent.getChildAdapterPosition(view) == 0) {
+                                left = 20
+                            }
+                            right = 20
+                        }
                     }
-                    findNavController().popBackStack()
                 })
+            }
         }
 
-        binding.quizCompleteButton.setOnClickListener {
-            if (!restartQuiz) {
-                Toast.makeText(requireContext(), "FAIL: Quiz is not restarted", Toast.LENGTH_LONG).show()
+        val quizSavingResultBACKObserver = Observer<DefaultResponseUI?> { result ->
                 findNavController().popBackStack()
-                return@setOnClickListener
+                result ?: return@Observer
+
+                if (result.message != null) {
+                    Toast.makeText(requireContext(), "FAIL: Error while saving quiz result", Toast.LENGTH_LONG).show()
+                }
             }
 
-            val resultModels = adapter?.models
-            viewModel.setQuizResult(courseId, courseItemId, true, resultModels ?: emptyList())
-            viewModel.quizSavingResult.observe(viewLifecycleOwner,
-                Observer { result ->
-                    result ?: return@Observer
-                    if (result.message != null) {
-                        Toast.makeText(requireContext(), "FAIL: Error while saving quiz result", Toast.LENGTH_LONG).show()
-                        findNavController().popBackStack()
-                    }
+        val quizSavingResultCOMPLETEObserver = Observer<DefaultResponseUI?> { result ->
+            result ?: return@Observer
+            if (result.message != null) {
+                Toast.makeText(requireContext(), "FAIL: Error while saving quiz result", Toast.LENGTH_LONG).show()
+                findNavController().popBackStack()
+            }
 
-                    val (correctAnswers, correctUserAnswers, correctAnswersPercentage) = viewModel.calculateQuizResults(resultModels ?: emptyList())
-                    val bundle = Bundle().apply {
-                        putInt("CourseId", courseId)
-                        putInt("CourseItemId", courseItemId)
-                        putString("CourseTitle", requireArguments().getString("courseTitle"))
-                        putInt("CorrectUserAnswers", correctUserAnswers)
-                        putInt("CorrectAnswers", correctAnswers)
-                        putDouble("CorrectAnswersPercentage", correctAnswersPercentage)
-                    }
-                    findNavController().navigate(R.id.action_open_quiz_result, bundle)
-                })
+            val (correctAnswers, correctUserAnswers, correctAnswersPercentage) = viewModel.calculateQuizResults(resultModels ?: emptyList())
+            val bundle = Bundle().apply {
+                putInt("CourseId", courseId)
+                putInt("CourseItemId", courseItemId)
+                putString("CourseTitle", args.getString("courseTitle"))
+                putInt("CorrectUserAnswers", correctUserAnswers)
+                putInt("CorrectAnswers", correctAnswers)
+                putDouble("CorrectAnswersPercentage", correctAnswersPercentage)
+            }
+            findNavController().navigate(R.id.action_open_quiz_result, bundle)
         }
+
+        val alertDialogObserver = Observer<Boolean?> { startQuiz ->
+            startQuiz ?: return@Observer
+
+            startQuizModel.startQuiz = startQuiz
+            viewModel.quizQuestions.observe(viewLifecycleOwner, quizQuestionsObserver)
+            binding.quizToolbar.setNavigationOnClickListener {
+                if (!startQuiz) {
+                    findNavController().popBackStack()
+                    return@setNavigationOnClickListener
+                }
+
+                resultModels = adapter?.models
+                viewModel.setQuizResult(courseId, courseItemId, false, resultModels ?: emptyList())
+                viewModel.quizSavingResult.observe(viewLifecycleOwner, quizSavingResultBACKObserver)
+            }
+
+            binding.quizCompleteButton.setOnClickListener {
+                if (!startQuiz) {
+                    Toast.makeText(requireContext(), "FAIL: Quiz is not restarted", Toast.LENGTH_LONG).show()
+                    findNavController().popBackStack()
+                    return@setOnClickListener
+                }
+
+                resultModels = adapter?.models
+                viewModel.setQuizResult(courseId, courseItemId, true, resultModels ?: emptyList())
+                viewModel.quizSavingResult.observe(viewLifecycleOwner, quizSavingResultCOMPLETEObserver)
+            }
+        }
+
+        viewModel.alertDialogResult.observe(viewLifecycleOwner, alertDialogObserver)
     }
 
     override fun onDestroy() {

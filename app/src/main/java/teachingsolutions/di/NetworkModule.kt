@@ -158,7 +158,7 @@ object NetworkModule {
                     context: JsonDeserializationContext?
                 ): LocalDateTime {
                     val dateTimeString = json.asString
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")
                     return LocalDateTime.parse(dateTimeString, formatter)
                 }
             })
@@ -168,7 +168,7 @@ object NetworkModule {
                     typeOfSrc: Type?,
                     context: JsonSerializationContext?
                 ): JsonElement {
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")
                     return JsonPrimitive(src?.format(formatter))
                 }
             })

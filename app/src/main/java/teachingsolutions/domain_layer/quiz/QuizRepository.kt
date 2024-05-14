@@ -6,6 +6,8 @@ import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersReq
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.data_access_layer.courses.CoursesDataSource
 import teachingsolutions.data_access_layer.quiz.QuizDataSource
+import teachingsolutions.domain_layer.courses.CoursesRepository
+import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.GetQuizResponseUI
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 class QuizRepository @Inject constructor(
     private val quizDataSource: QuizDataSource,
-    private val userRepository: UserRepository) {
+    private val userRepository: UserRepository,
+    private val coursesRepository: CoursesRepository) {
 
     suspend fun getQuizQuestions(courseId: Int, courseItemId: Int, userId: Long): GetQuizResponseUI {
         return when (val result = quizDataSource.getCourseItemQuiz(courseId, courseItemId, userId)) {
@@ -33,7 +36,9 @@ class QuizRepository @Inject constructor(
                                 QuestionAnswerUI(
                                     answer.answerId,
                                     answer.answerText,
-                                    answer.isCorrect
+                                    answer.isCorrect,
+                                    answer.wasChosenByUser,
+                                    answer.userAnswerText
                                 )
                             }
                         )
@@ -67,7 +72,9 @@ class QuizRepository @Inject constructor(
                         QuizQuestionAnswer(
                             answer.answerId,
                             answer.answerText,
-                            answer.isCorrect
+                            answer.isCorrect,
+                            answer.wasChosenByUser ?: false,
+                            answer.userAnswerText ?: ""
                         )
                     }
                 )
@@ -75,7 +82,10 @@ class QuizRepository @Inject constructor(
         )
 
         return when (val result = quizDataSource.setQuizUserAnswers(request)) {
-            is ActionResult.Success -> DefaultResponseUI(null)
+            is ActionResult.Success -> {
+                coursesRepository.setCourseItemProgress(courseItemId, CourseItemProgressType.from(result.data.progressType))
+                DefaultResponseUI(null)
+            }
             is ActionResult.NormalError -> DefaultResponseUI(result.data._errors?.joinToString { it } ?: "Error while setting quiz answers")
             is ActionResult.ExceptionError -> DefaultResponseUI(result.exception.message ?: "Error while setting quiz answers")
         }

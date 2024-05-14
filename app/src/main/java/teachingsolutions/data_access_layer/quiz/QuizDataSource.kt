@@ -4,6 +4,7 @@ import okhttp3.ResponseBody
 import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 import teachingsolutions.data_access_layer.DAL_models.quiz.GetQuizResponseApi
 import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersRequestApi
+import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersResponseApi
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
 import teachingsolutions.data_access_layer.common.ActionResult
 import java.io.IOException
@@ -24,11 +25,11 @@ class QuizDataSource @Inject constructor(private val apiService: IPianoMentorApi
                 }
             }
         } catch (e: Exception) {
-            ActionResult.ExceptionError(IOException("Error while getting quiz of course item: ${courseItemId}, response not successful, ${e.message}"))
+            ActionResult.ExceptionError(IOException(/*"Error while getting quiz of course item: ${courseItemId}, response not successful, */"${e.message}"))
         }
     }
 
-    suspend fun setQuizUserAnswers(request: SetQuizUserAnswersRequestApi): ActionResult<DefaultResponseApi> {
+    suspend fun setQuizUserAnswers(request: SetQuizUserAnswersRequestApi): ActionResult<SetQuizUserAnswersResponseApi> {
         return try {
             val result = apiService.setCourseItemQuizUserAnswers(request)
             when (result._errors) {

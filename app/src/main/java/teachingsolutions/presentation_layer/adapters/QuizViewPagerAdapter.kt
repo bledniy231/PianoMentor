@@ -2,6 +2,7 @@ package teachingsolutions.presentation_layer.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pianomentor.R
+import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionAnswerUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionViewPagerUI
 
 class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.Adapter<QuizViewPagerAdapter.QuizViewPagerViewHolder>() {
@@ -28,7 +31,7 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
                 return
             }
 
-            questionCounter.text = String.format(context.getString(R.string.question_counter), position + 1, _models?.size)
+            questionCounter.text = String.format(context.getString(R.string.question_counter), position + 1, models?.size)
             questionTitle.text = String.format(context.getString(R.string.question_title), position + 1)
             questionText.text = question.questionText
             if (question.attachedFile != null) {
@@ -41,9 +44,19 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
             radioGroup.removeAllViews()
             for (answer in question.answers) {
                 val radioButton = RadioButton(fragmentContext).apply {
+                    id = answer.answerId
+                    //setTag(R.id.tag_additional_text, question.questionId)
                     text = answer.answerText
-                    isChecked = answer.wasChosenByUser ?: false
-                    isClickable = _restartQuiz
+                    textSize = 16f
+                    isChecked = if (!_startQuiz) {
+                        answer.wasChosenByUser ?: false
+                    } else if (_quizStatus == CourseItemProgressType.FAILED) {
+                        answers?.forEach { it.wasChosenByUser = false }
+                        false
+                    } else {
+                        answer.wasChosenByUser ?: false
+                    }
+                    isEnabled = _startQuiz
                     layoutParams = RadioGroup.LayoutParams(
                         RadioGroup.LayoutParams.MATCH_PARENT,
                         RadioGroup.LayoutParams.WRAP_CONTENT
@@ -53,7 +66,7 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
                     }
                     setPadding(10, 0, 10, 0)
                     buttonDrawable = AppCompatResources.getDrawable(context, R.drawable.btn_radio_padding)
-                    background = if (_restartQuiz) {
+                    background = if (_startQuiz) {
                         AppCompatResources.getDrawable(context, R.drawable.btn_radio_background_correct)
                     } else if (!answer.isCorrect) {
                         AppCompatResources.getDrawable(context, R.drawable.btn_radio_background_incorrect)
@@ -61,21 +74,35 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
                         AppCompatResources.getDrawable(context, R.drawable.btn_radio_background_correct)
                     }
                 }
-                radioButton.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+                radioButton.setAutoSizeTextTypeUniformWithConfiguration(
+                    12,
+                    24,
+                    2,
+                    TypedValue.COMPLEX_UNIT_SP
+                )
                 radioGroup.addView(radioButton)
             }
 
             radioGroup.setOnCheckedChangeListener { group, checkedId ->
                 val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
-                question.answers.find { it.answerText == checkedRadioButton.text.toString() }?.wasChosenByUser = checkedRadioButton.isChecked
+                val answer = answers?.find { it.answerId == checkedRadioButton.id }
+                answer?.wasChosenByUser = checkedRadioButton.isChecked
+
+                for (i in 0 until group.childCount) {
+                    val radioButton = group.getChildAt(i) as? RadioButton
+                    if (radioButton != null && radioButton.id != checkedId) {
+                        answers?.find { it.answerId == radioButton.id}?.wasChosenByUser = false
+                    }
+                }
             }
         }
     }
 
-    private var _models: List<QuestionViewPagerUI>? = null
-    val models: List<QuestionViewPagerUI> = _models!!
+    var models: List<QuestionViewPagerUI>? = null
 
-    private var _restartQuiz: Boolean = false
+    private var _startQuiz: Boolean = false
+    private var _quizStatus: CourseItemProgressType? = null
+    private var answers: List<QuestionAnswerUI>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizViewPagerViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.quiz_card, parent, false)
@@ -83,17 +110,19 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
     }
 
     override fun getItemCount(): Int {
-        return _models?.size ?: 0
+        return models?.size ?: 0
     }
 
     override fun onBindViewHolder(holder: QuizViewPagerViewHolder, position: Int) {
-        holder.bind(_models?.get(position), position, fragmentContext)
+        holder.bind(models?.get(position), position, fragmentContext)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public fun setModelsList(list: List<QuestionViewPagerUI>, restartQuiz: Boolean) {
-        _models = list
-        _restartQuiz = restartQuiz
+    public fun setModelsList(list: List<QuestionViewPagerUI>, startQuiz: Boolean, quizStatus: CourseItemProgressType) {
+        models = list
+        answers = models?.flatMap { it.answers }
+        _startQuiz = startQuiz
+        _quizStatus = quizStatus
         notifyDataSetChanged()
     }
 }
