@@ -22,6 +22,7 @@ import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsMo
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
+import teachingsolutions.presentation_layer.extensions.safelyNavigate
 import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsResultUI
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
@@ -39,6 +40,32 @@ class StatisticsFragment : Fragment(),
     private val binding get() = _binding!!
 
     private val viewModel: StatisticsViewModel by viewModels()
+
+    private val userStatisticsObserver = Observer<StatisticsResultUI?> { statResultUI ->
+        statResultUI ?: return@Observer
+
+        statResultUI.success?.let {
+            initialStatisticsViewPager(it)
+        }
+
+        statResultUI.error?.let {
+            val error = if (it == "Unauthorized") {
+                getString(R.string.login_for_statistics)
+            } else {
+                it
+            }
+            updateUiWithStatisticsFailed(error)
+            initialStatisticsViewPager(UserStatisticsModel(
+                listOf(
+                    StatisticsViewPagerItemModelUI(0, 0, getString(R.string.tests_done), getString(R.string.zero_tests_done)),
+                    StatisticsViewPagerItemModelUI(0, 0, getString(R.string.courses_done), getString(R.string.zero_courses_done))
+                ),
+                BaseStatisticsModel(0, 0, getString(R.string.exercise)),
+                BaseStatisticsModel(0, 0, getString(R.string.lectures)),
+                BaseStatisticsModel(0, 0, getString(R.string.introduction_course))
+            ))
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,47 +87,17 @@ class StatisticsFragment : Fragment(),
 
         viewModel.refreshUserIfNeeds()
 
-        val userStatisticsObserver = Observer<StatisticsResultUI?> { statResultUI ->
-            statResultUI ?: return@Observer
-
-            statResultUI.success?.let {
-                initialStatisticsViewPager(it)
-            }
-
-            statResultUI.error?.let {
-                val error = if (it == "Unauthorized") {
-                    getString(R.string.login_for_statistics)
-                } else {
-                    it
-                }
-                updateUiWithStatisticsFailed(error)
-                initialStatisticsViewPager(UserStatisticsModel(
-                    listOf(
-                        StatisticsViewPagerItemModelUI(0, 0, getString(R.string.tests_done), getString(R.string.zero_tests_done)),
-                        StatisticsViewPagerItemModelUI(0, 0, getString(R.string.courses_done), getString(R.string.zero_courses_done))
-                    ),
-                    BaseStatisticsModel(0, 0, getString(R.string.exercise)),
-                    BaseStatisticsModel(0, 0, getString(R.string.lectures)),
-                    BaseStatisticsModel(0, 0, getString(R.string.introduction_course))
-                ))
-            }
-        }
-
         val refreshingCheckedObserver = Observer<Boolean?> { isRefreshingChecked ->
             isRefreshingChecked ?: return@Observer
-
-//            if (!isUserAvailable) {
-//                Toast.makeText(context, "Войдите в аккаунт", Toast.LENGTH_LONG).show()
-//            }
 
             initialMainMenuRecyclerView()
             viewModel.getUserStatistics()
             viewModel.userStatstics.observe(viewLifecycleOwner, userStatisticsObserver)
             binding.toolBarUserIconGoLogin.setOnClickListener {
                 if (viewModel.isUserLoggedIn()) {
-                    findNavController().navigate(R.id.action_choose_profile)
+                    findNavController().safelyNavigate(R.id.action_choose_profile)
                 } else {
-                    findNavController().navigate(R.id.action_choose_register_or_login)
+                    findNavController().safelyNavigate(R.id.action_choose_register_or_login)
                 }
             }
 
@@ -113,6 +110,13 @@ class StatisticsFragment : Fragment(),
             findNavController().navigate(R.id.action_global_pianoFragment)
         }
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//
+//        viewModel.getUserStatistics()
+//        viewModel.userStatstics.observe(viewLifecycleOwner, userStatisticsObserver)
+//    }
 
     private fun initialStatisticsViewPager(statResult: UserStatisticsModel) {
         val statisticsViewPagerAdapter = context?.let { StatisticsViewPagerAdapter(it) }

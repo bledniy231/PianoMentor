@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentProfileBinding
@@ -54,7 +55,13 @@ class ProfileFragment : Fragment() {
                         viewModel.logout()
                         Toast.makeText(requireContext(),
                             getString(R.string.you_have_been_logged_out), Toast.LENGTH_SHORT).show()
-                        findNavController().popBackStack(R.id.action_back_arrow_profile_to_statistics, false)
+                        //findNavController().popBackStack(R.id.statisticsFragment, true)
+//                        val options = NavOptions.Builder()
+//                            .setLaunchSingleTop(false)
+//                            .setPopUpTo(R.id.statisticsFragment, true)
+//                            .build()
+//                        findNavController().navigate(R.id.action_back_arrow_profile_to_statistics, null, options)
+                        findNavController().popBackStack()
                     }
                     .setNegativeButton(getString(R.string.no_word), null)
                     .show()

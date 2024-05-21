@@ -154,7 +154,7 @@ class QuizFragment : Fragment() {
 
             binding.quizCompleteButton.setOnClickListener {
                 if (!startQuiz) {
-                    Toast.makeText(requireContext(), "FAIL: Quiz is not restarted", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "FAIL: Quiz did not restarted", Toast.LENGTH_LONG).show()
                     findNavController().popBackStack()
                     return@setOnClickListener
                 }

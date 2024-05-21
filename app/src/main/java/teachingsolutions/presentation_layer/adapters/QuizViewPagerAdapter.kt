@@ -48,14 +48,7 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
                     //setTag(R.id.tag_additional_text, question.questionId)
                     text = answer.answerText
                     textSize = 16f
-                    isChecked = if (!_startQuiz) {
-                        answer.wasChosenByUser ?: false
-                    } else if (_quizStatus == CourseItemProgressType.FAILED) {
-                        answers?.forEach { it.wasChosenByUser = false }
-                        false
-                    } else {
-                        answer.wasChosenByUser ?: false
-                    }
+                    isChecked = answer.wasChosenByUser ?: false
                     isEnabled = _startQuiz
                     layoutParams = RadioGroup.LayoutParams(
                         RadioGroup.LayoutParams.MATCH_PARENT,
@@ -85,13 +78,14 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
 
             radioGroup.setOnCheckedChangeListener { group, checkedId ->
                 val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
-                val answer = answers?.find { it.answerId == checkedRadioButton.id }
-                answer?.wasChosenByUser = checkedRadioButton.isChecked
+                val userAnswer = answers?.find { it.answerId == checkedRadioButton.id }
+                userAnswer?.wasChosenByUser = checkedRadioButton.isChecked
 
                 for (i in 0 until group.childCount) {
                     val radioButton = group.getChildAt(i) as? RadioButton
                     if (radioButton != null && radioButton.id != checkedId) {
-                        answers?.find { it.answerId == radioButton.id}?.wasChosenByUser = false
+                        val answer = answers?.find { it.answerId == radioButton.id }
+                        answer?.wasChosenByUser = !checkedRadioButton.isChecked
                     }
                 }
             }
@@ -119,6 +113,13 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
 
     @SuppressLint("NotifyDataSetChanged")
     public fun setModelsList(list: List<QuestionViewPagerUI>, startQuiz: Boolean, quizStatus: CourseItemProgressType) {
+        if (startQuiz && quizStatus == CourseItemProgressType.FAILED) {
+            for (question in list) {
+                for (answer in question.answers) {
+                    answer.wasChosenByUser = false
+                }
+            }
+        }
         models = list
         answers = models?.flatMap { it.answers }
         _startQuiz = startQuiz

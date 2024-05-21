@@ -6,5 +6,5 @@ data class CourseModel(
     val title: String,
     val subtitle: String,
     val description: String,
-    val progressInPercent: Int = 0
+    var progressInPercent: Int = 0
 )

@@ -48,13 +48,13 @@ class LectureViewModel @Inject constructor(
     }
 
     fun setLectureProgress(courseItemId: Int, progress: CourseItemProgressType) {
+        val userId = userRepository.userId ?: 0
+        val courseId = coursesRepository.getCourseIdByCourseItemId(courseItemId)
+        if (userId == 0L || courseId == 0) return
+        coursesRepository.setCourseItemProgress(courseId, courseItemId, progress)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val userId = userRepository.userId ?: 0
-                val courseId = coursesRepository.getCourseIdByCourseItemId(courseItemId)
-                if (userId == 0L || courseId == 0) return@withContext
                 val defaultResponse = statisticsRepository.setCourseItemProgress(userId, courseId, courseItemId, progress)
-                coursesRepository.setCourseItemProgress(courseItemId, progress)
                 _setLectureProgressResult.postValue(defaultResponse)
             }
         }
