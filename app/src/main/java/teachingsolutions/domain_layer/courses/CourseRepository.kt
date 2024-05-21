@@ -7,6 +7,7 @@ import teachingsolutions.domain_layer.mapping_models.courses.CourseItemModel
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
 import teachingsolutions.domain_layer.mapping_models.courses.CourseModel
+import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsResultUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
@@ -18,6 +19,7 @@ import javax.inject.Singleton
 @Singleton
 class CoursesRepository @Inject constructor(
     private val coursesDataSource: CoursesDataSource,
+    private val statisticsRepository: StatisticsRepository,
     private val fileStorageManager: FileStorageManager
 ) {
     private var coursesCached = emptyList<CourseModel>()
@@ -158,8 +160,15 @@ class CoursesRepository @Inject constructor(
         return coursesItemsCached.find { it.courseItemId == courseItemId }?.courseId ?: 0
     }
 
-    fun setCourseItemProgress(courseItemId: Int, courseItemProgressType: CourseItemProgressType) {
+    fun setCourseItemProgress(courseId:Int, courseItemId: Int, courseItemProgressType: CourseItemProgressType) {
         coursesItemsCached.find { it.courseItemId == courseItemId }?.courseItemProgressType = courseItemProgressType
+        if (courseItemProgressType == CourseItemProgressType.COMPLETED) {
+            val neededCourse = coursesCached.find { it.courseId == courseId }
+            val resultPercent = neededCourse?.progressInPercent?.plus((100 / coursesItemsCached.filter { it.courseId == courseId }.size))
+            if (resultPercent != null) {
+                neededCourse.progressInPercent = resultPercent
+            }
+        }
     }
 
     fun clearCache() {

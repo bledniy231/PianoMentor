@@ -113,16 +113,13 @@ class CoursesFragment : Fragment(),
             when (courseItemModel.courseItemType) {
                 CourseItemType.LECTURE -> {
                     val args = bundleOf(
+                        "CourseId" to courseItemModel.courseId,
                         "CourseItemId" to courseItemModel.courseItemId,
                         "CourseItemTitle" to courseItemModel.title,
                         "CourseItemProgressType" to courseItemModel.courseItemProgressType.value)
                     findNavController().navigate(R.id.action_open_lecture, args)
                 }
                 CourseItemType.QUIZ -> {
-                    if (courseItemModel.courseItemProgressType == CourseItemProgressType.COMPLETED) {
-                        Toast.makeText(requireContext(), "Тест уже пройден", Toast.LENGTH_LONG).show()
-                        return
-                    }
                     if (viewModel.getUserId() == null || viewModel.getUserId() == 0L) {
                         Toast.makeText(requireContext(), "Необходимо авторизоваться", Toast.LENGTH_LONG).show()
                         return

@@ -1,5 +1,9 @@
 package teachingsolutions.domain_layer.quiz
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import teachingsolutions.data_access_layer.DAL_models.quiz.QuizQuestion
 import teachingsolutions.data_access_layer.DAL_models.quiz.QuizQuestionAnswer
 import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersRequestApi
@@ -8,6 +12,7 @@ import teachingsolutions.data_access_layer.courses.CoursesDataSource
 import teachingsolutions.data_access_layer.quiz.QuizDataSource
 import teachingsolutions.domain_layer.courses.CoursesRepository
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.GetQuizResponseUI
@@ -19,7 +24,8 @@ import javax.inject.Inject
 class QuizRepository @Inject constructor(
     private val quizDataSource: QuizDataSource,
     private val userRepository: UserRepository,
-    private val coursesRepository: CoursesRepository) {
+    private val coursesRepository: CoursesRepository,
+    private val statisticsRepository: StatisticsRepository) {
 
     suspend fun getQuizQuestions(courseId: Int, courseItemId: Int, userId: Long): GetQuizResponseUI {
         return when (val result = quizDataSource.getCourseItemQuiz(courseId, courseItemId, userId)) {
@@ -83,7 +89,13 @@ class QuizRepository @Inject constructor(
 
         return when (val result = quizDataSource.setQuizUserAnswers(request)) {
             is ActionResult.Success -> {
-                coursesRepository.setCourseItemProgress(courseItemId, CourseItemProgressType.from(result.data.progressType))
+                val courseItemProgress = CourseItemProgressType.from(result.data.progressType)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val response = statisticsRepository.setCourseItemProgress(userRepository.userId!!, courseId, courseItemId, courseItemProgress)
+                    if (response.message == null) {
+                        coursesRepository.setCourseItemProgress(courseId, courseItemId, courseItemProgress)
+                    }
+                }
                 DefaultResponseUI(null)
             }
             is ActionResult.NormalError -> DefaultResponseUI(result.data._errors?.joinToString { it } ?: "Error while setting quiz answers")
@@ -94,7 +106,7 @@ class QuizRepository @Inject constructor(
     private suspend fun getQuestionFile(dataSetId: Long?): File? {
         if (dataSetId == null) return null
 
-        return when (val result = quizDataSource.getQuizQuestionFile(dataSetId)) {
+        val file = when (val result = quizDataSource.getQuizQuestionFile(dataSetId)) {
             is ActionResult.Success -> {
                 val file = File.createTempFile("quiz_image_$dataSetId", null)
                 result.data.byteStream().use { input ->
@@ -106,5 +118,7 @@ class QuizRepository @Inject constructor(
             }
             else -> null
         }
+
+        return file
     }
 }

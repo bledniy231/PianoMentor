@@ -12,6 +12,7 @@ import teachingsolutions.data_access_layer.user.UserDataSource
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
 import teachingsolutions.domain_layer.common.CustomGsonSupplier
 import teachingsolutions.domain_layer.courses.CoursesRepository
+import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject
@@ -23,7 +24,8 @@ class UserRepository @Inject constructor(
     private val prefKeys: SharedPreferencesKeys,
     private val dataSource: UserDataSource,
     private val customGsonSupplier: CustomGsonSupplier,
-    private val coursesRepository: CoursesRepository
+    private val coursesRepository: CoursesRepository,
+    private val statisticsRepository: StatisticsRepository
 ) {
 
     private var user: LoginUserResponse? = null
@@ -54,6 +56,7 @@ class UserRepository @Inject constructor(
         }
 
         coursesRepository.clearCache()
+        statisticsRepository.clearCache()
         user = null
         with(sharedPreferences.edit()) {
             prefKeys::class.java.declaredFields.forEach { field ->

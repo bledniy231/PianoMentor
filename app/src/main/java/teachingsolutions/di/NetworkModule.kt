@@ -188,4 +188,4 @@ object NetworkModule {
     }
 }
 
-private const val BASE_URL = "http://10.0.2.2:5280/"
+private const val BASE_URL = "https://192.168.0.105:8080/"

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentRegistrationBinding
@@ -76,11 +77,17 @@ class RegistrationFragment : Fragment() {
                 }
                 registerResult.success?.let {
                     updateUiWithUser(it)
-                    val fragmentManager = requireActivity().supportFragmentManager
-                    while (fragmentManager.backStackEntryCount > 0) {
-                        fragmentManager.popBackStackImmediate()
-                    }
-                    findNavController().navigate(R.id.action_successful_registered)
+//                    val fragmentManager = requireActivity().supportFragmentManager
+//                    while (fragmentManager.backStackEntryCount > 0) {
+//                        fragmentManager.popBackStackImmediate()
+//                    }
+//                    findNavController().navigate(R.id.action_successful_registered)
+                    //findNavController().popBackStack(R.id.statisticsFragment, true)
+                    val options = NavOptions.Builder()
+                        .setLaunchSingleTop(false)
+                        .setPopUpTo(R.id.statisticsFragment, true)
+                        .build()
+                    findNavController().navigate(R.id.action_successful_registered, null, options)
                 }
             })
 

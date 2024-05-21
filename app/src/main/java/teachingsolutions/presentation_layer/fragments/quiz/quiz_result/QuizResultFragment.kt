@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentQuizResultBinding
@@ -19,6 +20,7 @@ class QuizResultFragment : Fragment() {
 
     private var _binding: FragmentQuizResultBinding? = null
     private val binding get() = _binding!!
+    private lateinit var args: Bundle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,14 +37,17 @@ class QuizResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments == null) {
+        try {
+            args = requireArguments()
+        } catch (e: Exception) {
             Toast.makeText(requireContext(), "FAIL: Empty arguments", Toast.LENGTH_SHORT).show()
             findNavController().popBackStack()
+            return
         }
 
-        val correctUserAnswers = requireArguments().getInt("CorrectUserAnswers")
-        val correctAnswers = requireArguments().getInt("CorrectAnswers")
-        val correctAnswersPercentage = requireArguments().getDouble("CorrectAnswersPercentage")
+        val correctUserAnswers = args.getInt("CorrectUserAnswers")
+        val correctAnswers = args.getInt("CorrectAnswers")
+        val correctAnswersPercentage = args.getDouble("CorrectAnswersPercentage")
         if (correctUserAnswers == correctAnswers) {
             binding.imageView.setImageResource(R.drawable.icon_success_quiz)
             binding.testStatusTextView.text = getString(R.string.quiz_result_success)
@@ -60,16 +65,34 @@ class QuizResultFragment : Fragment() {
         percentTextAnim.start()
 
         binding.btnBackToCourse.setOnClickListener {
-            findNavController().popBackStack(R.id.action_quiz_result_to_courses, true)
             val bundle = bundleOf(
-                "CourseId" to requireArguments().getInt("CourseId"),
-                "CourseTitle" to requireArguments().getString("CourseTitle")
+                "CourseId" to args.getInt("CourseId"),
+                "CourseTitle" to args.getString("CourseTitle")
             )
-            findNavController().navigate(R.id.action_quiz_result_to_courses, bundle)
+            //findNavController().navigate(R.id.action_quiz_result_to_courses, bundle)
+//            val navController = findNavController()
+//            navController.popBackStack()
+//            navController.popBackStack()
+            //findNavController().popBackStack(R.id.coursesFragment, true)
+            val options = NavOptions.Builder()
+                .setLaunchSingleTop(false)
+                .setPopUpTo(R.id.coursesFragment, true)
+                .build()
+            findNavController().navigate(R.id.action_quiz_result_to_courses, null, options)
         }
 
         binding.btnBackToStatistics.setOnClickListener {
-            findNavController().popBackStack(R.id.action_quiz_result_to_statistics, false)
+//            val fragmentManager = requireActivity().supportFragmentManager
+//            while (fragmentManager.backStackEntryCount > 0) {
+//                fragmentManager.popBackStackImmediate()
+//            }
+//            findNavController().navigate(R.id.action_quiz_result_to_statistics)
+            //findNavController().popBackStack(R.id.statisticsFragment, true)
+            val options = NavOptions.Builder()
+                .setLaunchSingleTop(false)
+                .setPopUpTo(R.id.statisticsFragment, true)
+                .build()
+            findNavController().navigate(R.id.action_quiz_result_to_statistics, null, options)
         }
     }
 
