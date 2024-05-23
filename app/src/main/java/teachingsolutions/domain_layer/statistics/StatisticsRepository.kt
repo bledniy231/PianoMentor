@@ -81,24 +81,6 @@ class StatisticsRepository @Inject constructor(private val statisticsDataSource:
         }
     }
 
-//    fun addCompletedQuizToStatistics(newValueInPercent: Int) {
-//        cachedStatistics?.statListViewPagerItems?.find { it.titleText.contains("тест", true) }?.let {
-//            it.progressValueInPercent = newValueInPercent
-//        }
-//    }
-//
-//    fun addCompletedLectureToStatistics(newValueInPercent: Int) {
-//        cachedStatistics?.lecturesProgressModel?.let {
-//            it.progressValueInPercent = newValueInPercent
-//        }
-//    }
-//
-//    fun addCompletedExerciseInStatistics(newValueInPercent: Int) {
-//        cachedStatistics?.exercisesProgressModel?.let {
-//            it.progressValueInPercent = newValueInPercent
-//        }
-//    }
-//
     fun clearCache() {
         cachedStatistics = null
     }

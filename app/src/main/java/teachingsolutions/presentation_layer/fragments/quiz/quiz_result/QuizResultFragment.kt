@@ -69,11 +69,6 @@ class QuizResultFragment : Fragment() {
                 "CourseId" to args.getInt("CourseId"),
                 "CourseTitle" to args.getString("CourseTitle")
             )
-            //findNavController().navigate(R.id.action_quiz_result_to_courses, bundle)
-//            val navController = findNavController()
-//            navController.popBackStack()
-//            navController.popBackStack()
-            //findNavController().popBackStack(R.id.coursesFragment, true)
             val options = NavOptions.Builder()
                 .setLaunchSingleTop(false)
                 .setPopUpTo(R.id.coursesFragment, true)
@@ -82,12 +77,6 @@ class QuizResultFragment : Fragment() {
         }
 
         binding.btnBackToStatistics.setOnClickListener {
-//            val fragmentManager = requireActivity().supportFragmentManager
-//            while (fragmentManager.backStackEntryCount > 0) {
-//                fragmentManager.popBackStackImmediate()
-//            }
-//            findNavController().navigate(R.id.action_quiz_result_to_statistics)
-            //findNavController().popBackStack(R.id.statisticsFragment, true)
             val options = NavOptions.Builder()
                 .setLaunchSingleTop(false)
                 .setPopUpTo(R.id.statisticsFragment, true)

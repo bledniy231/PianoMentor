@@ -2,6 +2,7 @@ package teachingsolutions.presentation_layer.fragments.statistics
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.content.Context
 import android.view.animation.DecelerateInterpolator
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -14,10 +15,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsModel
+import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsResultUI
+import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +46,7 @@ class StatisticsViewModel @Inject constructor(
     }
 
     fun getUserStatistics() {
+        clearLiveData()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val result = statRepository.getUserStatistics(userRepository.userId ?: 0)
@@ -94,5 +99,17 @@ class StatisticsViewModel @Inject constructor(
             }
         }
         return textValueAnim
+    }
+
+    fun getDefaultStatistics(fragmentContext: Context): UserStatisticsModel {
+        return UserStatisticsModel(
+            listOf(
+                StatisticsViewPagerItemModelUI(0, 0, fragmentContext.getString(R.string.tests_done), fragmentContext.getString(R.string.zero_tests_done)),
+                StatisticsViewPagerItemModelUI(0, 0, fragmentContext.getString(R.string.courses_done), fragmentContext.getString(R.string.zero_courses_done))
+            ),
+            BaseStatisticsModel(0, 0, fragmentContext.getString(R.string.exercise)),
+            BaseStatisticsModel(0, 0, fragmentContext.getString(R.string.lectures)),
+            BaseStatisticsModel(0, 0, fragmentContext.getString(R.string.introduction_course))
+        )
     }
 }

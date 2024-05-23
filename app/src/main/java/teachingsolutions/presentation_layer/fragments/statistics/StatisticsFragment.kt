@@ -1,14 +1,9 @@
 package teachingsolutions.presentation_layer.fragments.statistics
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,14 +13,12 @@ import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentStatisticsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
-import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsModel
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
 import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
 import teachingsolutions.presentation_layer.extensions.safelyNavigate
 import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsResultUI
-import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 
@@ -45,7 +38,7 @@ class StatisticsFragment : Fragment(),
         statResultUI ?: return@Observer
 
         statResultUI.success?.let {
-            initialStatisticsViewPager(it)
+            fillStatistics(it)
         }
 
         statResultUI.error?.let {
@@ -55,15 +48,7 @@ class StatisticsFragment : Fragment(),
                 it
             }
             updateUiWithStatisticsFailed(error)
-            initialStatisticsViewPager(UserStatisticsModel(
-                listOf(
-                    StatisticsViewPagerItemModelUI(0, 0, getString(R.string.tests_done), getString(R.string.zero_tests_done)),
-                    StatisticsViewPagerItemModelUI(0, 0, getString(R.string.courses_done), getString(R.string.zero_courses_done))
-                ),
-                BaseStatisticsModel(0, 0, getString(R.string.exercise)),
-                BaseStatisticsModel(0, 0, getString(R.string.lectures)),
-                BaseStatisticsModel(0, 0, getString(R.string.introduction_course))
-            ))
+            fillStatistics(viewModel.getDefaultStatistics(requireContext()))
         }
     }
 
@@ -91,6 +76,7 @@ class StatisticsFragment : Fragment(),
             isRefreshingChecked ?: return@Observer
 
             initialMainMenuRecyclerView()
+            disposeStatistics()
             viewModel.getUserStatistics()
             viewModel.userStatstics.observe(viewLifecycleOwner, userStatisticsObserver)
             binding.toolBarUserIconGoLogin.setOnClickListener {
@@ -111,14 +97,12 @@ class StatisticsFragment : Fragment(),
         }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//
-//        viewModel.getUserStatistics()
-//        viewModel.userStatstics.observe(viewLifecycleOwner, userStatisticsObserver)
-//    }
+    override fun onResume() {
+        super.onResume()
+        disposeStatistics()
+    }
 
-    private fun initialStatisticsViewPager(statResult: UserStatisticsModel) {
+    private fun fillStatistics(statResult: UserStatisticsModel) {
         val statisticsViewPagerAdapter = context?.let { StatisticsViewPagerAdapter(it) }
         statisticsViewPagerAdapter?.setModelsList(statResult.statListViewPagerItems)
         binding.statViewPager.adapter = statisticsViewPagerAdapter
@@ -155,9 +139,6 @@ class StatisticsFragment : Fragment(),
             }
         }
 
-//        binding.exercisesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_green, resources.newTheme())
-//        binding.lecturesCircleProgressBar.progressDrawable = ResourcesCompat.getDrawable(resources, R.drawable.circle_progress_bar_brown, resources.newTheme())
-
         val exerciseProgressAnim = viewModel.getObjectAnimator(binding.exercisesCircleProgressBar, statResult.exercisesProgressModel.progressValueInPercent)
         val exerciseTextAnim = viewModel.getValueAnimator(binding.exercisesCounterText, statResult.exercisesProgressModel.progressValueAbsolute)
         val lectureProgressAnim = viewModel.getObjectAnimator(binding.lecturesCircleProgressBar, statResult.lecturesProgressModel.progressValueInPercent)
@@ -183,6 +164,12 @@ class StatisticsFragment : Fragment(),
         val mainMenuRecyclerViewAdapter = MainMenuRecyclerViewAdapter(this)
         mainMenuRecyclerViewAdapter.setModelsList(mainMenuItemModels)
         binding.mainMenuRecyclerView.adapter = mainMenuRecyclerViewAdapter
+    }
+
+    private fun disposeStatistics() {
+        if (!viewModel.isUserLoggedIn()) {
+            fillStatistics(viewModel.getDefaultStatistics(requireContext()))
+        }
     }
 
     override fun onItemSelected(itemModel: MainMenuItemModelUI) {
