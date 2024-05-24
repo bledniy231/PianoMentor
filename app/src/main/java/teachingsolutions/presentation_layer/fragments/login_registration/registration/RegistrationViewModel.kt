@@ -46,30 +46,14 @@ class RegistrationViewModel @Inject constructor(private val userRepository: User
 
     fun registerDataChanged(username: String, email: String, password: String, confirmPassword: String) {
         when {
-            !isUserNameValid(username) -> {
-                _registerForm.value = RegistrationFormState(usernameError = R.string.prompt_nickname_only_letters_numbers)
-            }
-            !isEmailValid(email) -> {
-                _registerForm.value = RegistrationFormState(emailError = R.string.invalid_email)
-            }
-            password.length < 6 -> {
-                _registerForm.value = RegistrationFormState(passwordLengthError = R.string.password_too_short)
-            }
-            !containsLowercase(password) -> {
-                _registerForm.value = RegistrationFormState(passwordLowercaseError = R.string.password_no_lowercase)
-            }
-            !containsUppercase(password) -> {
-                _registerForm.value = RegistrationFormState(passwordUppercaseError = R.string.password_no_uppercase)
-            }
-            !containsDigit(password) -> {
-                _registerForm.value = RegistrationFormState(passwordDigitError = R.string.password_no_digit)
-            }
-            !isPasswordsMatch(password, confirmPassword) -> {
-                _registerForm.value = RegistrationFormState(confirmPasswordError = R.string.prompt_password_not_match)
-            }
-            else -> {
-                _registerForm.value = RegistrationFormState(isDataValid = true)
-            }
+            !isUserNameValid(username) -> _registerForm.value = RegistrationFormState(usernameError = R.string.prompt_nickname_only_letters_numbers)
+            !isEmailValid(email) -> _registerForm.value = RegistrationFormState(emailError = R.string.invalid_email)
+            password.length < 6 -> _registerForm.value = RegistrationFormState(passwordLengthError = R.string.password_too_short)
+            !containsLowercase(password) -> _registerForm.value = RegistrationFormState(passwordLowercaseError = R.string.password_no_lowercase)
+            !containsUppercase(password) -> _registerForm.value = RegistrationFormState(passwordUppercaseError = R.string.password_no_uppercase)
+            !containsDigit(password) -> _registerForm.value = RegistrationFormState(passwordDigitError = R.string.password_no_digit)
+            !isPasswordsMatch(password, confirmPassword) -> _registerForm.value = RegistrationFormState(confirmPasswordError = R.string.prompt_password_not_match)
+            else -> _registerForm.value = RegistrationFormState(isDataValid = true)
         }
     }
 

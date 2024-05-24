@@ -46,24 +46,12 @@ class LoginViewModel @Inject constructor(private val loginRegisterRepository: Us
 
     fun loginDataChanged(email: String, password: String) {
         when {
-            !isEmailValid(email) -> {
-                _loginForm.value = LoginFormState(usernameError = R.string.invalid_email)
-            }
-            password.length < 6 -> {
-                _loginForm.value = LoginFormState(passwordLengthError = R.string.password_too_short)
-            }
-            !containsLowercase(password) -> {
-                _loginForm.value = LoginFormState(passwordLowercaseError = R.string.password_no_lowercase)
-            }
-            !containsUppercase(password) -> {
-                _loginForm.value = LoginFormState(passwordUppercaseError = R.string.password_no_uppercase)
-            }
-            !containsDigit(password) -> {
-                _loginForm.value = LoginFormState(passwordDigitError = R.string.password_no_digit)
-            }
-            else -> {
-                _loginForm.value = LoginFormState(isDataValid = true)
-            }
+            !isEmailValid(email) -> _loginForm.value = LoginFormState(usernameError = R.string.invalid_email)
+            password.length < 6 -> _loginForm.value = LoginFormState(passwordLengthError = R.string.password_too_short)
+            !containsLowercase(password) -> _loginForm.value = LoginFormState(passwordLowercaseError = R.string.password_no_lowercase)
+            !containsUppercase(password) -> _loginForm.value = LoginFormState(passwordUppercaseError = R.string.password_no_uppercase)
+            !containsDigit(password) ->_loginForm.value = LoginFormState(passwordDigitError = R.string.password_no_digit)
+            else -> _loginForm.value = LoginFormState(isDataValid = true)
         }
     }
 
