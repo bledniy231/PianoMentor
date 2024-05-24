@@ -45,32 +45,55 @@ class RegistrationViewModel @Inject constructor(private val userRepository: User
     }
 
     fun registerDataChanged(username: String, email: String, password: String, confirmPassword: String) {
-        if (!isUserNameValid(username)) {
-            _registerForm.value = RegistrationFormState(usernameError = R.string.prompt_nickname_only_letters_numbers)
-        } else if (email.isNotEmpty() && !isEmailValid(email)) {
-            _registerForm.value = RegistrationFormState(emailError = R.string.prompt_email_not_regex)
-        } else if (password.isNotEmpty() && !isPasswordShort(password)) {
-            _registerForm.value = RegistrationFormState(passwordError = R.string.prompt_password_short)
-        } else if (password.isNotEmpty() && confirmPassword.isNotEmpty() && !isPasswordMatch(password, confirmPassword)) {
-            _registerForm.value = RegistrationFormState(confirmPasswordError = R.string.prompt_password_not_match)
-        } else {
-            _registerForm.value = RegistrationFormState(isDataValid = true)
+        when {
+            !isUserNameValid(username) -> {
+                _registerForm.value = RegistrationFormState(usernameError = R.string.prompt_nickname_only_letters_numbers)
+            }
+            !isEmailValid(email) -> {
+                _registerForm.value = RegistrationFormState(emailError = R.string.invalid_email)
+            }
+            password.length < 6 -> {
+                _registerForm.value = RegistrationFormState(passwordLengthError = R.string.password_too_short)
+            }
+            !containsLowercase(password) -> {
+                _registerForm.value = RegistrationFormState(passwordLowercaseError = R.string.password_no_lowercase)
+            }
+            !containsUppercase(password) -> {
+                _registerForm.value = RegistrationFormState(passwordUppercaseError = R.string.password_no_uppercase)
+            }
+            !containsDigit(password) -> {
+                _registerForm.value = RegistrationFormState(passwordDigitError = R.string.password_no_digit)
+            }
+            !isPasswordsMatch(password, confirmPassword) -> {
+                _registerForm.value = RegistrationFormState(confirmPasswordError = R.string.prompt_password_not_match)
+            }
+            else -> {
+                _registerForm.value = RegistrationFormState(isDataValid = true)
+            }
         }
     }
 
     private fun isUserNameValid(username: String): Boolean {
-        return username.matches(Regex("^[a-zA-Z0-9]*$"))
+        return username.isNotEmpty() && username.matches(Regex("^[a-zA-Z0-9]*$"))
     }
 
     private fun isEmailValid(email: String): Boolean {
-        return PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
+        return email.isNotEmpty() && PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    private fun isPasswordShort(password: String): Boolean {
-        return password.length > 5
+    private fun isPasswordsMatch(password: String, confirmPassword: String): Boolean {
+        return confirmPassword.isNotEmpty() && password.isNotEmpty() && password == confirmPassword
     }
 
-    private fun isPasswordMatch(password: String, confirmPassword: String): Boolean {
-        return password == confirmPassword
+    private fun containsLowercase(password: String): Boolean {
+        return password.isNotEmpty() && password.any { it.isLowerCase() }
+    }
+
+    private fun containsUppercase(password: String): Boolean {
+        return password.isNotEmpty() && password.any { it.isUpperCase() }
+    }
+
+    private fun containsDigit(password: String): Boolean {
+        return password.isNotEmpty() && password.any { it.isDigit() }
     }
 }

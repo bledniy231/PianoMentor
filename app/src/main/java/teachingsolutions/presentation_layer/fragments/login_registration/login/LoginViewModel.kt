@@ -45,20 +45,41 @@ class LoginViewModel @Inject constructor(private val loginRegisterRepository: Us
     }
 
     fun loginDataChanged(email: String, password: String) {
-        if (!isEmailInvalid(email)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-        } else if (password.isNotEmpty() && !isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
-        } else {
-            _loginForm.value = LoginFormState(isDataValid = true)
+        when {
+            !isEmailValid(email) -> {
+                _loginForm.value = LoginFormState(usernameError = R.string.invalid_email)
+            }
+            password.length < 6 -> {
+                _loginForm.value = LoginFormState(passwordLengthError = R.string.password_too_short)
+            }
+            !containsLowercase(password) -> {
+                _loginForm.value = LoginFormState(passwordLowercaseError = R.string.password_no_lowercase)
+            }
+            !containsUppercase(password) -> {
+                _loginForm.value = LoginFormState(passwordUppercaseError = R.string.password_no_uppercase)
+            }
+            !containsDigit(password) -> {
+                _loginForm.value = LoginFormState(passwordDigitError = R.string.password_no_digit)
+            }
+            else -> {
+                _loginForm.value = LoginFormState(isDataValid = true)
+            }
         }
     }
 
-    private fun isEmailInvalid(username: String): Boolean {
-        return PatternsCompat.EMAIL_ADDRESS.matcher(username).matches()
+    private fun isEmailValid(email: String): Boolean {
+        return email.isNotEmpty() && PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5
+    private fun containsLowercase(password: String): Boolean {
+        return password.isNotEmpty() && password.any { it.isLowerCase() }
+    }
+
+    private fun containsUppercase(password: String): Boolean {
+        return password.isNotEmpty() && password.any { it.isUpperCase() }
+    }
+
+    private fun containsDigit(password: String): Boolean {
+        return password.isNotEmpty() && password.any { it.isDigit() }
     }
 }

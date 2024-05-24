@@ -32,11 +32,27 @@
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         android:textColor="@color/ultra_light_purple"
+        android:textCursorDrawable="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/login_password_edit_text"
         app:layout_constraintVertical_bias="0.8"/>
+
+    <TextView
+        android:id="@+id/emailErrorLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/deep_coral"
+        tools:visibility="visible"
+        android:visibility="gone"
+        tools:text="Неверный email"
+        android:gravity="center_horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_email_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
         android:id="@+id/login_password_edit_text"
@@ -49,13 +65,32 @@
         android:imeOptions="actionDone"
         android:textColorHint="@color/ultra_light_purple"
         android:backgroundTint="@color/ultra_light_purple"
+        android:textColor="@color/ultra_light_purple"
+        android:textCursorDrawable="@null"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
+        android:drawableEnd="@drawable/icon_eye_closed"
+        android:drawableTint="@color/ultra_light_purple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_email_edit_text"
         app:layout_constraintBottom_toBottomOf="@+id/login_button"
         app:layout_constraintVertical_bias="0.15" />
+
+    <TextView
+        android:id="@+id/passwordErrorLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/deep_coral"
+        tools:visibility="visible"
+        android:visibility="gone"
+        tools:text="Неверный пароль\nНужно больше символов"
+        android:gravity="center_horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_password_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_button"

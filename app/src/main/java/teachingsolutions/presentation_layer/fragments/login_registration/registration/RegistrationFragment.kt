@@ -5,11 +5,16 @@ import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -37,32 +42,93 @@ class RegistrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //registerViewModel = ViewModelProvider(this, ViewModelsFactory())[RegistrationViewModel::class.java]
 
         val nicknameEditText = binding.registerNicknameEditText
+        val nicknameErrorTextView = binding.nickNameErrorRegister
         val emailEditText = binding.registerEmailEditText
+        val emailErrorTextView = binding.emailErrorRegister
         val passwordEditText = binding.registerPasswordEditText
+        val passwordErrorTextView = binding.passwordErrorRegister
         val confirmPasswordEditText = binding.registerConfirmPasswordEditText
+        val confirmPasswordTextView = binding.confirmPasswordErrorRegister
         val registerButton = binding.registerButton
         val loadingProgressBar = binding.registerLoading
 
+        passwordEditText.setOnTouchListener { _, event ->
+            val drawableEnd = 2
+            if (event.action == MotionEvent.ACTION_UP) {
+                if (event.rawX >= (passwordEditText.right - passwordEditText.compoundDrawables[drawableEnd].bounds.width())) {
+                    if (passwordEditText.transformationMethod is PasswordTransformationMethod) {
+                        passwordEditText.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                        confirmPasswordEditText.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                        val newDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.icon_eye_opened)
+                        passwordEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, newDrawable, null)
+                        Log.d("Register_PasswordEditText", "Password visibility visible")
+                    } else {
+                        passwordEditText.transformationMethod = PasswordTransformationMethod.getInstance()
+                        confirmPasswordEditText.transformationMethod = PasswordTransformationMethod.getInstance()
+                        val newDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.icon_eye_closed)
+                        passwordEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, newDrawable, null)
+                        Log.d("Register_PasswordEditText", "Password visibility gone")
+                    }
+                    passwordEditText.performClick()
+                    return@setOnTouchListener true
+                }
+            }
+            false
+        }
+
         registerViewModel.registerFormState.observe(viewLifecycleOwner,
             Observer { registerFormState ->
-                if (registerFormState == null) {
-                    return@Observer
-                }
+                registerFormState ?: return@Observer
+
                 registerButton.isEnabled = registerFormState.isDataValid
-                registerFormState.usernameError?.let {
-                    nicknameEditText.error = getString(it)
+
+                val passwordErrors = mutableListOf<String>()
+
+                registerFormState.passwordLengthError?.let {
+                    passwordErrors.add(getString(it))
                 }
-                registerFormState.emailError?.let {
-                    emailEditText.error = getString(it)
+                registerFormState.passwordLowercaseError?.let {
+                    passwordErrors.add(getString(it))
                 }
-                registerFormState.passwordError?.let {
-                    passwordEditText.error = getString(it)
+                registerFormState.passwordUppercaseError?.let {
+                    passwordErrors.add(getString(it))
                 }
-                registerFormState.confirmPasswordError?.let {
-                    confirmPasswordEditText.error = getString(it)
+                registerFormState.passwordDigitError?.let {
+                    passwordErrors.add(getString(it))
+                }
+
+                if (registerFormState.usernameError != null) {
+                    nicknameErrorTextView.visibility = View.VISIBLE
+                    nicknameErrorTextView.text = getString(registerFormState.usernameError)
+                } else {
+                    nicknameErrorTextView.visibility = View.GONE
+                    nicknameErrorTextView.text = null
+                }
+
+                if (registerFormState.emailError != null) {
+                    emailErrorTextView.visibility = View.VISIBLE
+                    emailErrorTextView.text = getString(registerFormState.emailError)
+                } else {
+                    emailErrorTextView.visibility = View.GONE
+                    emailErrorTextView.text = null
+                }
+
+                if (passwordErrors.isNotEmpty()) {
+                    passwordErrorTextView.visibility = View.VISIBLE
+                    passwordErrorTextView.text = passwordErrors.joinToString(" ")
+                } else {
+                    passwordErrorTextView.visibility = View.GONE
+                    passwordErrorTextView.text = null
+                }
+
+                if (registerFormState.confirmPasswordError != null) {
+                    confirmPasswordTextView.visibility = View.VISIBLE
+                    confirmPasswordTextView.text = getString(registerFormState.confirmPasswordError)
+                } else {
+                    confirmPasswordTextView.visibility = View.GONE
+                    confirmPasswordTextView.text = null
                 }
             })
 
@@ -77,12 +143,6 @@ class RegistrationFragment : Fragment() {
                 }
                 registerResult.success?.let {
                     updateUiWithUser(it)
-//                    val fragmentManager = requireActivity().supportFragmentManager
-//                    while (fragmentManager.backStackEntryCount > 0) {
-//                        fragmentManager.popBackStackImmediate()
-//                    }
-//                    findNavController().navigate(R.id.action_successful_registered)
-                    //findNavController().popBackStack(R.id.statisticsFragment, true)
                     val options = NavOptions.Builder()
                         .setLaunchSingleTop(false)
                         .setPopUpTo(R.id.statisticsFragment, true)

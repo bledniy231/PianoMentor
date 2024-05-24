@@ -36,12 +36,28 @@
             android:textColorHint="@color/ultra_light_purple"
             android:backgroundTint="@color/ultra_light_purple"
             android:textColor="@color/ultra_light_purple"
+            android:textCursorDrawable="@null"
             android:inputType="text"
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/register_email_edit_text"/>
+
+        <TextView
+            android:id="@+id/nickNameErrorRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/deep_coral"
+            tools:visibility="visible"
+            android:visibility="gone"
+            tools:text="@string/prompt_nickname_only_letters_numbers"
+            android:gravity="center_horizontal"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/register_nickname_edit_text"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <EditText
             android:id="@+id/register_email_edit_text"
@@ -52,12 +68,28 @@
             android:textColorHint="@color/ultra_light_purple"
             android:backgroundTint="@color/ultra_light_purple"
             android:textColor="@color/ultra_light_purple"
+            android:textCursorDrawable="@null"
             android:inputType="textEmailAddress"
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/register_nickname_edit_text"
             app:layout_constraintBottom_toTopOf="@+id/register_password_edit_text"/>
+
+        <TextView
+            android:id="@+id/emailErrorRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/deep_coral"
+            tools:visibility="visible"
+            android:visibility="gone"
+            tools:text="Неверный email"
+            android:gravity="center_horizontal"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/register_email_edit_text"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <EditText
             android:id="@+id/register_password_edit_text"
@@ -69,12 +101,31 @@
             android:imeOptions="actionDone"
             android:textColorHint="@color/ultra_light_purple"
             android:backgroundTint="@color/ultra_light_purple"
+            android:textColor="@color/ultra_light_purple"
+            android:textCursorDrawable="@null"
             android:inputType="textPassword"
             android:selectAllOnFocus="true"
+            android:drawableEnd="@drawable/icon_eye_closed"
+            android:drawableTint="@color/ultra_light_purple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/register_email_edit_text"
             app:layout_constraintBottom_toTopOf="@+id/register_confirmPassword_edit_text"/>
+
+        <TextView
+            android:id="@+id/passwordErrorRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/deep_coral"
+            tools:visibility="visible"
+            android:visibility="gone"
+            tools:text="@string/password_too_short"
+            android:gravity="center_horizontal"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/register_password_edit_text"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <EditText
             android:id="@+id/register_confirmPassword_edit_text"
@@ -86,12 +137,29 @@
             android:imeOptions="actionDone"
             android:textColorHint="@color/ultra_light_purple"
             android:backgroundTint="@color/ultra_light_purple"
+            android:textColor="@color/ultra_light_purple"
+            android:textCursorDrawable="@null"
             android:inputType="textPassword"
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/register_password_edit_text"
             app:layout_constraintBottom_toTopOf="@+id/register_button"/>
+
+        <TextView
+            android:id="@+id/confirmPasswordErrorRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/deep_coral"
+            tools:visibility="visible"
+            android:visibility="gone"
+            tools:text="@string/prompt_password_not_match"
+            android:gravity="center_horizontal"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/register_confirmPassword_edit_text"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/register_button"
