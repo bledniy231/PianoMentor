@@ -36,7 +36,7 @@
             android:id="@+id/start_register_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/light_brown"
+            android:backgroundTint="@color/semi_light_brown"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/start_login_btn"
             app:layout_constraintTop_toTopOf="parent"

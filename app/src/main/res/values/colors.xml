@@ -8,15 +8,16 @@
     <color name="first_green">#50A357</color>
     <color name="second_purple">#E9E8FF</color>
     <color name="bright_purple">#D1CFFA</color>
+    <color name="light_purple">#B4B2F4</color>
     <color name="first_purple">#6650A3</color>
     <color name="first_brown">#A37850</color>
+    <color name="semi_light_brown">#C9A68A</color>
     <color name="light_brown">#DAC2AB</color>
     <color name="second_brown">#F1DECC</color>
     <color name="light_gray">#7C7C7C</color>
     <color name="neutral_grey">#393939</color>
     <color name="dark_gray">#262626</color>
     <color name="ultra_light_purple">#FEF7FF</color>
-    <color name="light_purple">#F4F3FA</color>
     <color name="light_deep_coral">#F67E81</color>
     <color name="deep_coral">#FF5A5F</color>
     <color name="first_red">#F44047</color>

@@ -27,125 +27,125 @@
         <!-- White buttons -->
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button1"
+            android:id="@+id/note_C"
             android:layout_width="0dp"
             android:layout_height="200dp"
             style="@style/KeyboardKeyWhite"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button2"
+            app:layout_constraintEnd_toStartOf="@id/note_D"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button2"
+            android:id="@+id/note_D"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button3"
-            app:layout_constraintStart_toEndOf="@id/button1"
+            app:layout_constraintEnd_toStartOf="@id/note_E"
+            app:layout_constraintStart_toEndOf="@id/note_C"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button3"
+            android:id="@+id/note_E"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button4"
-            app:layout_constraintStart_toEndOf="@id/button2"
+            app:layout_constraintEnd_toStartOf="@id/note_F"
+            app:layout_constraintStart_toEndOf="@id/note_D"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button4"
+            android:id="@+id/note_F"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button5"
-            app:layout_constraintStart_toEndOf="@id/button3"
+            app:layout_constraintEnd_toStartOf="@id/note_G"
+            app:layout_constraintStart_toEndOf="@id/note_E"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button5"
+            android:id="@+id/note_G"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button6"
-            app:layout_constraintStart_toEndOf="@id/button4"
+            app:layout_constraintEnd_toStartOf="@id/note_A"
+            app:layout_constraintStart_toEndOf="@id/note_F"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button6"
+            android:id="@+id/note_A"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button7"
-            app:layout_constraintStart_toEndOf="@id/button5"
+            app:layout_constraintEnd_toStartOf="@id/note_B"
+            app:layout_constraintStart_toEndOf="@id/note_G"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button7"
+            android:id="@+id/note_B"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/button6"
+            app:layout_constraintStart_toEndOf="@id/note_A"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
         <!-- Black buttons -->
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/blackButton1"
+            android:id="@+id/note_С_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
-            app:layout_constraintEnd_toEndOf="@id/button2"
-            app:layout_constraintStart_toStartOf="@id/button1"
+            app:layout_constraintEnd_toEndOf="@id/note_D"
+            app:layout_constraintStart_toStartOf="@id/note_C"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/blackButton2"
+            android:id="@+id/note_D_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
-            app:layout_constraintEnd_toEndOf="@id/button3"
-            app:layout_constraintStart_toStartOf="@id/button2"
+            app:layout_constraintEnd_toEndOf="@id/note_E"
+            app:layout_constraintStart_toStartOf="@id/note_D"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/blackButton3"
+            android:id="@+id/note_F_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
-            app:layout_constraintEnd_toEndOf="@id/button5"
-            app:layout_constraintStart_toStartOf="@id/button4"
+            app:layout_constraintEnd_toEndOf="@id/note_G"
+            app:layout_constraintStart_toStartOf="@id/note_F"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/blackButton4"
+            android:id="@+id/note_G_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
-            app:layout_constraintEnd_toEndOf="@id/button6"
-            app:layout_constraintStart_toStartOf="@id/button5"
+            app:layout_constraintEnd_toEndOf="@id/note_A"
+            app:layout_constraintStart_toStartOf="@id/note_G"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/blackButton5"
+            android:id="@+id/note_A_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
-            app:layout_constraintEnd_toEndOf="@id/button7"
-            app:layout_constraintStart_toStartOf="@id/button6"
+            app:layout_constraintEnd_toEndOf="@id/note_B"
+            app:layout_constraintStart_toStartOf="@id/note_A"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
