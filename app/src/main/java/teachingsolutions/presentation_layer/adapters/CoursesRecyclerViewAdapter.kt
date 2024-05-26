@@ -4,20 +4,19 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
-import teachingsolutions.domain_layer.mapping_models.courses.CourseModel
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemModel
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseImplementation
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
@@ -33,8 +32,8 @@ class CoursesRecyclerViewAdapter(
         private val description: TextView = itemView.findViewById(R.id.description1)
         private val progressBar: ProgressBar = itemView.findViewById(R.id.progress1)
         internal val card: CardView = itemView.findViewById(R.id.course_item_card)
-        private val courseItemInfo: ConstraintLayout = itemView.findViewById(R.id.course_item_info)
-        private val courseItemImageContainer: RelativeLayout = itemView.findViewById(R.id.course_item_image_container)
+        private val courseItemInfo: LinearLayout = itemView.findViewById(R.id.course_item_info)
+        private val courseItemImageContainer: FrameLayout = itemView.findViewById(R.id.course_item_image_container)
         private val circleBackground: ImageView = itemView.findViewById(R.id.circle_background)
         private val courseItemImage: ImageView = itemView.findViewById(R.id.course_item_image)
 
