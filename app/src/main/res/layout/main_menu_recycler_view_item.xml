@@ -28,8 +28,8 @@
 
         <ImageView
             android:id="@+id/main_menu_recycler_view_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             tools:src="@drawable/icon_cources"
             app:tint="@color/white"
             app:layout_constraintStart_toStartOf="@+id/main_menu_recycler_view_purple_circle"

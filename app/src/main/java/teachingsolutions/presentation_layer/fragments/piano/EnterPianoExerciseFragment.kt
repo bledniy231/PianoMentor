@@ -1,22 +1,24 @@
 package teachingsolutions.presentation_layer.fragments.piano
 
-import android.animation.LayoutTransition
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.transition.AutoTransition
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionManager
-import com.example.pianomentor.databinding.FragmentEnterPianoLessonBinding
+import com.example.pianomentor.databinding.FragmentEnterPianoExerciseBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EnterPianoLessonFragment : Fragment() {
+class EnterPianoExerciseFragment : Fragment() {
 
-    private var _binding: FragmentEnterPianoLessonBinding? = null
+    private var _binding: FragmentEnterPianoExerciseBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var args: Bundle
 
     private val viewModel: EnterPianoLessonViewModel by viewModels()
 
@@ -28,19 +30,32 @@ class EnterPianoLessonFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEnterPianoLessonBinding.inflate(inflater, container, false)
-        _binding!!.taskContainer.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        _binding = FragmentEnterPianoExerciseBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val cardView = binding.taskDescriptionCardView
 
-        cardView.setOnClickListener {
-            val visibility = if (cardView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-            TransitionManager.beginDelayedTransition(binding.taskContainer, AutoTransition())
-            cardView.visibility = visibility
+        try {
+            args = requireArguments()
+        } catch (e: Exception) {
+            Toast.makeText(context, "Empty arguments", Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
         }
+
+        binding.enterPianoToolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.exerciseName.text = args.getString("CourseItemTitle")
+
+        view.postDelayed({
+            if (binding.taskTextContainer.visibility == View.GONE) {
+                TransitionManager.beginDelayedTransition(binding.taskDescriptionCardView)
+                TransitionManager.beginDelayedTransition(binding.buttonsContainer)
+                binding.taskTextContainer.visibility = View.VISIBLE
+            }
+        }, 400)
     }
 }

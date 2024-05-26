@@ -91,6 +91,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_open_exercise">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_open_lecture">
                               <value>
                                 <LayoutPositions />
@@ -102,6 +107,18 @@
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="enterPianoExerciseFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="636" />
+                            <option name="y" value="140" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

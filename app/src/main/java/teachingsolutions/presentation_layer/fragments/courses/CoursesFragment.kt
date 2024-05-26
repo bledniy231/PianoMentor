@@ -133,8 +133,8 @@ class CoursesFragment : Fragment(),
                     findNavController().navigate(R.id.action_open_quiz, args)
                 }
                 CourseItemType.EXERCISE -> {
-                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseName" to courseItemModel.title)
-                    //findNavController().navigate(R.id.action_open_practice, args)
+                    val args = bundleOf("CourseItemId" to courseItemModel.courseItemId, "CourseItemTitle" to courseItemModel.title)
+                    findNavController().navigate(R.id.action_open_exercise, args)
                 }
 
             }

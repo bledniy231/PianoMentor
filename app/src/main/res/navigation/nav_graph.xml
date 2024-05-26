@@ -33,6 +33,8 @@
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
+
+
     <fragment
         android:id="@+id/chooseLoginOrRegisterFragment"
         android:name="teachingsolutions.presentation_layer.fragments.choose_login_or_register.ChooseLoginOrRegisterFragment"
@@ -60,6 +62,9 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"/>
     </fragment>
+
+
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="teachingsolutions.presentation_layer.fragments.login_registration.login.LoginFragment"
@@ -80,6 +85,9 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"/>
     </fragment>
+
+
+
     <fragment
         android:id="@+id/registrationFragment"
         android:name="teachingsolutions.presentation_layer.fragments.login_registration.registration.RegistrationFragment"
@@ -99,6 +107,9 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"/>
     </fragment>
+
+
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="teachingsolutions.presentation_layer.fragments.profile.ProfileFragment"
@@ -118,6 +129,9 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"/>
     </fragment>
+
+
+
     <fragment
         android:id="@+id/coursesFragment"
         android:name="teachingsolutions.presentation_layer.fragments.courses.CoursesFragment"
@@ -157,7 +171,17 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_open_exercise"
+            app:destination="@+id/enterPianoExerciseFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
+
+
     <fragment
         android:id="@+id/aboutAppFragment"
         android:name="teachingsolutions.presentation_layer.fragments.about_app.AboutAppFragment"
@@ -182,6 +206,9 @@
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
+
+
+
     <fragment
         android:id="@+id/quizFragment"
         android:name="teachingsolutions.presentation_layer.fragments.quiz.QuizFragment"
@@ -201,6 +228,9 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
+
+
     <fragment
         android:id="@+id/quizResultFragment"
         android:name="teachingsolutions.presentation_layer.fragments.quiz.quiz_result.QuizResultFragment"
@@ -220,10 +250,32 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
+
+
     <fragment
         android:id="@+id/pianoFragment"
         android:name="teachingsolutions.presentation_layer.fragments.piano.PianoFragment"
         android:label="fragment_piano"
-        tools:layout="@layout/fragment_piano" /><action android:id="@+id/action_global_pianoFragment" app:destination="@id/pianoFragment"/>
+        tools:layout="@layout/fragment_piano" />
+    <action
+        android:id="@+id/action_global_pianoFragment"
+        app:destination="@id/pianoFragment"/>
+
+
+
+    <fragment
+        android:id="@+id/enterPianoExerciseFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.piano.EnterPianoExerciseFragment"
+        android:label="fragment_enter_piano_exercise"
+        tools:layout="@layout/fragment_enter_piano_exercise">
+        <action
+            android:id="@+id/action_back_arrow_enter_piano_to_courses"
+            app:destination="@id/coursesFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
 
 </navigation>
