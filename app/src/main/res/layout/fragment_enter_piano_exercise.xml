@@ -54,7 +54,8 @@
             android:id="@+id/task_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
             <FrameLayout
                 android:id="@+id/task_title_container"

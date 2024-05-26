@@ -1,14 +1,15 @@
 package teachingsolutions.presentation_layer.fragments.piano
 
+import android.animation.LayoutTransition
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.pianomentor.R
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.example.pianomentor.databinding.FragmentEnterPianoLessonBinding
-import com.example.pianomentor.databinding.FragmentPianoBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,11 +29,18 @@ class EnterPianoLessonFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEnterPianoLessonBinding.inflate(inflater, container, false)
+        _binding!!.taskContainer.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val cardView = binding.taskDescriptionCardView
+
+        cardView.setOnClickListener {
+            val visibility = if (cardView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            TransitionManager.beginDelayedTransition(binding.taskContainer, AutoTransition())
+            cardView.visibility = visibility
+        }
     }
 }
