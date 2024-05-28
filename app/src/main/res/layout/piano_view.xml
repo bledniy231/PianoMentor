@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="204dp" />
+            app:layout_constraintGuide_percent="1.0" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/blackKeysGuideline"
@@ -36,6 +36,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_С_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/dark_gray"
+            app:title="ДО"
+            app:titleColor="@color/white"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toStartOf="@id/note_D"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
+
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_D"
             android:layout_width="0dp"
@@ -45,6 +59,20 @@
             app:layout_constraintEnd_toStartOf="@id/note_E"
             app:layout_constraintStart_toEndOf="@id/note_C"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
+
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_D_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/dark_gray"
+            app:title="РЕ"
+            app:titleColor="@color/white"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toStartOf="@id/note_E"
+            app:layout_constraintStart_toEndOf="@id/note_C"
+            app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
+
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_E"
@@ -56,6 +84,18 @@
             app:layout_constraintStart_toEndOf="@id/note_D"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_E_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/dark_gray"
+            app:title="МИ"
+            app:titleColor="@color/white"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toStartOf="@id/note_F"
+            app:layout_constraintStart_toEndOf="@id/note_D"
+            app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_F"
             android:layout_width="0dp"
@@ -66,12 +106,36 @@
             app:layout_constraintStart_toEndOf="@id/note_E"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_F_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/dark_gray"
+            app:title="ФА"
+            app:titleColor="@color/white"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toStartOf="@id/note_G"
+            app:layout_constraintStart_toEndOf="@id/note_E"
+            app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_G"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/note_A"
+            app:layout_constraintStart_toEndOf="@id/note_F"
+            app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
+
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_G_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/dark_gray"
+            app:title="СОЛЬ"
+            app:titleColor="@color/white"
+            android:layout_marginBottom="10dp"
             app:layout_constraintEnd_toStartOf="@id/note_A"
             app:layout_constraintStart_toEndOf="@id/note_F"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
@@ -86,12 +150,36 @@
             app:layout_constraintStart_toEndOf="@id/note_G"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_A_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/dark_gray"
+            app:title="ЛЯ"
+            app:titleColor="@color/white"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toStartOf="@id/note_B"
+            app:layout_constraintStart_toEndOf="@id/note_G"
+            app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_B"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/note_A"
+            app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
+
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_B_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/dark_gray"
+            app:title="СИ"
+            app:titleColor="@color/white"
+            android:layout_marginBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/note_A"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
@@ -108,11 +196,37 @@
             app:layout_constraintStart_toStartOf="@id/note_C"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_С_sharp_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/first_red"
+            app:titleSize="4dp"
+            app:title="До#"
+            app:titleColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
+            app:layout_constraintEnd_toEndOf="@id/note_D"
+            app:layout_constraintStart_toStartOf="@id/note_C"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_D_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
+            app:layout_constraintEnd_toEndOf="@id/note_E"
+            app:layout_constraintStart_toStartOf="@id/note_D"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_D_sharp_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/first_red"
+            app:titleSize="4dp"
+            app:title="РE#"
+            app:titleColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
             app:layout_constraintEnd_toEndOf="@id/note_E"
             app:layout_constraintStart_toStartOf="@id/note_D"
@@ -128,6 +242,19 @@
             app:layout_constraintStart_toStartOf="@id/note_F"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_F_sharp_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/first_red"
+            app:titleSize="4dp"
+            app:title="ФА#"
+            app:titleColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
+            app:layout_constraintEnd_toEndOf="@id/note_G"
+            app:layout_constraintStart_toStartOf="@id/note_F"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_G_sharp"
             style="@style/KeyboardKeyBlack"
@@ -138,11 +265,37 @@
             app:layout_constraintStart_toStartOf="@id/note_G"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_G_sharp_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/first_red"
+            app:titleSize="3dp"
+            app:title="СОЛЬ#"
+            app:titleColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
+            app:layout_constraintEnd_toEndOf="@id/note_A"
+            app:layout_constraintStart_toStartOf="@id/note_G"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_A_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
+            app:layout_constraintEnd_toEndOf="@id/note_B"
+            app:layout_constraintStart_toStartOf="@id/note_A"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+            android:id="@+id/note_A_sharp_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:noteBackgroundColor="@color/first_red"
+            app:titleSize="4dp"
+            app:title="ЛЯ#"
+            app:titleColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/blackKeysGuideline"
             app:layout_constraintEnd_toEndOf="@id/note_B"
             app:layout_constraintStart_toStartOf="@id/note_A"
