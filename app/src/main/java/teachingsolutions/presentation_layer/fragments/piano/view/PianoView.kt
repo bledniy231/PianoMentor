@@ -1,4 +1,4 @@
-package teachingsolutions.presentation_layer.fragments.piano
+package teachingsolutions.presentation_layer.fragments.piano.view
 
 import android.content.Context
 import android.util.AttributeSet

@@ -42,7 +42,8 @@
                     android:text="@string/CounterOctave"
                     android:layout_gravity="center"/>
 
-                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
+                    android:id="@+id/piano_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -58,7 +59,8 @@
                     android:text="@string/BigOctave"
                     android:layout_gravity="center"/>
 
-                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
+                    android:id="@+id/piano_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -74,7 +76,7 @@
                     android:text="@string/SmallOctave"
                     android:layout_gravity="center"/>
 
-                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -90,7 +92,7 @@
                     android:text="@string/FirstOctave"
                     android:layout_gravity="center"/>
 
-                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -106,7 +108,7 @@
                     android:text="@string/SecondOctave"
                     android:layout_gravity="center"/>
 
-                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -122,7 +124,7 @@
                     android:text="@string/ThirdOctave"
                     android:layout_gravity="center"/>
 
-                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -138,7 +140,7 @@
                     android:text="@string/FourthOctave"
                     android:layout_gravity="center"/>
 
-                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>

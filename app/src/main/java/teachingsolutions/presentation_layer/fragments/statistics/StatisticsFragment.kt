@@ -93,7 +93,7 @@ class StatisticsFragment : Fragment(),
         viewModel.isRefreshingChecked.observe(viewLifecycleOwner, refreshingCheckedObserver)
 
         binding.pianoIv.setOnClickListener {
-            findNavController().navigate(R.id.action_global_pianoFragment)
+            findNavController().navigate(R.id.pianoExerciseFragment)
         }
     }
 
