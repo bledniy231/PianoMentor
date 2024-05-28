@@ -3,48 +3,218 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="teachingsolutions.presentation_layer.fragments.piano.PianoExerciseFragment">
 
-    <HorizontalScrollView
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/exercise_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_collapseMode="pin"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+        app:navigationIconTint="@color/dark_gray"
+        app:layout_scrollFlags="scroll|enterAlways"
+        tools:title="Сравнение секунд"
+        app:titleTextColor="@color/dark_gray"
+        android:background="@android:color/transparent"/>
+
+    <HorizontalScrollView
+        android:id="@+id/piano_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/piano_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <teachingsolutions.presentation_layer.fragments.piano.PianoView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <teachingsolutions.presentation_layer.fragments.piano.PianoView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CounterOctave"
+                    android:layout_gravity="center"/>
 
-            <teachingsolutions.presentation_layer.fragments.piano.PianoView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-            <teachingsolutions.presentation_layer.fragments.piano.PianoView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <teachingsolutions.presentation_layer.fragments.piano.PianoView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/BigOctave"
+                    android:layout_gravity="center"/>
 
-            <teachingsolutions.presentation_layer.fragments.piano.PianoView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-            <teachingsolutions.presentation_layer.fragments.piano.PianoView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/SmallOctave"
+                    android:layout_gravity="center"/>
+
+                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FirstOctave"
+                    android:layout_gravity="center"/>
+
+                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/SecondOctave"
+                    android:layout_gravity="center"/>
+
+                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ThirdOctave"
+                    android:layout_gravity="center"/>
+
+                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FourthOctave"
+                    android:layout_gravity="center"/>
+
+                <teachingsolutions.presentation_layer.fragments.piano.PianoView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
         </LinearLayout>
 
     </HorizontalScrollView>
 
+    <TextView
+        android:id="@+id/exercise_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:paddingHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        tools:text="Выберите больший интервал"/>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/btns_choose_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="?attr/actionBarSize">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="18sp"
+                tools:text="Первый"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="18sp"
+                tools:text="Второй"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/special_btns_container"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="bottom"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                tools:text="1/10"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="10dp"
+                android:textColor="@color/first_purple"
+                android:paddingHorizontal="5dp"
+                android:backgroundTint="@android:color/transparent"
+                tools:text="Повторить"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textColor="@color/first_purple"
+                android:paddingHorizontal="5dp"
+                android:backgroundTint="@android:color/transparent"
+                tools:text="Пропустить"/>
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

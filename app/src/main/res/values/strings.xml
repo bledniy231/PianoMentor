@@ -68,4 +68,11 @@
     <string name="restart_quiz">Перепройти тест</string>
     <string name="show_results">Показать результаты</string>
     <string name="task_title">Задание</string>
+    <string name="CounterOctave">Контроктава</string>
+    <string name="BigOctave">Большая октава</string>
+    <string name="SmallOctave">Малая октава</string>
+    <string name="FirstOctave">Первая октава</string>
+    <string name="SecondOctave">Вторая октава</string>
+    <string name="ThirdOctave">Третья октава</string>
+    <string name="FourthOctave">Четвёртая октава</string>
 </resources>
