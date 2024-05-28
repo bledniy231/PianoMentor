@@ -276,6 +276,29 @@
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_open_piano_exercise"
+            app:destination="@id/pianoExerciseFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/pianoExerciseFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.piano.PianoExerciseFragment"
+        android:label="fragment_piano_exercise"
+        tools:layout="@layout/fragment_piano_exercise">
+        <action
+            android:id="@+id/action_back_arrow_piano_to_start"
+            app:destination="@id/enterPianoExerciseFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
 
 </navigation>

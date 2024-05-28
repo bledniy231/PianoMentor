@@ -6,18 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.pianomentor.R
-import com.example.pianomentor.databinding.FragmentPianoBinding
-import com.example.pianomentor.databinding.FragmentPianoLessonBinding
+import com.example.pianomentor.databinding.FragmentPianoExerciseBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PianoLessonFragment : Fragment() {
+class PianoExerciseFragment : Fragment() {
 
-    private var _binding: FragmentPianoLessonBinding? = null
+    private var _binding: FragmentPianoExerciseBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: PianoLessonViewModel by viewModels()
+    private val viewModel: PianoExerciseViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +25,7 @@ class PianoLessonFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPianoLessonBinding.inflate(inflater, container, false)
+        _binding = FragmentPianoExerciseBinding.inflate(inflater, container, false)
         return binding.root
     }
 }

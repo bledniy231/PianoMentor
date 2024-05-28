@@ -5,6 +5,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class PianoLessonViewModel @Inject constructor() : ViewModel() {
+class PianoExerciseViewModel @Inject constructor() : ViewModel() {
 
 }

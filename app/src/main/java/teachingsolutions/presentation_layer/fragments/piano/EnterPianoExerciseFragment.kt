@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionManager
+import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentEnterPianoExerciseBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +21,7 @@ class EnterPianoExerciseFragment : Fragment() {
 
     private lateinit var args: Bundle
 
-    private val viewModel: EnterPianoLessonViewModel by viewModels()
+    private val viewModel: EnterPianoExerciseViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +50,10 @@ class EnterPianoExerciseFragment : Fragment() {
         }
 
         binding.exerciseName.text = args.getString("CourseItemTitle")
+
+        binding.buttonStart.setOnClickListener {
+            findNavController().navigate(R.id.action_open_piano_exercise)
+        }
 
         view.postDelayed({
             if (binding.taskTextContainer.visibility == View.GONE) {
