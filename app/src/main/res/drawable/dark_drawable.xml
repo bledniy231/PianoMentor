@@ -2,4 +2,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <corners android:topLeftRadius="@dimen/radius_piano_item" android:topRightRadius="@dimen/radius_piano_item" android:bottomLeftRadius="@dimen/radius_piano_item" android:bottomRightRadius="@dimen/radius_piano_item"/>
     <solid android:color="@color/light_gray"/>
+    <stroke android:color="@color/dark_gray" android:width="1dp"/>
 </shape>

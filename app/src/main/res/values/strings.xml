@@ -75,4 +75,6 @@
     <string name="SecondOctave">Вторая октава</string>
     <string name="ThirdOctave">Третья октава</string>
     <string name="FourthOctave">Четвёртая октава</string>
+    <string name="repeat_btn">Повторить</string>
+    <string name="skip_btn">Пропустить</string>
 </resources>
