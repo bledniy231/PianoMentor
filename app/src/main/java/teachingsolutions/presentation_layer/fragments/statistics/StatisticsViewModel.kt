@@ -15,8 +15,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsModel
-import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
+import teachingsolutions.domain_layer.domain_models.statistics.BaseStatisticsModel
+import teachingsolutions.domain_layer.domain_models.statistics.UserStatisticsModel
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI

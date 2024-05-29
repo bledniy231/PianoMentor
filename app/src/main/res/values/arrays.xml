@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="octave_1">
+        <item name="C">@raw/note_C_1</item>
+        <item>@raw/note_C_sharp_1</item>
+        <item>@raw/note_D_1</item>
+        <item>@raw/note_D_sharp_1</item>
+        <item>@raw/note_E_1</item>
+        <item>@raw/note_F_1</item>
+        <item>@raw/note_F_sharp_1</item>
+        <item>@raw/note_G_1</item>
+        <item>@raw/note_G_sharp_1</item>
+        <item>@raw/note_A_1</item>
+        <item>@raw/note_A_sharp_1</item>
+        <item>@raw/note_B_1</item>
+    </array>
+    <array name="octave_2">
+        <item>@raw/note_C_2</item>
+        <item>@raw/note_C_sharp_2</item>
+        <item>@raw/note_D_2</item>
+        <item>@raw/note_D_sharp_2</item>
+        <item>@raw/note_E_2</item>
+        <item>@raw/note_F_2</item>
+        <item>@raw/note_F_sharp_2</item>
+        <item>@raw/note_G_2</item>
+        <item>@raw/note_G_sharp_2</item>
+        <item>@raw/note_A_2</item>
+        <item>@raw/note_A_sharp_2</item>
+        <item>@raw/note_B_2</item>
+    </array>
+    <array name="octave_3">
+        <item>@raw/note_C_3</item>
+        <item>@raw/note_C_sharp_3</item>
+        <item>@raw/note_D_3</item>
+        <item>@raw/note_D_sharp_3</item>
+        <item>@raw/note_E_3</item>
+        <item>@raw/note_F_3</item>
+        <item>@raw/note_F_sharp_3</item>
+        <item>@raw/note_G_3</item>
+        <item>@raw/note_G_sharp_3</item>
+        <item>@raw/note_A_3</item>
+        <item>@raw/note_A_sharp_3</item>
+        <item>@raw/note_B_3</item>
+    </array>
+    <array name="octave_4">
+        <item>@raw/note_C_4</item>
+        <item>@raw/note_C_sharp_4</item>
+        <item>@raw/note_D_4</item>
+        <item>@raw/note_D_sharp_4</item>
+        <item>@raw/note_E_4</item>
+        <item>@raw/note_F_4</item>
+        <item>@raw/note_F_sharp_4</item>
+        <item>@raw/note_G_4</item>
+        <item>@raw/note_G_sharp_4</item>
+        <item>@raw/note_A_4</item>
+        <item>@raw/note_A_sharp_4</item>
+        <item>@raw/note_B_4</item>
+    </array>
+    <array name="octave_5">
+        <item>@raw/note_C_5</item>
+        <item>@raw/note_C_sharp_5</item>
+        <item>@raw/note_D_5</item>
+        <item>@raw/note_D_sharp_5</item>
+        <item>@raw/note_E_5</item>
+        <item>@raw/note_F_5</item>
+        <item>@raw/note_F_sharp_5</item>
+        <item>@raw/note_G_5</item>
+        <item>@raw/note_G_sharp_5</item>
+        <item>@raw/note_A_5</item>
+        <item>@raw/note_A_sharp_5</item>
+        <item>@raw/note_B_5</item>
+    </array>
+    <array name="octave_6">
+        <item>@raw/note_C_6</item>
+        <item>@raw/note_C_sharp_6</item>
+        <item>@raw/note_D_6</item>
+        <item>@raw/note_D_sharp_6</item>
+        <item>@raw/note_E_6</item>
+        <item>@raw/note_F_6</item>
+        <item>@raw/note_F_sharp_6</item>
+        <item>@raw/note_G_6</item>
+        <item>@raw/note_G_sharp_6</item>
+        <item>@raw/note_A_6</item>
+        <item>@raw/note_A_sharp_6</item>
+        <item>@raw/note_B_6</item>
+    </array>
+    <array name="octave_7">
+        <item>@raw/note_C_7</item>
+        <item>@raw/note_C_sharp_7</item>
+        <item>@raw/note_D_7</item>
+        <item>@raw/note_D_sharp_7</item>
+        <item>@raw/note_E_7</item>
+        <item>@raw/note_F_7</item>
+        <item>@raw/note_F_sharp_7</item>
+        <item>@raw/note_G_7</item>
+        <item>@raw/note_G_sharp_7</item>
+        <item>@raw/note_A_7</item>
+        <item>@raw/note_A_sharp_7</item>
+        <item>@raw/note_B_7</item>
+    </array>
+</resources>

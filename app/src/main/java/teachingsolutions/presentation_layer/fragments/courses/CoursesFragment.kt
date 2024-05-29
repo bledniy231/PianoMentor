@@ -13,8 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentCoursesBinding
 import dagger.hilt.android.AndroidEntryPoint
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemType
 import teachingsolutions.presentation_layer.adapters.CoursesRecyclerViewAdapter
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseImplementation
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI

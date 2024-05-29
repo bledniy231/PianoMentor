@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
-import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
+import teachingsolutions.domain_layer.domain_models.statistics.UserStatisticsModel
 import teachingsolutions.presentation_layer.extensions.safelyNavigate
 import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsResultUI
@@ -93,7 +93,7 @@ class StatisticsFragment : Fragment(),
         viewModel.isRefreshingChecked.observe(viewLifecycleOwner, refreshingCheckedObserver)
 
         binding.pianoIv.setOnClickListener {
-            findNavController().navigate(R.id.pianoExerciseFragment)
+            findNavController().navigate(R.id.action_global_pianoFragment)
         }
     }
 

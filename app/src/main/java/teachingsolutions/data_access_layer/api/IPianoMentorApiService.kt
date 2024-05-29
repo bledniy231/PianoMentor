@@ -13,6 +13,7 @@ import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequestApi
 import teachingsolutions.data_access_layer.DAL_models.courses.CourseItemsResponseApi
 import teachingsolutions.data_access_layer.DAL_models.courses.CoursesResponseApi
+import teachingsolutions.data_access_layer.DAL_models.exercise.GetExerciseTaskResponseApi
 import teachingsolutions.data_access_layer.DAL_models.quiz.GetQuizResponseApi
 import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersRequestApi
 import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersResponseApi
@@ -40,7 +41,7 @@ interface IPianoMentorApiService {
     @GET("api/Courses/GetCourseItems")
     suspend fun getCourseItems(@Query("userId") userId: Long, @Query("courseId") courseId: Int): CourseItemsResponseApi
 
-    @GET("api/Courses/DownloadCourseItemFile")
+    @GET("api/Files/DownloadCourseItemFile")
     suspend fun getCourseItemFile(@Query("courseItemId") courseItemId: Int): Response<ResponseBody>
 
     @PUT("api/Courses/SetCourseItemProgress")
@@ -55,6 +56,9 @@ interface IPianoMentorApiService {
     @POST("api/Courses/SetQuizUserAnswers")
     suspend fun setCourseItemQuizUserAnswers(@Body request: SetQuizUserAnswersRequestApi): SetQuizUserAnswersResponseApi
 
-    @GET("api/Courses/DownloadQuizQuestionFile")
+    @GET("api/Files/DownloadQuizQuestionFile")
     suspend fun getQuizQuestionFile(@Query("dataSetId") dataSetId: Long): Response<ResponseBody>
+
+    @GET("api/Courses/GetExerciseTask")
+    suspend fun getExerciseTask(@Query("courseItemId") courseItemId: Int): GetExerciseTaskResponseApi
 }

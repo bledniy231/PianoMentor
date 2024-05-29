@@ -9,21 +9,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pianomentor.R
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.quiz.QuizRepository
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.GetQuizResponseUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionViewPagerUI
 import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class QuizViewModel @Inject constructor(

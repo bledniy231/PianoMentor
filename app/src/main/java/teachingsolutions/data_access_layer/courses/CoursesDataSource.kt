@@ -1,11 +1,8 @@
 package teachingsolutions.data_access_layer.courses
 
 import okhttp3.ResponseBody
-import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 import teachingsolutions.data_access_layer.DAL_models.courses.CourseItemsResponseApi
 import teachingsolutions.data_access_layer.DAL_models.courses.CoursesResponseApi
-import teachingsolutions.data_access_layer.DAL_models.quiz.GetQuizResponseApi
-import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersRequestApi
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
 import teachingsolutions.data_access_layer.common.ActionResult
 import java.io.IOException

@@ -77,6 +77,7 @@
                     android:layout_gravity="center"/>
 
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
+                    android:id="@+id/piano_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -93,6 +94,7 @@
                     android:layout_gravity="center"/>
 
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
+                    android:id="@+id/piano_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -109,6 +111,7 @@
                     android:layout_gravity="center"/>
 
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
+                    android:id="@+id/piano_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -125,6 +128,7 @@
                     android:layout_gravity="center"/>
 
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
+                    android:id="@+id/piano_6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -141,6 +145,7 @@
                     android:layout_gravity="center"/>
 
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
+                    android:id="@+id/piano_7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>

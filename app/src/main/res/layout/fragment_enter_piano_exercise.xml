@@ -40,6 +40,19 @@
         android:layout_below="@+id/exercise_title"
         tools:text="Научимся сравнивать секунды"/>
 
+    <ProgressBar
+        android:id="@+id/enter_exercise_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_below="@+id/exercise_name"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="180dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:backgroundTint="@color/first_green"
+        android:progressTint="@color/first_green" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/task_description_cardView"
         android:layout_width="match_parent"
@@ -87,18 +100,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    android:text="В этом упражнении мы сыграем два интервала. Вы должны определить, какой интервал из двух был шире и выбрать соответствующую опцию"/>
+                    tools:text="В этом упражнении мы сыграем два интервала. Вы должны определить, какой интервал из двух был шире и выбрать соответствующую опцию"/>
             </FrameLayout>
         </LinearLayout>
         
     </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buttons_container"
+        android:id="@+id/btns_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/task_description_cardView"
-        android:layout_above="@+id/button_start"
+        android:layout_above="@+id/btn_start"
         android:layout_marginHorizontal="16dp">
 
         <androidx.constraintlayout.widget.Guideline
@@ -108,60 +121,47 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_horizontal"
+        <LinearLayout
+            android:id="@+id/btns_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_interval1"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:paddingHorizontal="5dp"
-            android:layout_margin="3dp"
-            app:cornerRadius="10dp"
-            android:text="Малая секунда"
+            android:paddingHorizontal="3dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
-            app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal"/>
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_interval2"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_interval1"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:paddingHorizontal="5dp"
+                app:cornerRadius="10dp"
+                tools:text="Малая секунда" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btns_right"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:paddingHorizontal="5dp"
-            android:layout_margin="3dp"
-            app:cornerRadius="10dp"
-            android:text="Большая секунда"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="3dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/guideline_vertical"
-            app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal"/>
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_interval_additional1"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:paddingHorizontal="5dp"
-            android:layout_margin="3dp"
-            app:cornerRadius="10dp"
-            android:text="Малая терция"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
-            app:layout_constraintTop_toBottomOf="@+id/guideline_horizontal"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_interval_additional2"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:paddingHorizontal="5dp"
-            android:layout_margin="3dp"
-            app:cornerRadius="10dp"
-            android:text="Большая терция"
-            app:layout_constraintStart_toEndOf="@+id/guideline_vertical"
-            app:layout_constraintTop_toBottomOf="@+id/guideline_horizontal"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_interval2"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:paddingHorizontal="5dp"
+                app:cornerRadius="10dp"
+                tools:text="Большая секунда"/>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_start"
+        android:id="@+id/btn_start"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
@@ -171,6 +171,6 @@
         android:layout_marginBottom="8dp"
         app:backgroundTint="@color/first_green"
         app:cornerRadius="10dp"
-        android:text="Начать упражнение"/>
+        android:text="@string/start_exercise"/>
 
 </RelativeLayout>

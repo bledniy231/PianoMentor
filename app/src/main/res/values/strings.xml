@@ -77,4 +77,5 @@
     <string name="FourthOctave">Четвёртая октава</string>
     <string name="repeat_btn">Повторить</string>
     <string name="skip_btn">Пропустить</string>
+    <string name="start_exercise">Начать упражнение</string>
 </resources>

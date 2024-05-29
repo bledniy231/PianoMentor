@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
 import teachingsolutions.domain_layer.courses.CoursesRepository
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI

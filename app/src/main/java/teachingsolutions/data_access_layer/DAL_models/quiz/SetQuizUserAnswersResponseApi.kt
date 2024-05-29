@@ -4,5 +4,5 @@ import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 
 class SetQuizUserAnswersResponseApi(
     val progressType: String,
-    val errors: Array<String>?,
+    errors: Array<String>? = null
 ) : DefaultResponseApi(errors)

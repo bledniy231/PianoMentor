@@ -8,15 +8,14 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemType
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemType
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseImplementation
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI

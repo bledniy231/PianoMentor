@@ -2,7 +2,6 @@ package teachingsolutions.data_access_layer.statistics
 
 import okio.IOException
 import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
-import teachingsolutions.data_access_layer.DAL_models.statistics.BaseStatisticsModelApi
 import teachingsolutions.data_access_layer.DAL_models.statistics.GetUserStatisticsResponseApi
 import teachingsolutions.data_access_layer.DAL_models.statistics.SetCourseItemProgressRequestApi
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
@@ -38,7 +37,7 @@ class StatisticsDataSource @Inject constructor(private val apiService: IPianoMen
         return try {
             val request = SetCourseItemProgressRequestApi(userId, courseId, courseItemId, courseItemProgressType)
             val apiResult = apiService.setCourseItemProgress(request)
-            when (apiResult._errors) {
+            when (apiResult.errors) {
                 null -> {
                     ActionResult.Success(apiResult)
                 }

@@ -4,5 +4,5 @@ import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 
 class CourseItemsResponseApi(
     val courseItems: ArrayList<CourseItem>,
-    val errors: Array<String>?
+    errors: Array<String>?
 ): DefaultResponseApi(errors)

@@ -23,7 +23,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentLectureBinding
 import dagger.hilt.android.AndroidEntryPoint
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
 import teachingsolutions.presentation_layer.fragments.lecture.model.LectureAnimation
 import teachingsolutions.presentation_layer.fragments.lecture.model.SwipeDirection
 import java.io.File

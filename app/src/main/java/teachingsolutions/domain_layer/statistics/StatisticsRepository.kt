@@ -2,9 +2,9 @@ package teachingsolutions.domain_layer.statistics
 
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.data_access_layer.statistics.StatisticsDataSource
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
-import teachingsolutions.domain_layer.mapping_models.statistics.BaseStatisticsModel
-import teachingsolutions.domain_layer.mapping_models.statistics.UserStatisticsModel
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.domain_models.statistics.BaseStatisticsModel
+import teachingsolutions.domain_layer.domain_models.statistics.UserStatisticsModel
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsResultUI
 import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsViewPagerItemModelUI
@@ -73,7 +73,7 @@ class StatisticsRepository @Inject constructor(private val statisticsDataSource:
                 DefaultResponseUI()
             }
             is ActionResult.NormalError -> {
-                DefaultResponseUI(result.data._errors?.joinToString { it } ?: "Error while setting course item progress")
+                DefaultResponseUI(result.data.errors?.joinToString { it } ?: "Error while setting course item progress")
             }
             is ActionResult.ExceptionError -> {
                 DefaultResponseUI(result.exception.message ?: "Exception while setting course item progress")

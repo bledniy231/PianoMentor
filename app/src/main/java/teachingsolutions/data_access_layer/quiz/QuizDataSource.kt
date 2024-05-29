@@ -32,7 +32,7 @@ class QuizDataSource @Inject constructor(private val apiService: IPianoMentorApi
     suspend fun setQuizUserAnswers(request: SetQuizUserAnswersRequestApi): ActionResult<SetQuizUserAnswersResponseApi> {
         return try {
             val result = apiService.setCourseItemQuizUserAnswers(request)
-            when (result._errors) {
+            when (result.errors) {
                 null -> {
                     ActionResult.Success(result)
                 }

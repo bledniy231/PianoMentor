@@ -1,6 +1,5 @@
 package teachingsolutions.presentation_layer.fragments.quiz
 
-import android.content.Context
 import android.graphics.Rect
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -9,16 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentQuizBinding
-import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
 import teachingsolutions.presentation_layer.adapters.QuizViewPagerAdapter
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.GetQuizResponseUI

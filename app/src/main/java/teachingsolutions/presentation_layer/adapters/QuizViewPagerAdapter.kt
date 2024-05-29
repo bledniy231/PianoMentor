@@ -14,7 +14,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.pianomentor.R
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
 import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionAnswerUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionViewPagerUI
 

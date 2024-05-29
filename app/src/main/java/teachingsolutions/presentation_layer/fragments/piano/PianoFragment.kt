@@ -5,9 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentPianoBinding
-import com.example.pianomentor.databinding.FragmentStatisticsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -3,15 +3,13 @@ package teachingsolutions.domain_layer.quiz
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import teachingsolutions.data_access_layer.DAL_models.quiz.QuizQuestion
 import teachingsolutions.data_access_layer.DAL_models.quiz.QuizQuestionAnswer
 import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersRequestApi
 import teachingsolutions.data_access_layer.common.ActionResult
-import teachingsolutions.data_access_layer.courses.CoursesDataSource
 import teachingsolutions.data_access_layer.quiz.QuizDataSource
 import teachingsolutions.domain_layer.courses.CoursesRepository
-import teachingsolutions.domain_layer.mapping_models.courses.CourseItemProgressType
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
@@ -98,7 +96,7 @@ class QuizRepository @Inject constructor(
                 }
                 DefaultResponseUI(null)
             }
-            is ActionResult.NormalError -> DefaultResponseUI(result.data._errors?.joinToString { it } ?: "Error while setting quiz answers")
+            is ActionResult.NormalError -> DefaultResponseUI(result.data.errors?.joinToString { it } ?: "Error while setting quiz answers")
             is ActionResult.ExceptionError -> DefaultResponseUI(result.exception.message ?: "Error while setting quiz answers")
         }
     }

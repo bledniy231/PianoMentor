@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import com.example.pianomentor.R
