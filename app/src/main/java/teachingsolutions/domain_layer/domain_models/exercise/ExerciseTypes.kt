@@ -10,6 +10,7 @@ enum class ExerciseTypes(val value: String) {
     DETERMINATION_MULTIPLE("DeterminationMultiple");
 
     companion object {
-        fun from(type: String?): ExerciseTypes = entries.find { it.value.lowercase() == type?.lowercase() } ?: COMPARISON_ASC
+        fun from(value: String?): ExerciseTypes = entries.find { it.value.lowercase() == value?.lowercase() } ?: COMPARISON_ASC
+        fun from(id: Int): ExerciseTypes = entries.find { it.ordinal == id - 1 } ?: COMPARISON_ASC
     }
 }

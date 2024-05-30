@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/exercise_name"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:backgroundTint="@color/second_purple"
         app:cardCornerRadius="10dp"
         app:cardElevation="10dp">

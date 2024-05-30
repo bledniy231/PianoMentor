@@ -28,6 +28,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_C"
+            android:tag="note_c"
             android:layout_width="0dp"
             android:layout_height="200dp"
             style="@style/KeyboardKeyWhite"
@@ -53,6 +54,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_D"
+            android:tag="note_d"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
@@ -78,6 +80,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_E"
+            android:tag="note_e"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
@@ -99,8 +102,11 @@
             app:layout_constraintStart_toEndOf="@id/note_D"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
 
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_F"
+            android:tag="note_f"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
@@ -122,8 +128,11 @@
             app:layout_constraintStart_toEndOf="@id/note_E"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"/>
 
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_G"
+            android:tag="note_g"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
@@ -145,8 +154,11 @@
             app:layout_constraintStart_toEndOf="@id/note_F"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_A"
+            android:tag="note_a"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
@@ -168,8 +180,11 @@
             app:layout_constraintStart_toEndOf="@id/note_G"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_B"
+            android:tag="note_b"
             android:layout_width="0dp"
             android:layout_height="0dp"
             style="@style/KeyboardKeyWhite"
@@ -191,10 +206,13 @@
             app:layout_constraintStart_toEndOf="@id/note_A"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
+
+
         <!-- Black buttons -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_C_sharp"
+            android:tag="note_c_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -217,8 +235,11 @@
             app:layout_constraintStart_toStartOf="@id/note_C"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_D_sharp"
+            android:tag="note_d_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -241,8 +262,11 @@
             app:layout_constraintStart_toStartOf="@id/note_D"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_F_sharp"
+            android:tag="note_f_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -265,8 +289,11 @@
             app:layout_constraintStart_toStartOf="@id/note_F"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_G_sharp"
+            android:tag="note_g_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -289,8 +316,11 @@
             app:layout_constraintStart_toStartOf="@id/note_G"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/note_A_sharp"
+            android:tag="note_a_sharp"
             style="@style/KeyboardKeyBlack"
             android:layout_width="0dp"
             android:layout_height="0dp"

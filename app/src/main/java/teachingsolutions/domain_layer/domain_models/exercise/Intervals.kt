@@ -16,5 +16,6 @@ enum class Intervals(val value: String, val russianTranslation: String) {
 
     companion object {
         fun from(value: String?): Intervals = entries.find { it.value == value } ?: MINOR_SECOND
+        fun from(id: Int): Intervals = entries.find { it.ordinal == id - 1} ?: MINOR_SECOND
     }
 }

@@ -39,7 +39,12 @@ class EnterPianoExerciseViewModel @Inject constructor(
             val button = MaterialButton(context)
             button.text = interval.russianTranslation
             button.id = count + 1
-            val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+
+            val params = LayoutParams(LayoutParams.WRAP_CONTENT, getPixelsFromDp(context, 40))
+            val paddingHorizontal = getPixelsFromDp(context, 5)
+            button.setPadding(paddingHorizontal, button.paddingTop, paddingHorizontal, button.paddingBottom)
+            button.cornerRadius = getPixelsFromDp(context, 10)
+
             button.setOnClickListener {
                 // Do something
             }
@@ -49,5 +54,11 @@ class EnterPianoExerciseViewModel @Inject constructor(
         }
 
         return result
+    }
+
+    private fun getPixelsFromDp(context: Context, dpValue: Int): Int {
+        val scale = context.resources.displayMetrics.density
+        val pixelValue = (dpValue * scale + 0.5f).toInt()
+        return pixelValue
     }
 }

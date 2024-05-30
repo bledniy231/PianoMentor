@@ -45,7 +45,8 @@
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:id="@+id/piano_1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:octave="1"/>
             </LinearLayout>
 
             <LinearLayout
@@ -62,7 +63,8 @@
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:id="@+id/piano_2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:octave="2"/>
             </LinearLayout>
 
             <LinearLayout
@@ -79,7 +81,8 @@
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:id="@+id/piano_3"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:octave="3"/>
             </LinearLayout>
 
             <LinearLayout
@@ -96,7 +99,8 @@
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:id="@+id/piano_4"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:octave="4"/>
             </LinearLayout>
 
             <LinearLayout
@@ -113,7 +117,8 @@
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:id="@+id/piano_5"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:octave="5"/>
             </LinearLayout>
 
             <LinearLayout
@@ -130,7 +135,8 @@
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:id="@+id/piano_6"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:octave="6"/>
             </LinearLayout>
 
             <LinearLayout
@@ -147,7 +153,8 @@
                 <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
                     android:id="@+id/piano_7"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    app:octave="7"/>
             </LinearLayout>
 
         </LinearLayout>

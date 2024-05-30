@@ -60,6 +60,8 @@ class EnterPianoExerciseFragment : Fragment() {
             }
 
             binding.taskText.text = exerciseTaskResponse.success?.taskDescription
+            binding.btnsLeft.removeAllViews()
+            binding.btnsRight.removeAllViews()
             val buttons = exerciseTaskResponse.success?.intervalsInTask?.let { viewModel.getButtons(requireContext(), it) }
 
             for ((count, btn) in buttons?.withIndex()!!) {

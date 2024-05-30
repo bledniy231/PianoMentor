@@ -30,13 +30,13 @@ class ExerciseRepository @Inject constructor(
 
         return when (val result = exerciseDataSource.getExerciseTask(courseItemId)) {
             is ActionResult.Success -> {
-                val exerciseType = ExerciseTypes.from(result.data.exerciseTask.exerciseTypeName)
+                val exerciseType = ExerciseTypes.from(result.data.exerciseTask.exerciseTypeId)
                 val exerciseTaskModel = ExerciseTaskModel(
                     result.data.exerciseTask.exerciseTaskId,
                     result.data.exerciseTask.courseItemId,
                     taskDescriptionManager.getDescriptionForExerciseType(exerciseType),
                     exerciseType,
-                    result.data.exerciseTask.intervalsInTaskNames.map { Intervals.from(it) }.sortedBy { it.ordinal }
+                    result.data.exerciseTask.intervalsInTaskIds.map { Intervals.from(it) }.sortedBy { it.ordinal }
                 )
 
                 exerciseTasksCached.add(exerciseTaskModel)
