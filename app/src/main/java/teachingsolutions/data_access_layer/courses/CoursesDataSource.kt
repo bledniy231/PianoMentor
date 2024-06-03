@@ -1,8 +1,8 @@
 package teachingsolutions.data_access_layer.courses
 
 import okhttp3.ResponseBody
-import teachingsolutions.data_access_layer.DAL_models.courses.CourseItemsResponseApi
-import teachingsolutions.data_access_layer.DAL_models.courses.CoursesResponseApi
+import teachingsolutions.data_access_layer.DAL_models.courses.GetCourseItemsResponseApi
+import teachingsolutions.data_access_layer.DAL_models.courses.GetCoursesResponseApi
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
 import teachingsolutions.data_access_layer.common.ActionResult
 import java.io.IOException
@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class CoursesDataSource @Inject constructor(private val apiService: IPianoMentorApiService) {
-    suspend fun getCourses(userId: Long): ActionResult<CoursesResponseApi> {
+    suspend fun getCourses(userId: Long): ActionResult<GetCoursesResponseApi> {
         return try {
             val result = apiService.getCourses(userId)
             when (result.errors) {
@@ -27,7 +27,7 @@ class CoursesDataSource @Inject constructor(private val apiService: IPianoMentor
         }
     }
 
-    suspend fun getCourseItems(userId: Long, courseId: Int): ActionResult<CourseItemsResponseApi> {
+    suspend fun getCourseItems(userId: Long, courseId: Int): ActionResult<GetCourseItemsResponseApi> {
         return try {
             val result = apiService.getCourseItems(userId, courseId)
             when (result.errors) {

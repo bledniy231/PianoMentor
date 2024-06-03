@@ -1,6 +1,6 @@
 package teachingsolutions.data_access_layer.DAL_models.user
 
-data class LoginUserResponse(
+data class LoginUserResponseApi(
     val userId: Long,
     val userName: String,
     val email: String,
