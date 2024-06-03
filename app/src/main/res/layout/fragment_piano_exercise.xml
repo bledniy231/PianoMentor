@@ -206,30 +206,23 @@
             android:layout_gravity="bottom"
             android:paddingHorizontal="16dp">
 
-            <LinearLayout
-                android:id="@+id/special_btns_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/repeat_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textColor="@color/first_purple"
+                android:paddingHorizontal="5dp"
+                android:layout_gravity="center_vertical|start"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/repeat_btn"/>
 
-                <TextView
-                    android:id="@+id/exercise_counter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    tools:text="1/10"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/repeat_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:textColor="@color/first_purple"
-                    android:paddingHorizontal="5dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="@string/repeat_btn"/>
-            </LinearLayout>
+            <TextView
+                android:id="@+id/exercise_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                tools:text="1/10"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/skip_btn"

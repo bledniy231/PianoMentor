@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionManager
 import com.example.pianomentor.R
@@ -24,10 +25,6 @@ class EnterPianoExerciseFragment : Fragment() {
     private lateinit var args: Bundle
 
     private val viewModel: EnterPianoExerciseViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +45,8 @@ class EnterPianoExerciseFragment : Fragment() {
         }
 
         changeVisibility(View.GONE)
-        viewModel.getExerciseTask(args.getInt("CourseItemId"))
+        binding.exerciseName.text = args.getString("CourseItemTitle")
+        viewModel.getExerciseTask(requireContext(), args.getInt("CourseItemId"))
 
         viewModel.exerciseTask.observe(viewLifecycleOwner) { exerciseTaskResponse ->
             exerciseTaskResponse ?: return@observe
@@ -87,10 +85,21 @@ class EnterPianoExerciseFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        binding.exerciseName.text = args.getString("CourseItemTitle")
-
         binding.btnStart.setOnClickListener {
-            findNavController().navigate(R.id.action_open_piano_exercise)
+            binding.enterExerciseLoading.visibility = View.VISIBLE
+
+            var listener: NavController.OnDestinationChangedListener? = null
+            listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+                if (destination.id == R.id.pianoExerciseFragment) {
+                    binding.enterExerciseLoading.visibility = View.GONE
+                    findNavController().removeOnDestinationChangedListener(listener!!)
+                }
+            }
+
+            findNavController().addOnDestinationChangedListener(listener)
+            val bundle = Bundle()
+            bundle.putString("CourseItemTitle", args.getString("CourseItemTitle"))
+            findNavController().navigate(R.id.action_open_piano_exercise, bundle)
         }
     }
 

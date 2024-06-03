@@ -9,7 +9,11 @@ import android.widget.LinearLayout
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.PianoViewBinding
 import com.google.android.material.button.MaterialButton
-import java.util.concurrent.CopyOnWriteArrayList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.ConcurrentHashMap
 
 class PianoView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -18,33 +22,21 @@ class PianoView @JvmOverloads constructor(
     private var _binding: PianoViewBinding? = null
     private val binding get() = checkNotNull(_binding) { "Binding is null" }
 
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val canPress = true
-    private val pressedKeys: CopyOnWriteArrayList<MaterialButton> = CopyOnWriteArrayList<MaterialButton>()
 
     @get:JvmName("getOctave")
     private var octave: Int by viewProperty(1)
 
-    private lateinit var noteButtonsToSounds: MutableMap<MaterialButton, MediaPlayer?>
+    private val noteButtonsToSounds: MutableMap<MaterialButton, MediaPlayer?> = ConcurrentHashMap()
 
     init {
         _binding = PianoViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-        noteButtonsToSounds = mutableMapOf(
-            binding.noteC to null,
-            binding.noteCSharp to null,
-            binding.noteD to null,
-            binding.noteDSharp to null,
-            binding.noteE to null,
-            binding.noteF to null,
-            binding.noteFSharp to null,
-            binding.noteG to null,
-            binding.noteGSharp to null,
-            binding.noteA to null,
-            binding.noteASharp to null,
-            binding.noteB to null
-        )
-
         initAttributes(attrs, defStyleAttr)
+        coroutineScope.launch {
+            initNoteSounds()
+        }
 
         setOnTouchListener { _, event ->
             val action = event.actionMasked
@@ -54,28 +46,11 @@ class PianoView @JvmOverloads constructor(
 
             when (action) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> handleDown(event.actionIndex, event)
-
-                MotionEvent.ACTION_MOVE -> {
-                    run {
-                        var i = 0
-                        while (i < event.pointerCount) {
-                            handleMove(i, event)
-                            i++
-                        }
-                    }
-                    var i = 0
-                    while (i < event.pointerCount) {
-                        handleDown(i, event)
-                        i++
-                    }
-                }
-
                 MotionEvent.ACTION_POINTER_UP -> handlePointerUp(event.getPointerId(event.actionIndex))
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     handleUp()
                     return@setOnTouchListener false
                 }
-
                 else -> {}
             }
             performClick()
@@ -85,12 +60,6 @@ class PianoView @JvmOverloads constructor(
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         return true
-    }
-
-    private fun loadNoteSound(btn: MaterialButton) {
-        val name = "${btn.tag}_$octave"
-        val soundRes = resources.getIdentifier(name, "raw", context.packageName)
-        noteButtonsToSounds[btn] =  MediaPlayer.create(context, soundRes)
     }
 
     private fun handleDown(which: Int, event: MotionEvent) {
@@ -103,16 +72,6 @@ class PianoView @JvmOverloads constructor(
                 handleKeyDown(which, event, button)
             }
         }
-    }
-
-    private fun handleKeyDown(which: Int, event: MotionEvent, button: MaterialButton) {
-        button.isPressed = true
-
-        if (noteButtonsToSounds[button] == null) {
-            loadNoteSound(button)
-        }
-        noteButtonsToSounds[button]?.start()
-        // здесь вы можете добавить вызов вашего слушателя, если он есть
     }
 
     private fun handleMove(which: Int, event: MotionEvent) {
@@ -129,6 +88,20 @@ class PianoView @JvmOverloads constructor(
             }
         }
     }
+
+    private fun handleKeyDown(which: Int, event: MotionEvent, button: MaterialButton) {
+        button.isPressed = true
+
+        coroutineScope.launch {
+            if (noteButtonsToSounds[button] == null) {
+                loadNoteSound(button)
+            }
+            noteButtonsToSounds[button]?.start()
+        }
+    }
+
+
+
 
     private fun handlePointerUp(pointerId: Int) {
         for ((button, _) in noteButtonsToSounds) {
@@ -148,11 +121,24 @@ class PianoView @JvmOverloads constructor(
 
     private fun handleKeyUp(button: MaterialButton) {
         button.isPressed = false
-        noteButtonsToSounds[button]?.apply {
-            pause()
-            seekTo(0)
+
+        val player = noteButtonsToSounds[button]
+        player?.let {
+            coroutineScope.launch {
+                var volume = 1.0f
+                while (volume > 0) {
+                    volume -= 0.05f
+                    if (volume < 0) {
+                        volume = 0f
+                    }
+                    it.setVolume(volume, volume)
+                    delay(10)
+                }
+                it.pause()
+                it.seekTo(0)
+                it.setVolume(1f, 1f)
+            }
         }
-        // здесь вы можете добавить вызов вашего слушателя, если он есть
     }
 
     private fun initAttributes(attrs: AttributeSet?, defStyleAttr: Int) {
@@ -161,5 +147,21 @@ class PianoView @JvmOverloads constructor(
             .use { typedArray ->
                 octave = typedArray.getInt(R.styleable.PianoView_octave, 1)
             }
+    }
+
+    private fun initNoteSounds() {
+        for (i in 0 until binding.pianoContainer.childCount) {
+            val button = binding.pianoContainer.getChildAt(i) as? MaterialButton
+            if (button != null) {
+                loadNoteSound(button)
+            }
+        }
+    }
+
+    private fun loadNoteSound(btn: MaterialButton) {
+        val name = "${btn.tag}_$octave"
+        val soundRes = resources.getIdentifier(name, "raw", context.packageName)
+        val soundPlayer = MediaPlayer.create(context, soundRes)
+        noteButtonsToSounds.putIfAbsent(btn, soundPlayer)
     }
 }
