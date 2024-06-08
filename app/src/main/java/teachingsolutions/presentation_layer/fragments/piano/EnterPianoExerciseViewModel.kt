@@ -14,9 +14,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import teachingsolutions.domain_layer.common.PixelLengthManager
 import teachingsolutions.domain_layer.domain_models.exercise.ExerciseTaskModel
 import teachingsolutions.domain_layer.domain_models.exercise.Intervals
 import teachingsolutions.domain_layer.exercise.ExerciseRepository
+import teachingsolutions.domain_layer.exercise.MediaPlayerManager
 import teachingsolutions.presentation_layer.fragments.piano.model.ExerciseTaskUI
 import teachingsolutions.presentation_layer.fragments.piano.model.GetExerciseTaskResponseUI
 import javax.inject.Inject
@@ -42,6 +44,7 @@ class EnterPianoExerciseViewModel @Inject constructor(
             "note_b" to null
         )
         private const val octave = "4"
+        private const val fadeOutDelay: Long = 10
     }
 
     private val _exerciseTask = MutableLiveData<GetExerciseTaskResponseUI?>()
@@ -74,10 +77,10 @@ class EnterPianoExerciseViewModel @Inject constructor(
             button.text = interval.russianTranslation
             button.id = count + 1
 
-            val params = LayoutParams(LayoutParams.WRAP_CONTENT, getPixelsFromDp(context, 40))
-            val paddingHorizontal = getPixelsFromDp(context, 5)
+            val params = LayoutParams(LayoutParams.WRAP_CONTENT, PixelLengthManager.getPixelsFromDp(context, 40))
+            val paddingHorizontal = PixelLengthManager.getPixelsFromDp(context, 5)
             button.setPadding(paddingHorizontal, button.paddingTop, paddingHorizontal, button.paddingBottom)
-            button.cornerRadius = getPixelsFromDp(context, 10)
+            button.cornerRadius = PixelLengthManager.getPixelsFromDp(context, 10)
 
             button.setOnClickListener {
                 viewModelScope.launch {
@@ -98,35 +101,12 @@ class EnterPianoExerciseViewModel @Inject constructor(
         return result
     }
 
-    private fun getPixelsFromDp(context: Context, dpValue: Int): Int {
-        val scale = context.resources.displayMetrics.density
-        val pixelValue = (dpValue * scale + 0.5f).toInt()
-        return pixelValue
-    }
-
     private suspend fun playInterval(interval: Intervals) {
         notes[0].second?.start()
         delay(1000)
-        fadeOutSound(notes[0].second)
+        MediaPlayerManager.fadeOutSound(notes[0].second, fadeOutDelay)
         notes[interval.width].second?.start()
         delay(1000)
-        fadeOutSound(notes[interval.width].second)
-    }
-
-    private suspend fun fadeOutSound(sound: MediaPlayer?) {
-        sound ?: return
-
-        var volume = 1.0f
-        while (volume > 0) {
-            volume -= 0.05f
-            if (volume < 0) {
-                volume = 0f
-            }
-            sound.setVolume(volume, volume)
-            delay(10)
-        }
-        sound.pause()
-        sound.seekTo(0)
-        sound.setVolume(1f, 1f)
+        MediaPlayerManager.fadeOutSound(notes[interval.width].second, fadeOutDelay)
     }
 }

@@ -1,4 +1,7 @@
 package teachingsolutions.presentation_layer.fragments.piano.model
 
-class ExerciseModelUI {
-}
+import android.widget.LinearLayout
+
+data class ExerciseModelUI (
+    val buttonsLine: List<LinearLayout>?
+)

@@ -30,7 +30,7 @@ class ExerciseRepository @Inject constructor(
                 val exerciseTaskModel = ExerciseTaskModel(
                     result.data.exerciseTask.exerciseTaskId,
                     result.data.exerciseTask.courseItemId,
-                    taskDescriptionManager.getDescriptionForExerciseType(exerciseType),
+                    taskDescriptionManager.getDescription(exerciseType),
                     exerciseType,
                     result.data.exerciseTask.intervalsInTaskIds.map { Intervals.from(it) }.sortedBy { it.ordinal }
                 )
