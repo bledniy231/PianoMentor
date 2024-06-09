@@ -38,7 +38,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_С_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
             app:layout_constraintStart_toEndOf="@id/note_C"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_D_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             app:layout_constraintStart_toEndOf="@id/note_D"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_E_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
             app:layout_constraintStart_toEndOf="@id/note_E"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_F_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
             app:layout_constraintStart_toEndOf="@id/note_F"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_G_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -168,7 +168,7 @@
             app:layout_constraintStart_toEndOf="@id/note_G"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_A_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -194,7 +194,7 @@
             app:layout_constraintStart_toEndOf="@id/note_A"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_B_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
             app:layout_constraintStart_toStartOf="@id/note_C"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_С_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -249,7 +249,7 @@
             app:layout_constraintStart_toStartOf="@id/note_D"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_D_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -276,7 +276,7 @@
             app:layout_constraintStart_toStartOf="@id/note_F"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_F_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -303,7 +303,7 @@
             app:layout_constraintStart_toStartOf="@id/note_G"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_G_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -330,7 +330,7 @@
             app:layout_constraintStart_toStartOf="@id/note_A"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <teachingsolutions.presentation_layer.fragments.piano.view.NoteIconView
+        <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_A_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

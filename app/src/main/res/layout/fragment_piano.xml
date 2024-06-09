@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="teachingsolutions.presentation_layer.fragments.piano.PianoFragment">
 
-    <teachingsolutions.presentation_layer.fragments.piano.view.PianoView
+    <teachingsolutions.presentation_layer.custom_views.piano_view.PianoView
         app:octave="3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

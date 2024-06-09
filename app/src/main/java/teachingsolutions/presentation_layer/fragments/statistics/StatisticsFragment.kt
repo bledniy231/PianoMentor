@@ -95,9 +95,6 @@ class StatisticsFragment : Fragment(),
         binding.pianoIv.setOnClickListener {
             findNavController().navigate(R.id.action_global_pianoFragment)
         }
-        binding.profileIv.setOnClickListener {
-            findNavController().navigate(R.id.action_global_profileFragment)
-        }
     }
 
     override fun onResume() {
