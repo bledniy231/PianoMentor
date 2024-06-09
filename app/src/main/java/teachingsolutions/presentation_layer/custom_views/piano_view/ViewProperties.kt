@@ -1,4 +1,4 @@
-package teachingsolutions.presentation_layer.fragments.piano.view
+package teachingsolutions.presentation_layer.custom_views.piano_view
 
 import android.content.res.Resources
 import android.util.TypedValue

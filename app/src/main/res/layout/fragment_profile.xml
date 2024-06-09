@@ -44,7 +44,7 @@
         </FrameLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <teachingsolutions.presentation_layer.views.avatar_view.AvatarView
+    <teachingsolutions.presentation_layer.custom_views.avatar_view.AvatarView
         android:id="@+id/user_avatar"
         android:layout_width="102dp"
         android:layout_height="102dp"
@@ -53,7 +53,8 @@
         android:translationY="66dp"
         app:layout_collapseMode="pin"
         app:avatarViewInitials="MD"
-        android:src="@drawable/icon_user"/>
+        android:src="@drawable/icon_user"
+        android:tint="@color/dark_gray"/>
 
 
     <androidx.core.widget.NestedScrollView

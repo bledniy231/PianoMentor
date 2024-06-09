@@ -1,4 +1,4 @@
-package teachingsolutions.presentation_layer.views.avatar_view
+package teachingsolutions.presentation_layer.custom_views.avatar_view
 
 import android.content.Context
 import android.graphics.Canvas

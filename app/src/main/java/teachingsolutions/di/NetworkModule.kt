@@ -23,21 +23,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import teachingsolutions.data_access_layer.api.AuthInterceptor
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
 import java.lang.reflect.Type
-import java.security.KeyStore
 import java.security.SecureRandom
-import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Arrays
 import javax.inject.Singleton
-import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
-import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
 @Module
