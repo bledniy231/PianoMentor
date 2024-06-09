@@ -99,6 +99,7 @@ class EnterPianoExerciseFragment : Fragment() {
             findNavController().addOnDestinationChangedListener(listener)
             val bundle = Bundle()
             bundle.putString("CourseItemTitle", args.getString("CourseItemTitle"))
+            bundle.putInt("CourseItemId", args.getInt("CourseItemId"))
             findNavController().navigate(R.id.action_open_piano_exercise, bundle)
         }
     }

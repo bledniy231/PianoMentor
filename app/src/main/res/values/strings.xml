@@ -81,4 +81,5 @@
     <string name="start_exercise">Начать упражнение</string>
     <string name="correct">Верно</string>
     <string name="incorrect">Неверно</string>
+    <string name="go_next_interval">Далее</string>
 </resources>

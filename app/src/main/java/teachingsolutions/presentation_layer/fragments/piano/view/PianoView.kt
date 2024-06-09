@@ -28,7 +28,7 @@ class PianoView @JvmOverloads constructor(
     @get:JvmName("getOctave")
     private var octave: Int by viewProperty(1)
 
-    val noteButtonsToSounds: MutableMap<MaterialButton, MediaPlayer?> = ConcurrentHashMap()
+    private val noteButtonsToSounds: MutableMap<MaterialButton, MediaPlayer?> = ConcurrentHashMap()
 
     init {
         _binding = PianoViewBinding.inflate(LayoutInflater.from(context), this, true)
