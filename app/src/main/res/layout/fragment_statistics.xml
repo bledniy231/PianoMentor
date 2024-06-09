@@ -36,6 +36,14 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/profile_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    app:tint="@color/white"
+                    android:src="@drawable/icon_eye_opened" />
+
+                <ImageView
                     android:id="@+id/piano_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

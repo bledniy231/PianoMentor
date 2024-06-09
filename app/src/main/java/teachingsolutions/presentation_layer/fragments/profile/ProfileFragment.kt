@@ -12,7 +12,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentProfileBinding
+import com.teamforce.thanksapp.presentation.customViews.AvatarView.internal.dp
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -21,6 +23,8 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ProfileViewModel by viewModels()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +40,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        handleTopAppBar()
         binding.profileToolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -67,6 +72,41 @@ class ProfileFragment : Fragment() {
                     .show()
             }
         }
+    }
+
+    private fun handleTopAppBar() {
+        val initialSize = 102.dp
+        val finalSize = 64.dp
+
+        val initialTranslationY = 66.dp
+        val finalTranslationY = 25.dp
+
+        var currentSize = initialSize
+        var currentTranslationY = initialTranslationY
+
+        binding.appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val percentage = abs(verticalOffset.toFloat()) / appBarLayout.totalScrollRange
+            val newSize = (initialSize - (initialSize - finalSize) * percentage).toInt()
+            val newTranslationY =
+                (initialTranslationY - (initialTranslationY - finalTranslationY) * percentage).toInt()
+
+            if (newSize != currentSize || newTranslationY != currentTranslationY) {
+                currentSize = newSize
+                currentTranslationY = newTranslationY
+
+                updateAvatarViewParams(newSize, newTranslationY)
+            }
+        }
+    }
+
+    private fun updateAvatarViewParams(newSize: Int, newTranslationY: Int) {
+        val layoutParams = binding.userAvatar.layoutParams
+        layoutParams.width = newSize
+        layoutParams.height = newSize
+        binding.userAvatar.layoutParams = layoutParams
+        binding.userAvatar.translationY = newTranslationY.toFloat()
+
+        binding.userAvatar.requestLayout()
     }
 
     override fun onDestroyView() {

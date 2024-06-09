@@ -1,4 +1,6 @@
 /build
 ../local.properties
+.gradle/
+gradle/
 ../.gradle
 /.gradle
