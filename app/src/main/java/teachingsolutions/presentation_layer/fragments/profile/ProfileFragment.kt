@@ -74,7 +74,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun handleTopAppBar() {
-        val initialSize = 102.dp
+        val initialSize = 175.dp
         val finalSize = 64.dp
 
         val initialTranslationY = 66.dp

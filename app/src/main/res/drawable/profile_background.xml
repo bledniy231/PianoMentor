@@ -8,7 +8,6 @@
                 android:shape="rectangle"
                 android:centerY="150%"/>
             <corners android:topRightRadius="32dp" android:topLeftRadius="32dp"/>
-            <padding android:left="4dp" android:top="4dp" android:right="4dp" android:bottom="4dp" />
         </shape>
     </item>
 </layer-list>
