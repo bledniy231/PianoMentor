@@ -23,7 +23,7 @@ class UserRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val prefKeys: SharedPreferencesKeys,
     private val dataSource: UserDataSource,
-    private val customGsonSupplier: CustomGsonSupplier,
+    customGsonSupplier: CustomGsonSupplier,
     private val coursesRepository: CoursesRepository,
     private val statisticsRepository: StatisticsRepository
 ) {
@@ -50,7 +50,7 @@ class UserRepository @Inject constructor(
         return user?.jwtTokensModel?.accessToken ?: ""
     }
 
-    suspend fun logout(isAccessTokenExpired: Boolean) {
+    suspend fun logout(isAccessTokenExpired: Boolean): Boolean {
         if (!isAccessTokenExpired) {
             dataSource.logout()
         }
@@ -72,6 +72,8 @@ class UserRepository @Inject constructor(
             }
             apply()
         }
+
+        return true
     }
 
     suspend fun login(username: String, password: String): ActionResult<LoginUserResponseApi> {
@@ -113,7 +115,7 @@ class UserRepository @Inject constructor(
         }
     }
 
-    public suspend fun refreshUserIfNeeds(): Boolean {
+    suspend fun refreshUserIfNeeds(): Boolean {
         //sharedPreferences.edit().clear().apply()
         if (!isFirstCheckUserAvailability) {
             return true

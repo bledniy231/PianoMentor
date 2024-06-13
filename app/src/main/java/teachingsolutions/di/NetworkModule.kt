@@ -37,41 +37,6 @@ import javax.net.ssl.X509TrustManager
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    /*@Provides
-    @Singleton
-    fun provideSslContext(@ApplicationContext context: Context): SSLContext {
-        val clientCertInputStream = context.resources.openRawResource(R.raw.DiplomaClientCertificationKey);
-
-        return try {
-            // Создание объекта X509Certificate для клиентского сертификата
-            val certificateFactory: CertificateFactory = CertificateFactory.getInstance("X.509")
-            val clientCertificate: X509Certificate = certificateFactory.generateCertificate(clientCertInputStream) as X509Certificate
-
-            // Создание объекта KeyStore и добавление клиентского сертификата
-            val keyStore: KeyStore = KeyStore.getInstance(KeyStore.getDefaultType())
-            keyStore.load(null, null)
-            keyStore.setCertificateEntry("alias", clientCertificate)
-
-            // Создание объекта TrustManagerFactory и инициализация с keyStore
-            val trustManagerFactory: TrustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-            trustManagerFactory.init(keyStore)
-
-            // Создание объекта SSLContext и инициализация с trustManagerFactory
-            val sslContext: SSLContext = SSLContext.getInstance("TLS")
-            sslContext.init(null, trustManagerFactory.trustManagers, null)
-
-            sslContext
-        } catch (e: Exception) {
-            // Обработка ошибок
-            e.printStackTrace()
-            // Возвращаем значение по умолчанию в случае ошибки
-            SSLContext.getDefault()
-        } finally {
-            // Важно закрыть InputStream после использования
-            clientCertInputStream.close()
-        }
-    }*/
-
     @Provides
     @Singleton
     fun provideOkHttpClient(authInterceptor: AuthInterceptor, @ApplicationContext context: Context): OkHttpClient? {
@@ -91,49 +56,6 @@ object NetworkModule {
             .addInterceptor(authInterceptor)
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .build()
-//        val clientCertInputStream = context.resources.openRawResource(R.raw.diploma_client_certification_key);
-//        var sslContext: SSLContext? = null
-//        var trustManager: TrustManager? = null
-//
-//        try {
-//            // Создание объекта X509Certificate для клиентского сертификата
-//            val certificateFactory: CertificateFactory = CertificateFactory.getInstance("X.509")
-//            //val clientCertificate: X509Certificate = certificateFactory.generateCertificate(clientCertInputStream) as X509Certificate
-//
-//            // Создание объекта KeyStore и добавление клиентского сертификата
-//            val keyStore: KeyStore = KeyStore.getInstance("PKCS12"/*KeyStore.getDefaultType()*/)
-//            keyStore.load(clientCertInputStream, "Borismybestfriend111".toCharArray())
-//            //keyStore.setCertificateEntry("alias", clientCertificate)
-//            val keyManagerFactory = KeyManagerFactory.getInstance("X509")
-//            keyManagerFactory.init(keyStore, "Borismybestfriend111".toCharArray())
-//
-//            // Создание объекта TrustManagerFactory и инициализация с keyStore
-//            val trustManagerFactory: TrustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-//            trustManagerFactory.init(keyStore)
-//            if (trustManagerFactory.trustManagers.size != 1 || (trustManagerFactory.trustManagers[0] !is X509TrustManager)) {
-//                throw IllegalStateException("Unexpected default trust managers:" + trustManagerFactory.trustManagers.contentToString());
-//            }
-//            trustManager = trustManagerFactory.trustManagers[0]
-//
-//            // Создание объекта SSLContext и инициализация с trustManagerFactory
-//            sslContext = SSLContext.getInstance("TLS")
-//            sslContext.init(keyManagerFactory.keyManagers, trustManagerFactory.trustManagers, SecureRandom())
-//        } catch (e: Exception) {
-//            // Обработка ошибок
-//            e.printStackTrace()
-//            // Возвращаем значение по умолчанию в случае ошибки
-//            sslContext = SSLContext.getDefault()
-//        } finally {
-//            // Важно закрыть InputStream после использования
-//            clientCertInputStream.close()
-//        }
-//        return sslContext?.socketFactory?.let {
-//            OkHttpClient.Builder()
-//                .addInterceptor(authInterceptor)
-//                .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-//                .sslSocketFactory(it, trustManager as X509TrustManager)
-//                .build()
-//        }
     }
 
     @Provides

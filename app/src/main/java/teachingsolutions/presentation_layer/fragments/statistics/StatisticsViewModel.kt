@@ -46,11 +46,12 @@ class StatisticsViewModel @Inject constructor(
     }
 
     fun getUserStatistics() {
-        clearLiveData()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val result = statRepository.getUserStatistics(userRepository.userId ?: 0)
-                _userStatistics.postValue(result)
+                if (result != _userStatistics.value) {
+                    _userStatistics.postValue(result)
+                }
             }
         }
     }
@@ -66,11 +67,6 @@ class StatisticsViewModel @Inject constructor(
                 _isRefreshingChecked.postValue(flag)
             }
         }
-    }
-
-    fun clearStatisticsAfterLogout() {
-        _userStatistics.postValue(StatisticsResultUI(null, "Unauthorized"))
-        _isRefreshingChecked.postValue(false)
     }
 
     fun clearLiveData() {

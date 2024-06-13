@@ -23,12 +23,6 @@ class ProfileFragment : Fragment() {
 
     private val viewModel: ProfileViewModel by viewModels()
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,14 +33,18 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         handleTopAppBar()
+
         binding.profileToolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
         binding.aboutAppCard.setOnClickListener {
             findNavController().navigate(R.id.action_open_about_app)
         }
+
         binding.usernameProfile.text = viewModel.userRepository.userName
+
         binding.logoutCard.setOnClickListener {
             if (!viewModel.userRepository.isLoggedIn) {
                 Toast.makeText(requireContext(),
@@ -57,15 +55,12 @@ class ProfileFragment : Fragment() {
                     .setMessage(getString(R.string.are_you_sure_logout_dialog))
                     .setPositiveButton(getString(R.string.yes_word)) { _, _ ->
                         viewModel.logout()
-                        Toast.makeText(requireContext(),
-                            getString(R.string.you_have_been_logged_out), Toast.LENGTH_SHORT).show()
-                        //findNavController().popBackStack(R.id.statisticsFragment, true)
-//                        val options = NavOptions.Builder()
-//                            .setLaunchSingleTop(false)
-//                            .setPopUpTo(R.id.statisticsFragment, true)
-//                            .build()
-//                        findNavController().navigate(R.id.action_back_arrow_profile_to_statistics, null, options)
-                        findNavController().popBackStack()
+                        viewModel.isLoggedOut.observe(viewLifecycleOwner) { isLoggedOut ->
+                            isLoggedOut ?: return@observe
+
+                            updateUiWithLogoutResult(isLoggedOut)
+                            findNavController().popBackStack()
+                        }
                     }
                     .setNegativeButton(getString(R.string.no_word), null)
                     .show()
@@ -106,6 +101,12 @@ class ProfileFragment : Fragment() {
         binding.userAvatar.translationY = newTranslationY.toFloat()
 
         binding.userAvatar.requestLayout()
+    }
+
+    private fun updateUiWithLogoutResult(isLoggedOut: Boolean) {
+        if (isLoggedOut) {
+            Toast.makeText(requireContext(), getString(R.string.you_have_been_logged_out), Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

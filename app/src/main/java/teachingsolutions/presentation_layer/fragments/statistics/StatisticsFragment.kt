@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentStatisticsBinding
@@ -18,7 +17,6 @@ import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
 import teachingsolutions.domain_layer.domain_models.statistics.UserStatisticsModel
 import teachingsolutions.presentation_layer.extensions.safelyNavigate
 import teachingsolutions.presentation_layer.fragments.statistics.model.MainMenuItemModelUI
-import teachingsolutions.presentation_layer.fragments.statistics.model.StatisticsResultUI
 import teachingsolutions.presentation_layer.interfaces.ISelectRecyclerViewItemListener
 
 
@@ -34,28 +32,6 @@ class StatisticsFragment : Fragment(),
 
     private val viewModel: StatisticsViewModel by viewModels()
 
-    private val userStatisticsObserver = Observer<StatisticsResultUI?> { statResultUI ->
-        statResultUI ?: return@Observer
-
-        statResultUI.success?.let {
-            fillStatistics(it)
-        }
-
-        statResultUI.error?.let {
-            val error = if (it == "Unauthorized") {
-                getString(R.string.login_for_statistics)
-            } else {
-                it
-            }
-            updateUiWithStatisticsFailed(error)
-            fillStatistics(viewModel.getDefaultStatistics(requireContext()))
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,21 +40,13 @@ class StatisticsFragment : Fragment(),
         _binding = FragmentStatisticsBinding.inflate(inflater, container, false)
         val behavior = BottomSheetBehavior.from(binding.bottomSheet)
         behavior.isShouldRemoveExpandedCorners = false
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         viewModel.refreshUserIfNeeds()
+        initialMainMenuRecyclerView()
 
-        val refreshingCheckedObserver = Observer<Boolean?> { isRefreshingChecked ->
-            isRefreshingChecked ?: return@Observer
+        viewModel.isRefreshingChecked.observe(viewLifecycleOwner) refreshObserver@ { isRefreshingChecked ->
+            isRefreshingChecked ?: return@refreshObserver
 
-            initialMainMenuRecyclerView()
-            disposeStatistics()
-            viewModel.getUserStatistics()
-            viewModel.userStatstics.observe(viewLifecycleOwner, userStatisticsObserver)
             binding.toolBarUserIconGoLogin.setOnClickListener {
                 if (viewModel.isUserLoggedIn()) {
                     findNavController().safelyNavigate(R.id.action_choose_profile)
@@ -87,19 +55,38 @@ class StatisticsFragment : Fragment(),
                 }
             }
 
-            viewModel.clearLiveData()
+            viewModel.getUserStatistics()
         }
 
-        viewModel.isRefreshingChecked.observe(viewLifecycleOwner, refreshingCheckedObserver)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.pianoIv.setOnClickListener {
             findNavController().navigate(R.id.action_global_pianoFragment)
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-        disposeStatistics()
+        viewModel.userStatstics.observe(viewLifecycleOwner) userStatObserver@ { statResultUI ->
+            statResultUI ?: return@userStatObserver
+
+            statResultUI.success?.let {
+                fillStatistics(it)
+            }
+
+            statResultUI.error?.let {
+                val error = if (it == "Unauthorized") {
+                    getString(R.string.login_for_statistics)
+                } else {
+                    it
+                }
+                updateUiWithStatisticsFailed(error)
+                fillStatistics(viewModel.getDefaultStatistics(requireContext()))
+            }
+
+            viewModel.clearLiveData()
+        }
     }
 
     private fun fillStatistics(statResult: UserStatisticsModel) {
@@ -145,6 +132,7 @@ class StatisticsFragment : Fragment(),
         val lectureTextAnim = viewModel.getValueAnimator(binding.lecturesCounterText, statResult.lecturesProgressModel.progressValueAbsolute)
         val courseProgressAnim = viewModel.getObjectAnimator(binding.coursesLinearProgressBar, statResult.coursesProgressModel.progressValueInPercent)
         val courseTextAnim = viewModel.getValueAnimator(binding.coursesPercentText, statResult.coursesProgressModel.progressValueInPercent, R.string.percent)
+
 
         exerciseProgressAnim.start()
         exerciseTextAnim.start()
