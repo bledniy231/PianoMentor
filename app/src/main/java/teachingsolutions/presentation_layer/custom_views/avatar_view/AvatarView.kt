@@ -27,7 +27,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.example.pianomentor.R
-import com.teamforce.thanksapp.presentation.customViews.AvatarView.AvatarShape
 import com.teamforce.thanksapp.presentation.customViews.AvatarView.IndicatorPosition
 import com.teamforce.thanksapp.presentation.customViews.AvatarView.internal.arrayPositions
 import com.teamforce.thanksapp.presentation.customViews.AvatarView.internal.dp
@@ -41,9 +40,6 @@ import com.teamforce.thanksapp.presentation.customViews.AvatarView.internal.use
 import com.teamforce.thanksapp.presentation.customViews.AvatarView.internal.viewProperty
 import kotlin.math.min
 
-/**
- * AvatarView supports segmented style images, borders, indicators, and initials.
- */
 
 class AvatarView @JvmOverloads constructor(
     context: Context,
@@ -66,25 +62,19 @@ class AvatarView @JvmOverloads constructor(
         style = Paint.Style.FILL
     }
 
-    /** The border width of AvatarView. */
     @get:Px
     public var avatarBorderWidth: Int by viewProperty(3.dp)
 
-    /** The border color of AvatarView. */
     @get:ColorInt
     public var avatarBorderColor: Int by viewProperty(Color.TRANSPARENT)
 
-    /** The border color array of AvatarView. */
     public var avatarBorderColorArray: IntArray by viewProperty(intArrayOf())
 
-    /** The border radius of AvatarView. */
     @get:Px
     public var avatarBorderRadius: Float by viewProperty(6.dp.toFloat())
 
-    /** The shape of the AvatarView. */
     public var avatarShape: AvatarShape by viewProperty(AvatarShape.CIRCLE)
 
-    /** The initials to be drawn instead of an image. */
     private var _avatarInitials: String? by viewProperty(null)
     public var avatarInitials: String? = null //by viewProperty(null)
         set(value) {
@@ -98,42 +88,32 @@ class AvatarView @JvmOverloads constructor(
             }
         }
 
-    /** The text size of the initials. */
     @get:Px
     public var avatarInitialsTextSize: Int by viewProperty(-1)
 
-    /** The text size ratio of the initials. */
     @get:FloatRange(from = 0.0, to = 1.0)
     public var avatarInitialsTextSizeRatio: Float by viewProperty(0.33f)
 
-    /** The text color of the initials. */
     @get:ColorInt
     public var avatarInitialsTextColor: Int by viewProperty(Color.WHITE)
 
-    /** The text styles color of the initials. */
     public var avatarInitialsStyle: Int by viewProperty(Typeface.NORMAL)
 
-    /** The background color of the initials. */
     @get:ColorInt
     public var avatarInitialsBackgroundColor: Int by viewProperty(internalBlue)
 
     public var useGradient: Boolean by viewProperty(false)
 
-    /** The background gradient color start of the initials. */
     @get:ColorInt
     var avatarInitialsBackgroundGradientColorStart: Int by viewProperty(internalBlue)
 
-    /** The background gradient color end of the initials. */
     @get:ColorInt
     var avatarInitialsBackgroundGradientColorEnd: Int by viewProperty(internalBlue)
 
-    /** Sets the visibility of the indicator. */
     public var indicatorEnabled: Boolean by viewProperty(false)
 
-    /** The position of the indicator. */
     public var indicatorPosition: IndicatorPosition by viewProperty(IndicatorPosition.TOP_RIGHT)
 
-    /** The color of the indicator. */
     @get:ColorInt
     public var indicatorColor: Int by viewProperty(internalGreen)
 
@@ -147,35 +127,23 @@ class AvatarView @JvmOverloads constructor(
             }
         }
 
-    /** The border color of the indicator. */
     @get:ColorInt
     public var indicatorBorderColor: Int by viewProperty(Color.WHITE)
 
-    /** The border color array of the indicator. */
     public var indicatorBorderColorArray: IntArray by viewProperty(intArrayOf())
 
-    /** The size criteria of the indicator. */
     public var indicatorSizeCriteria: Float by viewProperty(8f)
 
-    /** The border size criteria of the indicator. This must be bigger than the [indicatorSizeCriteria]. */
     public var indicatorBorderSizeCriteria: Float by viewProperty(10f)
 
-    /** A custom indicator view. */
     public var indicatorDrawable: Drawable? by viewProperty(null)
 
-    /** Supports RTL layout is enabled or not. */
     public var supportRtlEnabled: Boolean by viewProperty(true)
 
-    /** A placeholder that should be shown when loading an image. */
     public var placeholder: Drawable? by viewProperty(null)
 
-    /** An error placeholder that should be shown when request failed. */
     public var errorPlaceholder: Drawable? by viewProperty(null)
 
-    /**
-     * The maximum section size of the avatar when loading multiple images.
-     * This size must between 1 and 4.
-     */
     public var maxSectionSize: Int = 4
         set(value) {
             field = value.coerceIn(1..4)
@@ -315,7 +283,6 @@ class AvatarView @JvmOverloads constructor(
         }
     }
 
-    /** Applies custom attributes to [AvatarView]. */
     private fun applyPaintStyles() {
         borderPaint.color = avatarBorderColor
         borderPaint.strokeWidth = avatarBorderWidth.toFloat()
@@ -344,7 +311,6 @@ class AvatarView @JvmOverloads constructor(
             ?: (avatarInitialsTextSizeRatio * width)
     }
 
-    /** Draws a border to [AvatarView]. */
     private fun drawBorder(canvas: Canvas) {
         if (avatarBorderWidth == 0) return
 
@@ -368,7 +334,6 @@ class AvatarView @JvmOverloads constructor(
         }
     }
 
-    /** Draws initials to [AvatarView]. */
     private fun drawInitials(canvas: Canvas) {
         val initials = this.avatarInitials ?: return
 
@@ -395,7 +360,6 @@ class AvatarView @JvmOverloads constructor(
         )
     }
 
-    /** Draws color of the initials to [AvatarView]. */
     private fun drawColor(canvas: Canvas) {
         if (avatarShape == AvatarShape.ROUNDED_RECT) {
             canvas.drawRoundRect(
@@ -417,7 +381,6 @@ class AvatarView @JvmOverloads constructor(
         }
     }
 
-    /** Draws an indicator to [AvatarView]. */
     private fun drawIndicator(canvas: Canvas) {
         if (indicatorEnabled) {
             val isRtlEnabled = supportRtlEnabled && isRtlLayout
@@ -498,7 +461,6 @@ class AvatarView @JvmOverloads constructor(
     }
 
 
-    /** Apply gradient shader to a [Paint]. */
     private fun Paint.applyGradientShader(colorArray: IntArray, cx: Float, cy: Float): Paint =
         apply {
             if (colorArray.isNotEmpty()) {

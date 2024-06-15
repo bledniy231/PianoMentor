@@ -112,7 +112,7 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public fun setModelsList(list: List<QuestionViewPagerUI>, startQuiz: Boolean, quizStatus: CourseItemProgressType) {
+    fun setModelsList(list: List<QuestionViewPagerUI>, startQuiz: Boolean, quizStatus: CourseItemProgressType) {
         if (startQuiz && quizStatus == CourseItemProgressType.FAILED) {
             for (question in list) {
                 for (answer in question.answers) {

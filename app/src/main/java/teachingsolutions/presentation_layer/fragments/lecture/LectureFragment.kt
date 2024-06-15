@@ -73,6 +73,16 @@ class LectureFragment : Fragment() {
             return
         }
 
+        val courseItemId = args.getInt("CourseItemId")
+        val courseItemTitle = args.getString("CourseItemTitle")
+        if (courseItemId > 0 && !courseItemTitle.isNullOrEmpty()) {
+            //viewModel.deleteLecturePdf(courseItemId, courseName)
+            viewModel.getLecturePdf(courseItemId, courseItemTitle)
+        } else {
+            Toast.makeText(requireContext(), "FAIL: Incorrect arguments", Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
+        }
+
         isEndedReading = args.getString("CourseItemProgressType") == CourseItemProgressType.COMPLETED.value
         binding.lectureToolbar.title = args.getString("CourseItemTitle")
         binding.lecturesLoading.visibility = View.VISIBLE
@@ -114,16 +124,6 @@ class LectureFragment : Fragment() {
                 Toast.makeText(requireContext(), "FAIL: $error", Toast.LENGTH_LONG).show()
                 findNavController().popBackStack()
             }
-        }
-
-        val courseItemId = args.getInt("CourseItemId")
-        val courseItemTitle = args.getString("CourseItemTitle")
-        if (courseItemId > 0 && !courseItemTitle.isNullOrEmpty()) {
-            //viewModel.deleteLecturePdf(courseItemId, courseName)
-            viewModel.getLecturePdf(courseItemId, courseItemTitle)
-        } else {
-            Toast.makeText(requireContext(), "FAIL: Incorrect arguments", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
         }
 
         binding.lectureToolbar.setNavigationOnClickListener {
@@ -173,7 +173,7 @@ class LectureFragment : Fragment() {
             popupMenu?.show()
         }
 
-        if (requireArguments().getString("CourseItemProgressType") == CourseItemProgressType.NOT_STARTED.value) {
+        if (args.getString("CourseItemProgressType") == CourseItemProgressType.NOT_STARTED.value) {
             viewModel.setLectureProgress(courseItemId, CourseItemProgressType.IN_PROGRESS)
         }
     }
@@ -269,13 +269,12 @@ class LectureFragment : Fragment() {
     private fun onExit(courseItemId: Int) {
         val shouldWaitResult = checkIfLectureCompleted(courseItemId)
         if (shouldWaitResult) {
-            viewModel.setLectureProgressResult.observe(viewLifecycleOwner,
-                Observer { defResponse ->
+            viewModel.setLectureProgressResult.observe(viewLifecycleOwner) { defResponse ->
                     defResponse.message?.let {
                         Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
                     }
                     findNavController().popBackStack()
-                })
+                }
         }
         else {
             findNavController().popBackStack()

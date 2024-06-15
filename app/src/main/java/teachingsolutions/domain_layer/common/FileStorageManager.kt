@@ -42,4 +42,14 @@ class FileStorageManager @Inject constructor(@ApplicationContext private val con
         val file = File(context.filesDir, fileName)
         return file.delete()
     }
+
+    fun createTempFile(body: ResponseBody, id: Long): File {
+        val file = File.createTempFile("temp_file_PM_$id", null)
+        body.byteStream().use { input ->
+            file.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+        return file
+    }
 }

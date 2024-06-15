@@ -7,12 +7,11 @@ import teachingsolutions.domain_layer.domain_models.courses.CourseItemModel
 import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
 import teachingsolutions.domain_layer.domain_models.courses.CourseItemType
 import teachingsolutions.domain_layer.domain_models.courses.CourseModel
-import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsResultUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseModelUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResultUI
-import teachingsolutions.presentation_layer.fragments.lecture.model.LecturePdfResultUI
+import teachingsolutions.presentation_layer.fragments.common.FileResultUI
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -115,22 +114,22 @@ class CoursesRepository @Inject constructor(
         }
     }
 
-    suspend fun getLecturePdfFile(courseItemId: Int, courseItemTitle: String): LecturePdfResultUI {
+    suspend fun getLecturePdfFile(courseItemId: Int, courseItemTitle: String): FileResultUI {
         val localFile = fileStorageManager.getLecturePdf(courseItemId, courseItemTitle)
         if (localFile != null) {
-            return LecturePdfResultUI(localFile, null)
+            return FileResultUI(localFile, null)
         }
 
         return when (val result = coursesDataSource.getCourseItemFile(courseItemId)) {
             is ActionResult.Success -> {
                 val file = fileStorageManager.saveLecturePdf(courseItemId, courseItemTitle, result.data)
-                LecturePdfResultUI(file, null)
+                FileResultUI(file, null)
             }
             is ActionResult.NormalError -> {
-                LecturePdfResultUI(null, result.data.string())
+                FileResultUI(null, result.data.string())
             }
             is ActionResult.ExceptionError -> {
-                LecturePdfResultUI(null, result.exception.message)
+                FileResultUI(null, result.exception.message)
             }
         }
     }

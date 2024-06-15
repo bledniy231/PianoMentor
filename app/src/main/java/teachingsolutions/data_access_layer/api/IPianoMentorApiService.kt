@@ -1,5 +1,7 @@
 package teachingsolutions.data_access_layer.api
 
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Response
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequestApi
@@ -7,7 +9,9 @@ import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponseApi
 import retrofit2.http.POST
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Query
 import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequestApi
@@ -61,4 +65,11 @@ interface IPianoMentorApiService {
 
     @GET("api/Courses/GetExerciseTask")
     suspend fun getExerciseTask(@Query("courseItemId") courseItemId: Int): GetExerciseTaskResponseApi
+
+    @GET("api/Files/DownloadUserProfilePhoto")
+    suspend fun getProfilePhoto(@Query("userId") userId: Long): Response<ResponseBody>
+
+    @Multipart
+    @PUT("api/Files/UpdateUserProfilePhoto")
+    suspend fun updateProfilePhoto(@Query("userId") userId: Long, @Part image: MultipartBody.Part): DefaultResponseApi
 }

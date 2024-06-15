@@ -1,6 +1,7 @@
 package teachingsolutions.domain_layer.user
 
 import android.content.SharedPreferences
+import okhttp3.MultipartBody
 import teachingsolutions.data_access_layer.DAL_models.user.JwtTokens
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequestApi
 import teachingsolutions.data_access_layer.common.ActionResult
@@ -11,8 +12,11 @@ import teachingsolutions.data_access_layer.DAL_models.user.RegisterUserRequestAp
 import teachingsolutions.data_access_layer.user.UserDataSource
 import teachingsolutions.data_access_layer.shared_preferences_keys.SharedPreferencesKeys
 import teachingsolutions.domain_layer.common.CustomGsonSupplier
+import teachingsolutions.domain_layer.common.FileStorageManager
 import teachingsolutions.domain_layer.courses.CoursesRepository
 import teachingsolutions.domain_layer.statistics.StatisticsRepository
+import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
+import teachingsolutions.presentation_layer.fragments.common.FileResultUI
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject
@@ -25,7 +29,8 @@ class UserRepository @Inject constructor(
     private val dataSource: UserDataSource,
     customGsonSupplier: CustomGsonSupplier,
     private val coursesRepository: CoursesRepository,
-    private val statisticsRepository: StatisticsRepository
+    private val statisticsRepository: StatisticsRepository,
+    private val fileStorageManager: FileStorageManager
 ) {
 
     private var user: LoginUserResponseApi? = null
@@ -157,6 +162,50 @@ class UserRepository @Inject constructor(
         else
         {
             return false
+        }
+    }
+
+    suspend fun getProfilePhoto(): FileResultUI {
+        if (userId == null) {
+            return FileResultUI(null, null)
+        }
+
+        val result = dataSource.getProfilePhoto(userId!!)
+        return when {
+            result is ActionResult.Success && result.data.contentLength() > 0 -> {
+                val file = fileStorageManager.createTempFile(result.data, userId!!)
+                FileResultUI(file, null)
+            }
+            result is ActionResult.Success && result.data.contentLength() == 0L -> {
+                FileResultUI(null, null)
+            }
+            result is ActionResult.NormalError -> {
+                FileResultUI(null, result.data.string())
+            }
+            result is ActionResult.ExceptionError -> {
+                FileResultUI(null, result.exception.message)
+            }
+            else -> {
+                FileResultUI(null, "Unknown error")
+            }
+        }
+    }
+
+    suspend fun setProfilePhoto(body: MultipartBody.Part): DefaultResponseUI {
+        if (userId == null) {
+            return DefaultResponseUI("Пользователь не найден")
+        }
+
+        return when (val result = dataSource.setProfilePhoto(userId!!, body)) {
+            is ActionResult.Success -> {
+                DefaultResponseUI("Фото было загружено")
+            }
+            is ActionResult.NormalError -> {
+                DefaultResponseUI(result.data.errors?.joinToString { it } ?: "Неизвестная ошибка")
+            }
+            is ActionResult.ExceptionError -> {
+                DefaultResponseUI(result.exception.message ?: "Неизвестная ошибка")
+            }
         }
     }
 

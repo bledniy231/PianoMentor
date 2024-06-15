@@ -16,7 +16,7 @@ import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
 import teachingsolutions.presentation_layer.fragments.lecture.model.LectureAnimation
-import teachingsolutions.presentation_layer.fragments.lecture.model.LecturePdfResultUI
+import teachingsolutions.presentation_layer.fragments.common.FileResultUI
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,8 +28,8 @@ class LectureViewModel @Inject constructor(
     private val prefKeys: SharedPreferencesKeys
 ) : ViewModel() {
 
-    private val _lecturePdfResult = MutableLiveData<LecturePdfResultUI>()
-    val lecturePdfResult: LiveData<LecturePdfResultUI> = _lecturePdfResult
+    private val _lecturePdfResult = MutableLiveData<FileResultUI>()
+    val lecturePdfResult: LiveData<FileResultUI> = _lecturePdfResult
 
     private val _setLectureProgressResult = MutableLiveData<DefaultResponseUI>()
     val setLectureProgressResult: LiveData<DefaultResponseUI> = _setLectureProgressResult

@@ -1,6 +1,10 @@
 package teachingsolutions.data_access_layer.user
 
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
+import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequestApi
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponseApi
@@ -70,16 +74,31 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
         }
     }
 
-    private fun loginUserOnResponse(response: Response<LoginUserResponseApi>): ActionResult<LoginUserResponseApi> {
-        return if (response.isSuccessful) {
-            val user = response.body()
-            if (user != null && user.failedMessage.isNullOrEmpty()) {
-                ActionResult.Success(user)
+    suspend fun getProfilePhoto(userId: Long): ActionResult<ResponseBody> {
+        return try {
+            val response = apiService.getProfilePhoto(userId)
+            if (response.isSuccessful && response.body() != null) {
+                ActionResult.Success(response.body()!!)
+            } else if (response.isSuccessful && response.body() == null) {
+                ActionResult.Success(ByteArray(0).toResponseBody(null))
             } else {
-                ActionResult.ExceptionError(IOException("Error login in, response failed message: ${user?.failedMessage ?: "cannot map response to user model"}"))
+                ActionResult.NormalError(response.body()?.string()?.toResponseBody() ?: "Ошибка в процессе получения фото профиля".toResponseBody())
             }
-        } else {
-            ActionResult.ExceptionError(IOException("Error login in, response not successful"))
+        } catch (e: Exception) {
+            ActionResult.ExceptionError(IOException("${e.message}"))
+        }
+    }
+
+    suspend fun setProfilePhoto(userId: Long, body: MultipartBody.Part): ActionResult<DefaultResponseApi> {
+        return try {
+            val response = apiService.updateProfilePhoto(userId, body)
+            if (response.errors.isNullOrEmpty()) {
+                ActionResult.Success(DefaultResponseApi())
+            } else {
+                ActionResult.NormalError(DefaultResponseApi(response.errors))
+            }
+        } catch (e: Exception) {
+            ActionResult.ExceptionError(IOException("${e.message}"))
         }
     }
 }

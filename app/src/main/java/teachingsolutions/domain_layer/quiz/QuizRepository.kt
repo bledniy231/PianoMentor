@@ -16,6 +16,7 @@ import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.GetQuizResponseUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionAnswerUI
 import teachingsolutions.presentation_layer.fragments.quiz.model.QuestionViewPagerUI
+import teachingsolutions.domain_layer.common.FileStorageManager
 import java.io.File
 import javax.inject.Inject
 
@@ -23,7 +24,8 @@ class QuizRepository @Inject constructor(
     private val quizDataSource: QuizDataSource,
     private val userRepository: UserRepository,
     private val coursesRepository: CoursesRepository,
-    private val statisticsRepository: StatisticsRepository) {
+    private val statisticsRepository: StatisticsRepository,
+    private val fileStorageManager: FileStorageManager) {
 
     suspend fun getQuizQuestions(courseId: Int, courseItemId: Int, userId: Long): GetQuizResponseUI {
         return when (val result = quizDataSource.getCourseItemQuiz(courseId, courseItemId, userId)) {
@@ -106,13 +108,7 @@ class QuizRepository @Inject constructor(
 
         val file = when (val result = quizDataSource.getQuizQuestionFile(dataSetId)) {
             is ActionResult.Success -> {
-                val file = File.createTempFile("quiz_image_$dataSetId", null)
-                result.data.byteStream().use { input ->
-                    file.outputStream().use { output ->
-                        input.copyTo(output)
-                    }
-                }
-                file
+                fileStorageManager.createTempFile(result.data, dataSetId)
             }
             else -> null
         }
