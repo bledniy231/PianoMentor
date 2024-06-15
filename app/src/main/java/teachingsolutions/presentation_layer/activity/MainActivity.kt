@@ -22,4 +22,16 @@ class MainActivity : AppCompatActivity() {
         }
         callback.isEnabled = true
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        val directory = this.cacheDir
+        val files = directory.listFiles()
+        if (files != null) {
+            for (i in files.indices) {
+                files[i].delete()
+            }
+        }
+    }
 }

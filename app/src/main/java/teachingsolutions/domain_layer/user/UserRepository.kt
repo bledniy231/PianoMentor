@@ -170,10 +170,15 @@ class UserRepository @Inject constructor(
             return FileResultUI(null, null)
         }
 
+        val tempPhoto = fileStorageManager.getTempProfilePhotoFile()
+        if (tempPhoto != null) {
+            return FileResultUI(tempPhoto, null)
+        }
+
         val result = dataSource.getProfilePhoto(userId!!)
         return when {
             result is ActionResult.Success && result.data.contentLength() > 0 -> {
-                val file = fileStorageManager.createTempFile(result.data, userId!!)
+                val file = fileStorageManager.createTempProfilePhotoFile(result.data)
                 FileResultUI(file, null)
             }
             result is ActionResult.Success && result.data.contentLength() == 0L -> {

@@ -70,6 +70,6 @@ interface IPianoMentorApiService {
     suspend fun getProfilePhoto(@Query("userId") userId: Long): Response<ResponseBody>
 
     @Multipart
-    @PUT("api/Files/UpdateUserProfilePhoto")
+    @POST("api/Files/UpdateUserProfilePhoto")
     suspend fun updateProfilePhoto(@Query("userId") userId: Long, @Part image: MultipartBody.Part): DefaultResponseApi
 }

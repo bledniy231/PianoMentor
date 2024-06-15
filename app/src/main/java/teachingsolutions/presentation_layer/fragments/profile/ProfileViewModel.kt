@@ -71,10 +71,6 @@ class ProfileViewModel @Inject constructor(val userRepository: UserRepository): 
                 val path = getFilePathFromUri(context, uri, true)
                 _tempProfilePhoto.postValue(path)
                 val file = File(path)
-                if (file == null) {
-                    Toast.makeText(context, context.getString(R.string.error_loading_image), Toast.LENGTH_LONG).show()
-                    return@withContext
-                }
 
                 val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
                 val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)

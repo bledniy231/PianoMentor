@@ -52,4 +52,32 @@ class FileStorageManager @Inject constructor(@ApplicationContext private val con
         }
         return file
     }
+
+    fun createTempProfilePhotoFile(body: ResponseBody): File {
+        val file = File.createTempFile("temp_profile_photo", null)
+        body.byteStream().use { input ->
+            file.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+        return file
+    }
+
+    fun getTempProfilePhotoFile(): File? {
+        val tempDir = System.getProperty("java.io.tmpdir")?.let { File(it) }
+        if (tempDir == null) {
+            return null
+        }
+
+        val files = tempDir.listFiles()
+        if (files != null) {
+            for (file in files) {
+                if (file.name.startsWith("temp_profile_photo")) {
+                    return file
+                }
+            }
+        }
+
+        return null
+    }
 }
