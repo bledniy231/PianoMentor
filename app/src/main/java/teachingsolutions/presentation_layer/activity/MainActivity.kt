@@ -1,12 +1,12 @@
 package teachingsolutions.presentation_layer.activity
 
 import android.os.Bundle
-import android.view.Menu
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.example.pianomentor.R
 import dagger.hilt.android.AndroidEntryPoint
+import teachingsolutions.domain_layer.common.FileStorageManager
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         val callback = onBackPressedDispatcher.addCallback(this) {
             if (!findNavController(R.id.nav_host_fragment).popBackStack()) {
                 isEnabled = false
+                FileStorageManager.clearCacheDir()
                 onBackPressed()
             }
         }
@@ -25,13 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        val directory = this.cacheDir
-        val files = directory.listFiles()
-        if (files != null) {
-            for (i in files.indices) {
-                files[i].delete()
-            }
-        }
+        FileStorageManager.clearCacheDir()
     }
 }

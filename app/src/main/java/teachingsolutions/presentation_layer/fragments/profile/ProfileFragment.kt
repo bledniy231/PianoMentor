@@ -1,10 +1,6 @@
 package teachingsolutions.presentation_layer.fragments.profile
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,19 +9,13 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentProfileBinding
 import com.teamforce.thanksapp.presentation.customViews.AvatarView.internal.dp
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
 import kotlin.math.abs
 
 @AndroidEntryPoint
@@ -55,7 +45,6 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -83,13 +72,6 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        binding.profileToolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.aboutAppCard.setOnClickListener {
-            findNavController().navigate(R.id.action_open_about_app)
-        }
-
         binding.logoutCard.setOnClickListener {
             if (!viewModel.userRepository.isLoggedIn) {
                 Toast.makeText(requireContext(),
@@ -114,6 +96,14 @@ class ProfileFragment : Fragment() {
 
         binding.uploadProfilePhotoCard.setOnClickListener {
             launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        binding.profileToolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.aboutAppCard.setOnClickListener {
+            findNavController().navigate(R.id.action_open_about_app)
         }
     }
 

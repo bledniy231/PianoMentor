@@ -1,7 +1,13 @@
 package teachingsolutions.domain_layer.user
 
+import android.content.ContentResolver
+import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
+import android.webkit.MimeTypeMap
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import teachingsolutions.data_access_layer.DAL_models.user.JwtTokens
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequestApi
 import teachingsolutions.data_access_layer.common.ActionResult
@@ -17,8 +23,16 @@ import teachingsolutions.domain_layer.courses.CoursesRepository
 import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
 import teachingsolutions.presentation_layer.fragments.common.FileResultUI
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -62,6 +76,7 @@ class UserRepository @Inject constructor(
 
         coursesRepository.clearCache()
         statisticsRepository.clearCache()
+        FileStorageManager.clearCacheDir()
         user = null
         with(sharedPreferences.edit()) {
             prefKeys::class.java.declaredFields.forEach { field ->
@@ -196,13 +211,20 @@ class UserRepository @Inject constructor(
         }
     }
 
-    suspend fun setProfilePhoto(body: MultipartBody.Part): DefaultResponseUI {
+    suspend fun setProfilePhoto(context: Context, uri: Uri): DefaultResponseUI {
         if (userId == null) {
             return DefaultResponseUI("Пользователь не найден")
         }
 
+        val path = getFilePathFromUri(context, uri, true)
+        val file = File(path)
+
+        val requestFile = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val body = MultipartBody.Part.createFormData("photo", file.name, requestFile)
+
         return when (val result = dataSource.setProfilePhoto(userId!!, body)) {
             is ActionResult.Success -> {
+                FileStorageManager.clearCacheDir()
                 DefaultResponseUI("Фото было загружено")
             }
             is ActionResult.NormalError -> {
@@ -216,5 +238,53 @@ class UserRepository @Inject constructor(
 
     private fun isTokenExpired(tokenExpireTime: LocalDateTime?): Boolean {
         return tokenExpireTime?.isBefore(LocalDateTime.now(ZoneOffset.UTC)) ?: false
+    }
+
+    private fun getFilePathFromUri(context: Context, uri: Uri, uniqueName: Boolean): String =
+        if (uri.path?.contains("file://") == true) {
+            uri.path!!
+        } else {
+            getFileFromContentUri(context, uri, uniqueName).path
+        }
+
+    private fun getFileFromContentUri(context: Context, contentUri: Uri, uniqueName: Boolean): File {
+        val fileExtension = getFileExtension(context, contentUri) ?: ""
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val fileName = ("temp_file_" + if (uniqueName) timeStamp.plus(System.nanoTime()) else contentUri.path?.let(::File)?.name ?: "") + ".$fileExtension"
+        val tempFile = File(context.cacheDir, fileName)
+        tempFile.createNewFile()
+        var oStream: FileOutputStream? = null
+        var inputStream: InputStream? = null
+
+        try {
+            oStream = FileOutputStream(tempFile)
+            inputStream = context.contentResolver.openInputStream(contentUri)
+
+            inputStream?.let { copy(inputStream, oStream) }
+            oStream.flush()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            inputStream?.close()
+            oStream?.close()
+        }
+
+        return tempFile
+    }
+
+    private fun getFileExtension(context: Context, uri: Uri): String? =
+        if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
+            MimeTypeMap.getSingleton().getExtensionFromMimeType(context.contentResolver.getType(uri))
+        } else {
+            uri.path?.let { MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(File(it)).toString()) }
+        }
+
+    @Throws(IOException::class)
+    private fun copy(source: InputStream, target: OutputStream) {
+        val buf = ByteArray(8192)
+        var length: Int
+        while (source.read(buf).also { length = it } > 0) {
+            target.write(buf, 0, length)
+        }
     }
 }

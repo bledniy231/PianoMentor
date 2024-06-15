@@ -11,6 +11,22 @@ import javax.inject.Singleton
 
 @Singleton
 class FileStorageManager @Inject constructor(@ApplicationContext private val context: Context) {
+
+    companion object {
+        fun clearCacheDir() {
+            val cacheDir = System.getProperty("java.io.tmpdir")?.let { File(it) }
+            if (cacheDir != null) {
+                val files = cacheDir.listFiles()
+                if (files != null) {
+                    for (file in files) {
+                        file.delete()
+                    }
+                }
+            }
+
+        }
+    }
+
     fun getLecturePdf(courseItemId: Int, courseItemTitle: String): File? {
         val fileName = "${courseItemId}_${courseItemTitle.replace(" ", "_", true)}.pdf"
         val file = File(context.filesDir, fileName)
