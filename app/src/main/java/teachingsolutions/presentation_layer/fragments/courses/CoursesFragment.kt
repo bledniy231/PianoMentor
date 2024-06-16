@@ -90,10 +90,22 @@ class CoursesFragment : Fragment(),
                 }
         })
 
-        binding.coursesToolbar.title = arguments?.getString("CourseTitle") ?: "Курсы"
+        val filterTitle = arguments?.getString("FilterTitle")
+        if (filterTitle != null) {
+            binding.coursesToolbar.title = filterTitle
+        } else {
+            binding.coursesToolbar.title = arguments?.getString("CourseTitle") ?: "Курсы"
+        }
     }
 
     private fun initialReceivingElements() {
+        val filter = arguments?.getString("Filter")?.let { CourseItemType.from(it) }
+        if (filter != null) {
+            courseImpl = CourseImplementation.EXACT_COURSE_ITEMS
+            viewModel.getExactCourseItemsList(userId ?: 0, 0, filter)
+            return
+        }
+
         when (val courseId = arguments?.getInt("CourseId") ?: 0) {
             0 -> {
                 courseImpl = CourseImplementation.BASE_COURSES

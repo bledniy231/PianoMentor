@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentStatisticsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemType
 import teachingsolutions.presentation_layer.adapters.MainMenuRecyclerViewAdapter
 import teachingsolutions.presentation_layer.adapters.StatisticsViewPagerAdapter
 import teachingsolutions.domain_layer.domain_models.statistics.UserStatisticsModel
@@ -166,13 +168,25 @@ class StatisticsFragment : Fragment(),
                 findNavController().navigate(R.id.action_choose_courses)
             }
             "Практические занятия" -> {
-                //findNavController().navigate(R.id.action_statisticsFragment_to_practiceFragment)
+                val args = bundleOf(
+                    "Filter" to CourseItemType.EXERCISE.value,
+                    "FilterTitle" to "Практические занятия"
+                )
+                findNavController().navigate(R.id.action_choose_courses, args)
             }
             "Лекции по теории" -> {
-                //findNavController().navigate(R.id.action_statisticsFragment_to_theoryLecturesFragment)
+                val args = bundleOf(
+                    "Filter" to CourseItemType.LECTURE.value,
+                    "FilterTitle" to "Лекции по теории"
+                )
+                findNavController().navigate(R.id.action_choose_courses, args)
             }
             "Тесты по теории" -> {
-                //findNavController().navigate(R.id.action_statisticsFragment_to_theoryTestsFragment)
+                val args = bundleOf(
+                    "Filter" to CourseItemType.QUIZ.value,
+                    "FilterTitle" to "Тесты по теории"
+                )
+                findNavController().navigate(R.id.action_choose_courses, args)
             }
             "Тренировка слуха" -> {
                 //findNavController().navigate(R.id.action_statisticsFragment_to_hearingTrainingFragment)

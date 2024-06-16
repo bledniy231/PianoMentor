@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.domain_layer.courses.CoursesRepository
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemType
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.courses.model.CourseItemsResultUI
 import teachingsolutions.presentation_layer.fragments.courses.model.CoursesResultUI
@@ -35,10 +36,10 @@ class CoursesViewModel @Inject constructor(
         }
     }
 
-    fun getExactCourseItemsList(userId: Long, courseId: Int) {
+    fun getExactCourseItemsList(userId: Long, courseId: Int, filter: CourseItemType? = null) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val result = coursesRepository.getCourseItems(userId, courseId)
+                val result = coursesRepository.getCourseItems(userId, courseId, filter)
                 _courseItemsResult.postValue(result)
             }
         }

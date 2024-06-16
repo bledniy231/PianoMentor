@@ -5,6 +5,7 @@ import teachingsolutions.data_access_layer.DAL_models.courses.GetCourseItemsResp
 import teachingsolutions.data_access_layer.DAL_models.courses.GetCoursesResponseApi
 import teachingsolutions.data_access_layer.api.IPianoMentorApiService
 import teachingsolutions.data_access_layer.common.ActionResult
+import teachingsolutions.domain_layer.domain_models.courses.CourseItemType
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -40,6 +41,22 @@ class CoursesDataSource @Inject constructor(private val apiService: IPianoMentor
             }
         } catch (e: Exception) {
             ActionResult.ExceptionError(IOException("Error while getting course items of course: ${courseId}, response not successful, ${e.message}"))
+        }
+    }
+
+    suspend fun getCourseItemsWithFilter(userId: Long, filter: CourseItemType): ActionResult<GetCourseItemsResponseApi> {
+        return try {
+            val result = apiService.getCourseItemsWithFilter(userId, filter.value)
+            when (result.errors) {
+                null -> {
+                    ActionResult.Success(result)
+                }
+                else -> {
+                    ActionResult.NormalError(result)
+                }
+            }
+        } catch (e: Exception) {
+            ActionResult.ExceptionError(IOException("Error while getting course items with filter: ${filter}, response not successful, ${e.message}"))
         }
     }
 

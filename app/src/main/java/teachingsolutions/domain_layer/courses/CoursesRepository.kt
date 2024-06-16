@@ -67,21 +67,42 @@ class CoursesRepository @Inject constructor(
         }
     }
 
-    suspend fun getCourseItems(userId: Long, courseId: Int): CourseItemsResultUI {
-        val neededCourseItemsFromCache = coursesItemsCached.filter { it.courseId == courseId }.sortedBy { it.position }
-        if (neededCourseItemsFromCache.isNotEmpty()) {
-            return CourseItemsResultUI(neededCourseItemsFromCache.map {
-                CourseItemModelUI(
-                    it.courseId,
-                    it.title,
-                    it.courseItemType,
-                    it.courseItemProgressType,
-                    it.courseItemId
-                )
-            }, null)
+    suspend fun getCourseItems(userId: Long, courseId: Int, filter: CourseItemType? = null): CourseItemsResultUI {
+        if (filter != null) {
+            val neededCourseItemsFromCache = coursesItemsCached.filter { it.courseItemType == filter }.sortedBy { it.position }
+            if (neededCourseItemsFromCache.isNotEmpty()) {
+                return CourseItemsResultUI(neededCourseItemsFromCache.map {
+                    CourseItemModelUI(
+                        it.courseId,
+                        it.title,
+                        it.courseItemType,
+                        it.courseItemProgressType,
+                        it.courseItemId
+                    )
+                }, null)
+            }
+        } else {
+            val neededCourseItemsFromCache = coursesItemsCached.filter { it.courseId == courseId }.sortedBy { it.position }
+            if (neededCourseItemsFromCache.size == 10) {
+                return CourseItemsResultUI(neededCourseItemsFromCache.map {
+                    CourseItemModelUI(
+                        it.courseId,
+                        it.title,
+                        it.courseItemType,
+                        it.courseItemProgressType,
+                        it.courseItemId
+                    )
+                }, null)
+            }
         }
 
-        return when (val result = coursesDataSource.getCourseItems(userId, courseId)) {
+        val result = if (filter == null) {
+            coursesDataSource.getCourseItems(userId, courseId)
+        } else {
+            coursesDataSource.getCourseItemsWithFilter(userId, filter)
+        }
+
+        return when (result) {
             is ActionResult.Success -> {
                 coursesItemsCached = result.data.courseItems.map {
                     CourseItemModel(
@@ -94,7 +115,11 @@ class CoursesRepository @Inject constructor(
                     )
                 }
 
-                val sortedCourseItems = coursesItemsCached.filter { it.courseId == courseId }.sortedBy { it.position }
+                val sortedCourseItems = if (filter == null) {
+                    coursesItemsCached.filter { it.courseId == courseId }.sortedBy { it.position }
+                } else {
+                    coursesItemsCached.filter { it.courseItemType == filter }.sortedBy { it.position }
+                }
                 CourseItemsResultUI(sortedCourseItems.map {
                     CourseItemModelUI(
                         it.courseId,

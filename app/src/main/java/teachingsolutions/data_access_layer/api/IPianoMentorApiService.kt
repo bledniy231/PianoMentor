@@ -49,6 +49,9 @@ interface IPianoMentorApiService {
     @GET("api/Courses/GetCourseItems")
     suspend fun getCourseItems(@Query("userId") userId: Long, @Query("courseId") courseId: Int): GetCourseItemsResponseApi
 
+    @GET("api/Courses/GetCourseItemsWithFilter")
+    suspend fun getCourseItemsWithFilter(@Query("userId") userId: Long, @Query("filter") filter: String): GetCourseItemsResponseApi
+
     @GET("api/Files/DownloadCourseItemFile")
     suspend fun getCourseItemFile(@Query("courseItemId") courseItemId: Int): Response<ResponseBody>
 
