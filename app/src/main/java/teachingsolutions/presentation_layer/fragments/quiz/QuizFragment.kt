@@ -35,10 +35,6 @@ class QuizFragment : Fragment() {
     private var resultModels: List<QuestionViewPagerUI>? = null
     private val startQuizModel: StartQuizModel = StartQuizModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -105,29 +101,31 @@ class QuizFragment : Fragment() {
         }
 
         val quizSavingResultBACKObserver = Observer<DefaultResponseUI?> { result ->
-                findNavController().popBackStack()
-                result ?: return@Observer
+            findNavController().popBackStack()
+            result ?: return@Observer
 
-                if (result.message != null) {
-                    Toast.makeText(requireContext(), "FAIL: Error while saving quiz result", Toast.LENGTH_LONG).show()
-                }
+            if (result.message != null) {
+                Toast.makeText(requireContext(), "FAIL: Error while saving quiz result", Toast.LENGTH_LONG).show()
             }
+        }
 
         val quizSavingResultCOMPLETEObserver = Observer<DefaultResponseUI?> { result ->
             result ?: return@Observer
+
             if (result.message != null) {
                 Toast.makeText(requireContext(), "FAIL: Error while saving quiz result", Toast.LENGTH_LONG).show()
                 findNavController().popBackStack()
             }
 
-            val (correctAnswers, correctUserAnswers, correctAnswersPercentage) = viewModel.calculateQuizResults(resultModels ?: emptyList())
+            val (correctDefaultAnswers, correctUserAnswers, correctAnswersPercentage) = viewModel.calculateQuizResults(resultModels ?: emptyList())
             val bundle = Bundle().apply {
                 putInt("CourseId", courseId)
                 putInt("CourseItemId", courseItemId)
-                putString("CourseTitle", args.getString("courseTitle"))
+                putString("CourseItemTitle", args.getString("courseItemTitle"))
                 putInt("CorrectUserAnswers", correctUserAnswers)
-                putInt("CorrectAnswers", correctAnswers)
+                putInt("CorrectDefaultAnswers", correctDefaultAnswers)
                 putDouble("CorrectAnswersPercentage", correctAnswersPercentage)
+                putBoolean("IsQuiz", true)
             }
             findNavController().navigate(R.id.action_open_quiz_result, bundle)
         }
@@ -143,8 +141,7 @@ class QuizFragment : Fragment() {
                     return@setNavigationOnClickListener
                 }
 
-                resultModels = adapter?.models
-                viewModel.setQuizResult(courseId, courseItemId, false, resultModels ?: emptyList())
+                viewModel.setQuizResult(courseId, courseItemId, false, adapter?.models ?: emptyList())
                 viewModel.quizSavingResult.observe(viewLifecycleOwner, quizSavingResultBACKObserver)
             }
 
@@ -155,8 +152,7 @@ class QuizFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                resultModels = adapter?.models
-                viewModel.setQuizResult(courseId, courseItemId, true, resultModels ?: emptyList())
+                viewModel.setQuizResult(courseId, courseItemId, true, adapter?.models ?: emptyList())
                 viewModel.quizSavingResult.observe(viewLifecycleOwner, quizSavingResultCOMPLETEObserver)
             }
         }

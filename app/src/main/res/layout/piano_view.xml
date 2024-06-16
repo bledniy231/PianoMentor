@@ -40,6 +40,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_С_icon"
+            android:tag="note_c_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -66,6 +67,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_D_icon"
+            android:tag="note_d_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/dark_gray"
@@ -92,6 +94,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_E_icon"
+            android:tag="note_e_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/dark_gray"
@@ -118,6 +121,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_F_icon"
+            android:tag="note_f_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/dark_gray"
@@ -144,6 +148,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_G_icon"
+            android:tag="note_g_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/dark_gray"
@@ -170,6 +175,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_A_icon"
+            android:tag="note_a_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/dark_gray"
@@ -196,6 +202,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_B_icon"
+            android:tag="note_b_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/dark_gray"
@@ -224,6 +231,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_С_sharp_icon"
+            android:tag="note_c_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/first_red"
@@ -251,6 +259,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_D_sharp_icon"
+            android:tag="note_d_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/first_red"
@@ -278,6 +287,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_F_sharp_icon"
+            android:tag="note_f_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/first_red"
@@ -305,6 +315,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_G_sharp_icon"
+            android:tag="note_g_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/first_red"
@@ -332,6 +343,7 @@
 
         <teachingsolutions.presentation_layer.custom_views.piano_view.NoteIconView
             android:id="@+id/note_A_sharp_icon"
+            android:tag="note_a_sharp_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:noteBackgroundColor="@color/first_red"

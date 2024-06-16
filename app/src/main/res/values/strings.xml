@@ -64,6 +64,7 @@
     <string name="quiz_result_fail">Увы, но вы совершили ошибки в тесте</string>
     <string name="correct_answers">Правильных ответов: %1$d</string>
     <string name="total_questions">Всего вопросов: %1$d</string>
+    <string name="total_exercises">Всего заданий: %1$d</string>
     <string name="percent_completed">Процент выполнения: %.2f</string>
     <string name="percent">%d%%</string>
     <string name="restart_quiz_or_show_results">Хотите ли вы перепройти тест или же просмотреть прошлые результаты теста?</string>
@@ -90,4 +91,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="changed_password_success">Вы успешно изменили пароль</string>
+    <string name="exercise_result_success">Вы успешно завершили практическое задание</string>
+    <string name="exercise_result_fail">Увы, но вы провалили практическое задание</string>
+    <string name="end_exercise">Готово</string>
 </resources>

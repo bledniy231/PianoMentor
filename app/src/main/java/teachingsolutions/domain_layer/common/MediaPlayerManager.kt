@@ -1,4 +1,4 @@
-package teachingsolutions.domain_layer.exercise
+package teachingsolutions.domain_layer.common
 
 import android.media.MediaPlayer
 import kotlinx.coroutines.delay
@@ -14,12 +14,16 @@ class MediaPlayerManager {
                 if (volume < 0) {
                     volume = 0f
                 }
-                sound.setVolume(volume, volume)
+                try {
+                    sound.setVolume(volume, volume)
+                } catch (e: Exception) { }
                 delay(delay)
             }
-            sound.pause()
-            sound.seekTo(0)
-            sound.setVolume(1f, 1f)
+            try {
+                sound.pause()
+                sound.seekTo(0)
+                sound.setVolume(1f, 1f)
+            } catch (e: Exception) { }
         }
     }
 }

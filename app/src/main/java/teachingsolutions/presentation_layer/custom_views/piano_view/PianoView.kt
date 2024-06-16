@@ -66,10 +66,27 @@ class PianoView @JvmOverloads constructor(
         val x = event.getX(which).toInt()
         val y = event.getY(which).toInt()
         for ((button, _) in noteButtonsToSounds) {
-            if (!button.isPressed &&
-                button.left <= x && x <= button.right &&
-                button.top <= y && y <= button.bottom) {
-                handleKeyDown(which, event, button)
+            if (button.tag.toString().endsWith("sharp", true)) {
+                if (!button.isPressed &&
+                    button.left <= x && x <= button.right &&
+                    button.top <= y && y <= button.bottom) {
+                    handleKeyDown(which, event, button)
+                }
+            } else {
+                var isInsideBlackKey = false
+                for ((blackKey, _) in noteButtonsToSounds) {
+                    if (blackKey.tag.toString().endsWith("sharp", true) &&
+                        blackKey.left <= x && x <= blackKey.right &&
+                        blackKey.top <= y && y <= blackKey.bottom) {
+                        isInsideBlackKey = true
+                        break
+                    }
+                }
+                if (!isInsideBlackKey && !button.isPressed &&
+                    button.left <= x && x <= button.right &&
+                    button.top <= y && y <= button.bottom) {
+                    handleKeyDown(which, event, button)
+                }
             }
         }
     }

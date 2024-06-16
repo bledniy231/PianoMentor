@@ -1,4 +1,4 @@
-package teachingsolutions.presentation_layer.fragments.quiz.quiz_result
+package teachingsolutions.presentation_layer.fragments.quiz_result
 
 import android.animation.ValueAnimator
 import android.os.Bundle
@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
@@ -16,15 +15,11 @@ import com.example.pianomentor.databinding.FragmentQuizResultBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class QuizResultFragment : Fragment() {
+class QuizOrExerciseResultFragment : Fragment() {
 
     private var _binding: FragmentQuizResultBinding? = null
     private val binding get() = _binding!!
     private lateinit var args: Bundle
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,18 +41,19 @@ class QuizResultFragment : Fragment() {
         }
 
         val correctUserAnswers = args.getInt("CorrectUserAnswers")
-        val correctAnswers = args.getInt("CorrectAnswers")
+        val correctDefaultAnswers = args.getInt("CorrectDefaultAnswers")
         val correctAnswersPercentage = args.getDouble("CorrectAnswersPercentage")
-        if (correctUserAnswers == correctAnswers) {
+        val isQuiz = args.getBoolean("IsQuiz")
+        if (correctUserAnswers == correctDefaultAnswers) {
             binding.imageView.setImageResource(R.drawable.icon_success_quiz)
-            binding.testStatusTextView.text = getString(R.string.quiz_result_success)
+            binding.testStatusTextView.text = if (isQuiz) getString(R.string.quiz_result_success) else getString(R.string.exercise_result_success)
         } else {
             binding.imageView.setImageResource(R.drawable.icon_failed_quiz)
-            binding.testStatusTextView.text = getString(R.string.quiz_result_fail)
+            binding.testStatusTextView.text = if (isQuiz) getString(R.string.quiz_result_fail) else getString(R.string.exercise_result_fail)
         }
 
         val correctTextAnim = animateTextView(correctUserAnswers, binding.correctAnswersTextView, R.string.correct_answers)
-        val totalTextAnim = animateTextView(correctAnswers, binding.totalQuestionsTextView, R.string.total_questions)
+        val totalTextAnim = animateTextView(correctDefaultAnswers, binding.totalQuestionsTextView, if (isQuiz) R.string.total_questions else R.string.total_exercises)
         val percentTextAnim = animateTextView(correctAnswersPercentage, binding.percentCompleted, R.string.percent_completed)
 
         correctTextAnim.start()
@@ -65,10 +61,6 @@ class QuizResultFragment : Fragment() {
         percentTextAnim.start()
 
         binding.btnBackToCourse.setOnClickListener {
-            val bundle = bundleOf(
-                "CourseId" to args.getInt("CourseId"),
-                "CourseTitle" to args.getString("CourseTitle")
-            )
             val options = NavOptions.Builder()
                 .setLaunchSingleTop(false)
                 .setPopUpTo(R.id.coursesFragment, true)

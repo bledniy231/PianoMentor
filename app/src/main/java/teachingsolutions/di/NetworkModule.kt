@@ -107,8 +107,8 @@ object NetworkModule {
     }
 }
 
-//private const val BASE_URL = "https://192.168.0.105:8080/"      // Docker
-private const val BASE_URL = "https://192.168.0.105:8181/"    // Development
+private const val BASE_URL = "https://192.168.0.105:8080/"      // Docker
+//private const val BASE_URL = "https://192.168.0.105:8181/"    // Development
 //private const val BASE_URL = "https://10.0.2.2:8080/"         // Localhost Docker
 //private const val BASE_URL = "https://10.0.2.2:8181/"         // Localhost Development
 //private const val BASE_URL = "https://192.168.0.3:8080/"

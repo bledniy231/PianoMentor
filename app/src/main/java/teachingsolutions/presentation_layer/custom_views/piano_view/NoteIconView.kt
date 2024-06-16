@@ -22,7 +22,7 @@ class NoteIconView @JvmOverloads constructor(
     private var title: String? by viewProperty(null)
 
     @get:ColorInt
-    private var noteBackgroundColor: Int by viewProperty(Color.RED)
+    public var noteBackgroundColor: Int by viewProperty(Color.GRAY)
 
     @get:ColorInt
     private var titleColor: Int by viewProperty(Color.BLACK)

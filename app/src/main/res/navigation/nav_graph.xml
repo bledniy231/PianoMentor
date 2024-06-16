@@ -240,7 +240,7 @@
 
     <fragment
         android:id="@+id/quizResultFragment"
-        android:name="teachingsolutions.presentation_layer.fragments.quiz.quiz_result.QuizResultFragment"
+        android:name="teachingsolutions.presentation_layer.fragments.quiz_result.QuizOrExerciseResultFragment"
         android:label="QuizResultFragment">
         <action
             android:id="@+id/action_quiz_result_to_courses"

@@ -2,7 +2,6 @@ package teachingsolutions.presentation_layer.fragments.piano
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.os.Bundle
 import android.widget.LinearLayout.LayoutParams
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,7 +17,7 @@ import teachingsolutions.domain_layer.common.PixelLengthManager
 import teachingsolutions.domain_layer.domain_models.exercise.ExerciseTaskModel
 import teachingsolutions.domain_layer.domain_models.exercise.Intervals
 import teachingsolutions.domain_layer.exercise.ExerciseRepository
-import teachingsolutions.domain_layer.exercise.MediaPlayerManager
+import teachingsolutions.domain_layer.common.MediaPlayerManager
 import teachingsolutions.presentation_layer.fragments.piano.model.ExerciseTaskUI
 import teachingsolutions.presentation_layer.fragments.piano.model.GetExerciseTaskResponseUI
 import javax.inject.Inject
@@ -61,8 +60,6 @@ class EnterPianoExerciseViewModel @Inject constructor(
                 _exerciseTask.postValue(uiResponse)
 
                 for ((count, noteWithSound) in notes.withIndex()) {
-                    noteWithSound.second ?: continue
-
                     val noteId = context.resources.getIdentifier(noteWithSound.first + "_$octave", "raw", context.packageName)
                     notes[count] = Pair(notes[count].first, MediaPlayer.create(context, noteId))
                 }

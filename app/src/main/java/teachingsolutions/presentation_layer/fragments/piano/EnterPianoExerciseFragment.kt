@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -97,10 +98,13 @@ class EnterPianoExerciseFragment : Fragment() {
             }
 
             findNavController().addOnDestinationChangedListener(listener)
-            val bundle = Bundle()
-            bundle.putString("CourseItemTitle", args.getString("CourseItemTitle"))
-            bundle.putInt("CourseItemId", args.getInt("CourseItemId"))
-            findNavController().navigate(R.id.action_open_piano_exercise, bundle)
+            val args = bundleOf(
+                "CourseId" to args.getInt("CourseId"),
+                "CourseItemId" to args.getInt("CourseItemId"),
+                "CourseItemTitle" to args.getString("CourseItemTitle"),
+                "CourseItemProgressType" to args.getString("CourseItemProgressType")
+            )
+            findNavController().navigate(R.id.action_open_piano_exercise, args)
         }
     }
 
