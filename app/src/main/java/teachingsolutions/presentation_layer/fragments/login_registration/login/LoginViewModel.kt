@@ -18,7 +18,7 @@ import teachingsolutions.presentation_layer.fragments.login_registration.common_
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val loginRegisterRepository: UserRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -29,7 +29,7 @@ class LoginViewModel @Inject constructor(private val loginRegisterRepository: Us
     fun login(username: String, password: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                when (val result = loginRegisterRepository.login(username, password)) {
+                when (val result = userRepository.login(username, password)) {
                     is ActionResult.Success -> {
                         _loginResultUI.postValue(LoginResultUI(success = LoggedInUserModelUI(displayName = result.data.userName)))
                     }

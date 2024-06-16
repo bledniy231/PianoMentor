@@ -3,8 +3,8 @@ package teachingsolutions.data_access_layer.user
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
-import retrofit2.Response
 import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
+import teachingsolutions.data_access_layer.DAL_models.user.ChangePasswordRequestApi
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequestApi
 import teachingsolutions.data_access_layer.common.ActionResult
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserResponseApi
@@ -46,6 +46,22 @@ class UserDataSource @Inject constructor(private val apiService: IPianoMentorApi
             }
         } catch (e: Exception) {
             ActionResult.ExceptionError(IOException(e.message))
+        }
+    }
+
+    suspend fun changePassword(userId: Long, oldPass: String, newPass: String, repeatNewPass: String): ActionResult<DefaultResponseApi> {
+        return try {
+            val response = apiService.changePassword(ChangePasswordRequestApi(userId, oldPass, newPass, repeatNewPass))
+            when (response.errors) {
+                null -> {
+                    ActionResult.Success(response)
+                }
+                else -> {
+                    ActionResult.NormalError(response)
+                }
+            }
+        } catch (exception: Exception) {
+            ActionResult.ExceptionError(IOException(exception.message))
         }
     }
 

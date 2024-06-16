@@ -98,6 +98,10 @@ class ProfileFragment : Fragment() {
             launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
+        binding.changePassword.setOnClickListener {
+            findNavController().navigate(R.id.action_open_change_password)
+        }
+
         binding.profileToolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }

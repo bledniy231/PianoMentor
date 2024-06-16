@@ -1,5 +1,6 @@
 package teachingsolutions.presentation_layer.fragments.login_registration.registration
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
 import android.os.Bundle
@@ -40,6 +41,7 @@ class RegistrationFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -87,16 +89,16 @@ class RegistrationFragment : Fragment() {
                 val passwordErrors = mutableListOf<String>()
 
                 registerFormState.passwordLengthError?.let {
-                    passwordErrors.add(getString(it))
+                    passwordErrors.add(getString(it, "Пароль"))
                 }
                 registerFormState.passwordLowercaseError?.let {
-                    passwordErrors.add(getString(it))
+                    passwordErrors.add(getString(it, "Пароль"))
                 }
                 registerFormState.passwordUppercaseError?.let {
-                    passwordErrors.add(getString(it))
+                    passwordErrors.add(getString(it, "Пароль"))
                 }
                 registerFormState.passwordDigitError?.let {
-                    passwordErrors.add(getString(it))
+                    passwordErrors.add(getString(it, "Пароль"))
                 }
 
                 if (registerFormState.usernameError != null) {
@@ -152,14 +154,8 @@ class RegistrationFragment : Fragment() {
             })
 
         val afterTextChangedListener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // ignore
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                // ignore
-            }
-
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
             override fun afterTextChanged(s: Editable) {
                 registerViewModel.registerDataChanged(
                     nicknameEditText.text.toString(),

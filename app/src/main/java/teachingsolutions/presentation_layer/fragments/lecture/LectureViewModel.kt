@@ -15,7 +15,7 @@ import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressTy
 import teachingsolutions.domain_layer.statistics.StatisticsRepository
 import teachingsolutions.domain_layer.user.UserRepository
 import teachingsolutions.presentation_layer.fragments.common.DefaultResponseUI
-import teachingsolutions.presentation_layer.fragments.lecture.model.LectureAnimation
+import teachingsolutions.presentation_layer.fragments.lecture.model.LectureAnimationEnum
 import teachingsolutions.presentation_layer.fragments.common.FileResultUI
 import javax.inject.Inject
 
@@ -60,12 +60,12 @@ class LectureViewModel @Inject constructor(
         }
     }
 
-    fun saveLectureAnimationSettings(animation: LectureAnimation) {
+    fun saveLectureAnimationSettings(animation: LectureAnimationEnum) {
         sharedPreferences.edit().putString(prefKeys.KEY_LECTURE_ANIMATION, animation.name).apply()
     }
 
-    fun getLectureAnimationSettings(): LectureAnimation {
-        val animationName = sharedPreferences.getString(prefKeys.KEY_LECTURE_ANIMATION, LectureAnimation.NONE.name)
-        return LectureAnimation.valueOf(animationName ?: LectureAnimation.NONE.name)
+    fun getLectureAnimationSettings(): LectureAnimationEnum {
+        val animationName = sharedPreferences.getString(prefKeys.KEY_LECTURE_ANIMATION, LectureAnimationEnum.NONE.name)
+        return LectureAnimationEnum.valueOf(animationName ?: LectureAnimationEnum.NONE.name)
     }
 }

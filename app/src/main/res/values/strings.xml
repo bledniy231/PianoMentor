@@ -10,20 +10,23 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Пароль</string>
+    <string name="prompt_old_password">Старый пароль</string>
+    <string name="prompt_new_password">Новый пароль</string>
+    <string name="prompt_repeat_new_password">Повторите новый пароль</string>
     <string name="action_sign_in">Войти</string>
     <string name="action_sign_in_short">Войти</string>
     <string name="action_sign_up">Зарегистрироваться</string>
+    <string name="action_change_password">Сменить пароль</string>
     <string name="welcome">Вы вошли в учётную запись</string>
     <string name="invalid_email">Не правильно указан Email</string>
-    <string name="password_too_short">Пароль должен содержать не менее 6 символов</string>
-    <string name="password_no_lowercase">Пароль должен содержать хотя бы одну строчную букву</string>
-    <string name="password_no_uppercase">Пароль должен содержать хотя бы одну заглавную букву</string>
-    <string name="password_no_digit">Пароль должен содержать хотя бы одну цифру</string>
+    <string name="password_too_short">%1$s должен содержать не менее 6 символов</string>
+    <string name="password_no_lowercase">%1$s должен содержать хотя бы одну строчную букву</string>
+    <string name="password_no_uppercase">%1$s должен содержать хотя бы одну заглавную букву</string>
+    <string name="password_no_digit">%1$s должен содержать хотя бы одну цифру</string>
     <string name="login_failed">Вход не был выполнен</string>
     <string name="prompt_nickname">Никнейм</string>
     <string name="prompt_confirm_password">Повторите пароль</string>
     <string name="prompt_nickname_only_letters_numbers">Никнейм должен содержать только буквы и цифры</string>
-    <string name="prompt_password_short">Пароль должен содержать не менее 6 символов</string>
     <string name="prompt_email_not_regex">Email не совпадает с шаблоном email</string>
     <string name="prompt_password_not_match">Пароли не совпадают</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -84,4 +87,7 @@
     <string name="go_next_interval">Далее</string>
     <string name="change_password">Изменить пароль</string>
     <string name="error_loading_image">Не получилось загрузить фото</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="changed_password_success">Вы успешно изменили пароль</string>
 </resources>

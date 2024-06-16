@@ -8,6 +8,7 @@ import android.webkit.MimeTypeMap
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import teachingsolutions.data_access_layer.DAL_models.common.DefaultResponseApi
 import teachingsolutions.data_access_layer.DAL_models.user.JwtTokens
 import teachingsolutions.data_access_layer.DAL_models.user.LoginUserRequestApi
 import teachingsolutions.data_access_layer.common.ActionResult
@@ -114,6 +115,15 @@ class UserRepository @Inject constructor(
         }
 
         return result
+    }
+
+
+    suspend fun changePassword(oldPass: String, newPass: String, repeatNewPass: String): ActionResult<DefaultResponseApi> {
+        if (userId == null) {
+            return ActionResult.NormalError(DefaultResponseApi(arrayOf("Пользователь не найден")))
+        }
+
+        return dataSource.changePassword(userId!!, oldPass, newPass, repeatNewPass)
     }
 
     private suspend fun refreshUserTokens(jwtTokens: JwtTokens): ActionResult<RefreshUserTokensResponseApi> {

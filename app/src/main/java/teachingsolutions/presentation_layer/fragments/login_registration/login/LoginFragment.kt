@@ -1,5 +1,6 @@
 package teachingsolutions.presentation_layer.fragments.login_registration.login
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
 import android.os.Bundle
@@ -40,6 +41,7 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -81,16 +83,16 @@ class LoginFragment : Fragment() {
             val passwordErrors = mutableListOf<String>()
 
             loginFormState.passwordLengthError?.let {
-                passwordErrors.add(getString(it))
+                passwordErrors.add(getString(it, "Пароль"))
             }
             loginFormState.passwordLowercaseError?.let {
-                passwordErrors.add(getString(it))
+                passwordErrors.add(getString(it, "Пароль"))
             }
             loginFormState.passwordUppercaseError?.let {
-                passwordErrors.add(getString(it))
+                passwordErrors.add(getString(it, "Пароль"))
             }
             loginFormState.passwordDigitError?.let {
-                passwordErrors.add(getString(it))
+                passwordErrors.add(getString(it, "Пароль"))
             }
 
             if (loginFormState.usernameError != null) {
@@ -129,12 +131,8 @@ class LoginFragment : Fragment() {
             })
 
         val afterTextChangedListener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // ignore
-            }
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                // ignore
-            }
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
             override fun afterTextChanged(s: Editable) {
                 loginViewModel.loginDataChanged(
                     emailEditText.text.toString(),
@@ -142,6 +140,7 @@ class LoginFragment : Fragment() {
                 )
             }
         }
+
         emailEditText.addTextChangedListener(afterTextChangedListener)
         passwordEditText.addTextChangedListener(afterTextChangedListener)
         passwordEditText.setOnEditorActionListener { _, actionId, _ ->

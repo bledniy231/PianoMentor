@@ -18,14 +18,13 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.pianomentor.R
 import com.example.pianomentor.databinding.FragmentLectureBinding
 import dagger.hilt.android.AndroidEntryPoint
 import teachingsolutions.domain_layer.domain_models.courses.CourseItemProgressType
-import teachingsolutions.presentation_layer.fragments.lecture.model.LectureAnimation
-import teachingsolutions.presentation_layer.fragments.lecture.model.SwipeDirection
+import teachingsolutions.presentation_layer.fragments.lecture.model.LectureAnimationEnum
+import teachingsolutions.presentation_layer.fragments.lecture.model.SwipeDirectionEnum
 import java.io.File
 import kotlin.math.abs
 
@@ -48,7 +47,7 @@ class LectureFragment : Fragment() {
     private var file: File? = null
     private var gestureDetector: GestureDetector? = null
 
-    private var lectureAnimation: LectureAnimation = LectureAnimation.NONE
+    private var lectureAnimationEnum: LectureAnimationEnum = LectureAnimationEnum.NONE
     private val SWIPE_THRESHOLD = 100
     private val SWIPE_VELOCITY_THRESHOLD = 100
     private var currentPageIndex = 0
@@ -98,14 +97,14 @@ class LectureFragment : Fragment() {
         binding.buttonNext.setOnClickListener {
             if (currentPageIndex + 1 < (pdfRenderer?.pageCount ?: 0)) {
                 currentPageIndex++
-                file?.let { displayPdf(SwipeDirection.RIGHT) }
+                file?.let { displayPdf(SwipeDirectionEnum.RIGHT) }
             }
         }
 
         binding.buttonPrevious.setOnClickListener {
             if (currentPageIndex > 0) {
                 currentPageIndex--
-                file?.let { displayPdf(SwipeDirection.LEFT) }
+                file?.let { displayPdf(SwipeDirectionEnum.LEFT) }
             }
         }
 
@@ -118,7 +117,7 @@ class LectureFragment : Fragment() {
                     findNavController().popBackStack()
                 }
                 pdfRenderer = PdfRenderer(fileDescriptor!!)
-                displayPdf(SwipeDirection.NONE)
+                displayPdf(SwipeDirectionEnum.NONE)
             }
             lecturePdfResultUI.error?.let { error ->
                 Toast.makeText(requireContext(), "FAIL: $error", Toast.LENGTH_LONG).show()
@@ -136,7 +135,7 @@ class LectureFragment : Fragment() {
             }
         })
 
-        lectureAnimation = viewModel.getLectureAnimationSettings()
+        lectureAnimationEnum = viewModel.getLectureAnimationSettings()
 
         popupMenu = PopupMenu(requireContext(), binding.settingsButton).apply {
             inflate(R.menu.lecture_menu)
@@ -144,29 +143,29 @@ class LectureFragment : Fragment() {
                 when (menuItem.itemId) {
                     R.id.action_no_anim -> {
                         menuItem.isChecked = true
-                        lectureAnimation = LectureAnimation.NONE
-                        viewModel.saveLectureAnimationSettings(lectureAnimation)
+                        lectureAnimationEnum = LectureAnimationEnum.NONE
+                        viewModel.saveLectureAnimationSettings(lectureAnimationEnum)
                         true
                     }
                     R.id.action_fade -> {
                         menuItem.isChecked = true
-                        lectureAnimation = LectureAnimation.FADE
-                        viewModel.saveLectureAnimationSettings(lectureAnimation)
+                        lectureAnimationEnum = LectureAnimationEnum.FADE
+                        viewModel.saveLectureAnimationSettings(lectureAnimationEnum)
                         true
                     }
                     R.id.action_slide -> {
                         menuItem.isChecked = true
-                        lectureAnimation = LectureAnimation.SLIDE
-                        viewModel.saveLectureAnimationSettings(lectureAnimation)
+                        lectureAnimationEnum = LectureAnimationEnum.SLIDE
+                        viewModel.saveLectureAnimationSettings(lectureAnimationEnum)
                         true
                     }
                     else -> false
                 }
             }
-            when (lectureAnimation) {
-                LectureAnimation.NONE -> menu.findItem(R.id.action_no_anim).isChecked = true
-                LectureAnimation.FADE -> menu.findItem(R.id.action_fade).isChecked = true
-                LectureAnimation.SLIDE -> menu.findItem(R.id.action_slide).isChecked = true
+            when (lectureAnimationEnum) {
+                LectureAnimationEnum.NONE -> menu.findItem(R.id.action_no_anim).isChecked = true
+                LectureAnimationEnum.FADE -> menu.findItem(R.id.action_fade).isChecked = true
+                LectureAnimationEnum.SLIDE -> menu.findItem(R.id.action_slide).isChecked = true
             }
         }
         binding.settingsButton.setOnClickListener {
@@ -178,7 +177,7 @@ class LectureFragment : Fragment() {
         }
     }
 
-    private fun displayPdf(direction: SwipeDirection) {
+    private fun displayPdf(direction: SwipeDirectionEnum) {
         val pageCount = pdfRenderer?.pageCount
         val currentPage = pdfRenderer?.openPage(currentPageIndex)
         if (pageCount != null && currentPageIndex == pageCount - 1) {
@@ -188,7 +187,7 @@ class LectureFragment : Fragment() {
         val bitmap = Bitmap.createBitmap(currentPage?.width ?: 0, currentPage?.height ?: 0, Bitmap.Config.ARGB_8888)
         currentPage?.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
 
-        if (lectureAnimation == LectureAnimation.NONE) {
+        if (lectureAnimationEnum == LectureAnimationEnum.NONE) {
             binding.pdfView.setImageBitmap(bitmap)
         }
         else {
@@ -201,8 +200,8 @@ class LectureFragment : Fragment() {
         binding.lecturesLoading.visibility = View.GONE
     }
 
-    private fun imageViewAnimatedChange(context: Context, imageView: ImageView, newImage: Bitmap, direction: SwipeDirection) {
-        if (lectureAnimation == LectureAnimation.FADE) {
+    private fun imageViewAnimatedChange(context: Context, imageView: ImageView, newImage: Bitmap, direction: SwipeDirectionEnum) {
+        if (lectureAnimationEnum == LectureAnimationEnum.FADE) {
             val (animOutId, animInId) = Pair(android.R.anim.fade_out, android.R.anim.fade_in)
             val animOut = AnimationUtils.loadAnimation(context, animOutId)
             val animIn = AnimationUtils.loadAnimation(context, animInId)
@@ -218,7 +217,7 @@ class LectureFragment : Fragment() {
             imageView.startAnimation(animOut)
 
         } else {
-            val (animOutId, animInId) = if (direction == SwipeDirection.LEFT) {
+            val (animOutId, animInId) = if (direction == SwipeDirectionEnum.LEFT) {
                 Pair(R.anim.image_view_slide_out_right, R.anim.image_view_slide_in_left)
             } else {
                 Pair(R.anim.image_view_slide_out_left, R.anim.image_view_slide_in_right)
@@ -248,7 +247,7 @@ class LectureFragment : Fragment() {
                     if (e1.x - e2.x > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD && pdfRenderer != null) {
                         if (currentPageIndex + 1 < pdfRenderer!!.pageCount) {
                             currentPageIndex++
-                            file?.let { displayPdf(SwipeDirection.LEFT) }
+                            file?.let { displayPdf(SwipeDirectionEnum.LEFT) }
                         }
                         return true
                     }
@@ -256,7 +255,7 @@ class LectureFragment : Fragment() {
                     else if (e2.x - e1.x > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                         if (currentPageIndex > 0) {
                             currentPageIndex--
-                            file?.let { displayPdf(SwipeDirection.RIGHT) }
+                            file?.let { displayPdf(SwipeDirectionEnum.RIGHT) }
                         }
                         return true
                     }

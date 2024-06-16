@@ -23,6 +23,7 @@ import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersReq
 import teachingsolutions.data_access_layer.DAL_models.quiz.SetQuizUserAnswersResponseApi
 import teachingsolutions.data_access_layer.DAL_models.statistics.SetCourseItemProgressRequestApi
 import teachingsolutions.data_access_layer.DAL_models.statistics.GetUserStatisticsResponseApi
+import teachingsolutions.data_access_layer.DAL_models.user.ChangePasswordRequestApi
 import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensRequestApi
 import teachingsolutions.data_access_layer.DAL_models.user.RefreshUserTokensResponseApi
 
@@ -32,6 +33,9 @@ interface IPianoMentorApiService {
 
     @POST("api/ApplicationUser/Register")
     suspend fun registerUser(@Body request: RegisterUserRequestApi): LoginUserResponseApi
+
+    @POST("api/ApplicationUser/ChangePassword")
+    suspend fun changePassword(@Body request: ChangePasswordRequestApi): DefaultResponseApi
 
     @POST("api/ApplicationUser/Logout")
     suspend fun logoutUser(): Void
