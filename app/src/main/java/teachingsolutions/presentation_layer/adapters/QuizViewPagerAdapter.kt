@@ -77,17 +77,20 @@ class QuizViewPagerAdapter(private val fragmentContext: Context): RecyclerView.A
             }
 
             radioGroup.setOnCheckedChangeListener { group, checkedId ->
-                val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
-                val userAnswer = answers?.find { it.answerId == checkedRadioButton.id }
-                userAnswer?.wasChosenByUser = checkedRadioButton.isChecked
+                try {
+                    val checkedRadioButton = group.findViewById<RadioButton>(checkedId)
+                    val userAnswer = answers?.find { it.answerId == checkedRadioButton.id }
+                    userAnswer?.wasChosenByUser = checkedRadioButton.isChecked
 
-                for (i in 0 until group.childCount) {
-                    val radioButton = group.getChildAt(i) as? RadioButton
-                    if (radioButton != null && radioButton.id != checkedId) {
-                        val answer = answers?.find { it.answerId == radioButton.id }
-                        answer?.wasChosenByUser = !checkedRadioButton.isChecked
+                    for (i in 0 until group.childCount) {
+                        val radioButton = group.getChildAt(i) as? RadioButton
+                        if (radioButton != null && radioButton.id != checkedId) {
+                            val answer = answers?.find { it.answerId == radioButton.id }
+                            answer?.wasChosenByUser = !checkedRadioButton.isChecked
+                        }
                     }
                 }
+                catch (e: Exception) { }
             }
         }
     }
